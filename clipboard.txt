@@ -1,0 +1,27 @@
+curriculum
+
+a subject belongsToMany Course
+a subject hasMany Outline
+a course belongsTo a subject
+
+
+
+
+
+$year = App\Models\Curriculum\Year::find(1);
+$subject = App\Models\Curriculum\Subject::find(1);
+$semester = App\Models\Curriculum\Semester::find(1);
+$course = App\Models\Course::find(1);
+$subject->with('outlines.course', 'outlines.year', 'outlines.subject', 'outlines.semester')->get();
+
+$subject->courses()->attach($course->id, [
+	'semester_id' => $semester->id,
+	'year_id' => $year->id
+]);
+
+$subject->outlines()->create([
+	'subject_id' => $subject->id,
+	'semester_id' => $semester->id,
+	'year_id' => $year->id,
+	'course_id' => $course->id
+]);
