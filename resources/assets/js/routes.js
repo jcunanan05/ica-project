@@ -5,7 +5,11 @@ import VueRouter from 'vue-router';
 const routes = [
     {
         path: '/',
-        component: require('./components/Example.vue')
+        component: require('./views/welcome/index.vue')
+    },
+    {
+      path: '/login',
+      component: require('./views/auth/login.vue')
     }
 ];
 

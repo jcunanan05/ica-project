@@ -7,6 +7,8 @@
 import router from './routes.js';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import App from './App.vue'
+
 
 require('./bootstrap');
 
@@ -19,12 +21,14 @@ require('./bootstrap');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
+Vue.config.devtools = true;
 Vue.use(VueRouter);
+
 
 Vue.component('example', require('./components/Example.vue'));
 
 const app = new Vue({
-    el: '#app',
-    router
+  el: '#app',
+  router: router,
+  render: h => h(App)
 });

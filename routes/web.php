@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('app');
 });
 
-Route::get('/login', function () {
+Route::post('/login', function () {
     return response()->json([
         'success' => 'Login Successful!'
     ]);
