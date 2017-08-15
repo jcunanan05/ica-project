@@ -15,8 +15,12 @@ Route::get('/', function () {
     return view('app');
 });
 
-Route::post('/login', function () {
+Route::get('/api/login', function () {
     return response()->json([
         'success' => 'Login Successful!'
     ]);
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
