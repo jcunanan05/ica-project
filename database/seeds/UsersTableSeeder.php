@@ -23,36 +23,33 @@ class UsersTableSeeder extends Seeder
           'first_name' => 'John', 
           'middle_name' => 'John', 
           'last_name' => 'Doe', 
-          'full_name' => 'John John Doe', 
           'school_index_no' => '0909-0909-0909', 
           'email' => 'john@example.com', 
           'password' => bcrypt($password), 
-            'role_id' => $student->id, 
-          'is_activated' => true 
+          'role_id' => $student->id, 
+          'is_verified' => true 
         ]); 
  
         User::create([ 
           'first_name' => 'Jane', 
           'middle_name' => 'Jane', 
           'last_name' => 'Doe', 
-          'full_name' => 'Jane Jane Doe', 
           'school_index_no' => '0998-0998-0998', 
           'email' => 'jane@example.com', 
           'password' => bcrypt($password), 
           'role_id' => $lecturer->id, 
-          'is_activated' => true 
+          'is_verified' => true 
         ]); 
  
         User::create([ 
           'first_name' => 'Reggie', 
           'middle_name' => 'Istrar', 
           'last_name' => 'Admin', 
-          'full_name' => 'Reggie Istar Admin', 
           'school_index_no' => '0978-0978-0978', 
           'email' => 'registrar@example.com', 
           'password' => bcrypt($password), 
           'role_id' => $registrar->id, 
-          'is_activated' => true 
+          'is_verified' => true 
         ]); 
     }
 }
