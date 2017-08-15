@@ -15,12 +15,10 @@ Route::get('/', function () {
     return view('app');
 });
 
-Route::get('/api/login', function () {
-    return response()->json([
-        'success' => 'Login Successful!'
-    ]);
-});
+Route::post('/api/login', 'Auth\LoginController@login');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/logout','Auth\LoginController@logout');

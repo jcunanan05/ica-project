@@ -1,21 +1,31 @@
 <template lang="html">
-  <div>
+  <div class="container">
     <form method="POST" @submit.prevent="login">
-      <input
-        type="text"
-        name="username"
-        placeholder="Username"
-        v-model="username">
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        v-model="password">
+
+      <div class="form-group row">
+        <input
+          type="email"
+          name="username"
+          placeholder="Username"
+          v-model="username">
+      </div>
+      
+      <div class="form-group row">
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          v-model="password">
+      </div>
+
+      <div class="form-group row">
         <button
+          class="btn btn-primary"
           type="submit"
           name="login">
             Login
         </button>
+      </div>
     </form>
 
     <h1 v-if="successMessage">{{ successMessage }}</h1>
@@ -38,11 +48,14 @@ export default {
     },
 
     login() {
-      axios.post('/login',{})
+      const loginCredentials = this._data;
+
+
+      axios.post('/login', loginCredentials)
         .then(response => {
           this.flashSuccess(response.data.success);
         })
-        .catch((error) => {
+        .catch((error) => { 
           console.log(error);
         });
     }
@@ -50,5 +63,5 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
 </style>
