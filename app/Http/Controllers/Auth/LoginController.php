@@ -3,37 +3,45 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use \App\Http\Requests\CustomRules\UserRules;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /** 
+     * Login the user
+     *
+     */
+    public function login(Request $request) {
+        $this->validateLogin($request);
+
+        return $this->success();
+    }
+
+
+    /** 
+     * Validate credentials
+     *
+     */
+    protected function validateLogin(Request $request) {
+        $userRules = new UserRules();
+
+        $this->validate($request, [
+            'email' => $userRules->for('email'),
+            'password' => $userRules->for('password')
+        ]);
+    }
+
+    protected function success() {
+        return response()->json([
+            'success' => 'Validation Passed'
+        ], 201);
     }
 }

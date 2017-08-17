@@ -1,16 +1,17 @@
 <template lang="html">
-  <div class="container">
-    <form method="POST" @submit.prevent="login">
+  <div class="container-fluid">
 
-      <div class="form-group row">
+    <form method="POST" @submit.prevent="login">
+      <div class="form-group">
         <input
           type="email"
-          name="username"
-          placeholder="Username"
-          v-model="username">
+          name="email"
+          placeholder="email"
+          v-model="email">
       </div>
       
-      <div class="form-group row">
+
+      <div class="form-group">
         <input
           type="password"
           name="password"
@@ -18,7 +19,8 @@
           v-model="password">
       </div>
 
-      <div class="form-group row">
+
+      <div class="form-group">
         <button
           class="btn btn-primary"
           type="submit"
@@ -28,40 +30,33 @@
       </div>
     </form>
 
-    <h1 v-if="successMessage">{{ successMessage }}</h1>
   </div>
 </template>
 
 <script>
 export default {
   name: 'login',
+
   data () {
     return {
-      username: '',
-      password: '',
-      successMessage: ''
+      email: '',
+      password: ''
     }
   },
+
   methods: {
-    flashSuccess (successMessage){
-      this.successMessage = successMessage;
-    },
-
     login() {
-      const loginCredentials = this._data;
-
-
-      axios.post('/login', loginCredentials)
+      axios.post('/api/login', {
+        email: this.email,
+        password: this.password
+      })
         .then(response => {
-          this.flashSuccess(response.data.success);
+          console.log(response);
         })
-        .catch((error) => { 
-          console.log(error);
+        .catch(errors => {
+          console.log(errors);
         });
     }
   }
 }
 </script>
-
-<style lang="scss">
-</style>
