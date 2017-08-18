@@ -4,19 +4,31 @@
     <form method="POST" @submit.prevent="login">
       <div class="form-group">
         <input
+          :class="{'form-control': true,'is-invalid': errors.has('email')}"
           type="email"
           name="email"
           placeholder="email"
-          v-model="email">
+          v-model="email" 
+          @keydown="clearError('email')" >
+
+          <div class="invalid-feedback" v-if="errors.has('email')">
+            {{ errors.get('email') }}
+          </div>
       </div>
       
 
       <div class="form-group">
         <input
+          :class="{'form-control': true,'is-invalid': errors.has('password')}"
           type="password"
           name="password"
           placeholder="Password"
-          v-model="password">
+          v-model="password"
+          @keydown="clearError('password')" >
+
+          <div class="invalid-feedback" v-if="errors.has('password')">
+            {{ errors.get('password') }}
+          </div>
       </div>
 
 
@@ -24,7 +36,7 @@
         <button
           class="btn btn-primary"
           type="submit"
-          name="login">
+          name="login" >
             Login
         </button>
       </div>
@@ -34,13 +46,16 @@
 </template>
 
 <script>
+import Errors from '../../utilities/Errors.js';
+
 export default {
   name: 'login',
 
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      errors: new Errors()
     }
   },
 
@@ -54,9 +69,16 @@ export default {
           console.log(response);
         })
         .catch(errors => {
-          console.log(errors);
+          this.errors.record(errors.response.data);
         });
+    },
+
+    clearError(field) {
+      if(this.errors.has(field)) {
+        this.errors.clear(field);
+      }
     }
+
   }
 }
 </script>

@@ -15,7 +15,7 @@
 
 
   	  	<ul class="nav navbar-nav ml-auto">
-  	  	  <navbar-link uri="#" text="Login" />
+  	  	  <navbar-link uri="#/login" text="Login" />
   	  	</ul>
   	  </div>
 
