@@ -1,33 +1,31 @@
 <template lang="html">
   <div class="container-fluid">
 
-    <form method="POST" @submit.prevent="login">
+    <form method="POST" @submit.prevent="login" @keydown="form.errors.clear($event.target.name)">
       <div class="form-group">
         <input
-          :class="{'form-control': true,'is-invalid': errors.has('email')}"
+          :class="{'form-control': true,'is-invalid':form.errors.has('email')}"
           type="email"
           name="email"
           placeholder="email"
-          v-model="email" 
-          @keydown="clearError('email')" >
+          v-model="form.email" >
 
-          <div class="invalid-feedback" v-if="errors.has('email')">
-            {{ errors.get('email') }}
+          <div class="invalid-feedback" v-if="form.errors.has('email')">
+            {{ form.errors.get('email') }}
           </div>
       </div>
       
 
       <div class="form-group">
         <input
-          :class="{'form-control': true,'is-invalid': errors.has('password')}"
+          :class="{'form-control': true,'is-invalid': form.errors.has('password')}"
           type="password"
           name="password"
           placeholder="Password"
-          v-model="password"
-          @keydown="clearError('password')" >
+          v-model="form.password" >
 
-          <div class="invalid-feedback" v-if="errors.has('password')">
-            {{ errors.get('password') }}
+          <div class="invalid-feedback" v-if="form.errors.has('password')">
+            {{ form.errors.get('password') }}
           </div>
       </div>
 
@@ -46,37 +44,26 @@
 </template>
 
 <script>
-import Errors from '../../utilities/Errors.js';
+import Form from '../../utilities/Form.js';
+
 
 export default {
   name: 'login',
 
   data () {
     return {
-      email: '',
-      password: '',
-      errors: new Errors()
+      form: new Form({
+        email: '',
+        password: ''
+      })
     }
   },
 
   methods: {
     login() {
-      axios.post('/api/login', {
-        email: this.email,
-        password: this.password
-      })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(errors => {
-          this.errors.record(errors.response.data);
-        });
-    },
-
-    clearError(field) {
-      if(this.errors.has(field)) {
-        this.errors.clear(field);
-      }
+      this.form.submit('post', '/api/login')
+        .then(response => console.log(response))
+        .catch(errors => console.log(errors));
     }
 
   }
