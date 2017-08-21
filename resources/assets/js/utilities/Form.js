@@ -9,6 +9,13 @@ class Form {
     }
 
     this.errors = new Errors();
+
+    this.submitDisabled = false;
+  }
+
+
+  setSubmitDisabled(isDisabled) {
+    this.submitDisabled = isDisabled;
   }
   
 

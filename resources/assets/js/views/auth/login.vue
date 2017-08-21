@@ -1,7 +1,9 @@
 <template lang="html">
   <div class="container-fluid">
 
-    <form method="POST" @submit.prevent="login" @keydown="form.errors.clear($event.target.name)">
+    <form method="POST" 
+      @submit.prevent="login" 
+      @keydown="form.errors.clear($event.target.name), form.setSubmitDisabled(form.errors.any())" >
       <div class="form-group">
         <input
           :class="{'form-control': true,'is-invalid':form.errors.has('email')}"
@@ -13,6 +15,7 @@
           <div class="invalid-feedback" v-if="form.errors.has('email')">
             {{ form.errors.get('email') }}
           </div>
+
       </div>
       
 
@@ -34,7 +37,9 @@
         <button
           class="btn btn-primary"
           type="submit"
-          name="login" >
+          name="login"
+          :disabled="form.submitDisabled" >
+            <span v-if="isLoading"><i class="fa fa-circle-o-notch fa-spin"></i></span>
             Login
         </button>
       </div>
@@ -55,15 +60,23 @@ export default {
       form: new Form({
         email: '',
         password: ''
-      })
-    }
+      }),
+
+      isLoading: false
+    };
   },
 
   methods: {
     login() {
+      this.form.setSubmitDisabled(true);
+      this.isLoading = true;
+
       this.form.submit('post', '/api/login')
         .then(response => console.log(response))
-        .catch(errors => console.log(errors));
+        .catch(errors => {
+          console.log(errors);
+          this.isLoading = false;
+        });
     }
 
   }
