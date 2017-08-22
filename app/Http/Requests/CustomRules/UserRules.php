@@ -14,7 +14,6 @@ class UserRules extends CustomRules
                 'birthday' => 'required|date_format:m-d-Y', 
                 'homeAddress' => 'required|string', 
                 'contactNo' => ['required', 'string', 'regex:/(?:0|63)(?:9)[0-9]{9}|[0-9]{7,10}/'], 
-                'passwordConfirm' => 'required|min:5|confirmed',
-                'password' => 'required|min:5'
+                'password' => 'required|min:5|confirmed'
         ];
 }
