@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\CustomRules\LoginRules;
@@ -24,7 +25,7 @@ class LoginController extends Controller
         $this->validateLogin($request);
 
         if($this->attemptLogin($request)) {
-            return $this->success();
+            return $this->success($request);
         }
 
         return $this->sendFailedLoginResponse($request);
@@ -91,7 +92,15 @@ class LoginController extends Controller
     protected function success() 
     {
         return response()->json([
-            'success' => 'Validation Passed'
+            'success' => 'Validation Passed',
+            'user' => User::find(Auth::user()->id)
+                        ->select(
+                            'first_name', 
+                            'middle_name', 
+                            'last_name', 
+                            'email'
+                        )
+                        ->first()
         ], 201);
     }
 

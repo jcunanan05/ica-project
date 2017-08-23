@@ -43,8 +43,8 @@
             Login
         </button>
       </div>
-    </form>
 
+    </form>
   </div>
 </template>
 
@@ -75,6 +75,7 @@ export default {
         .then(response => console.log(response))
         .catch(errors => {
           console.log(errors);
+          
           this.isLoading = false;
         });
     }
