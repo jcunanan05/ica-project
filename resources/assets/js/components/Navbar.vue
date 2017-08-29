@@ -42,6 +42,7 @@ Vue.component('navbar-link', {
 })
 
 export default {
-  name: 'app-navbar'
+	name: 'app-navbar',
+
 }
 </script>

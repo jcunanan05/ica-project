@@ -92,15 +92,15 @@ class LoginController extends Controller
     protected function success() 
     {
         return response()->json([
-            'success' => 'Validation Passed',
+            'success' => 'Login Successful!',
             'user' => User::find(Auth::user()->id)
                         ->select(
-                            'first_name', 
+                            'first_name',
                             'middle_name', 
                             'last_name', 
                             'email'
                         )
-                        ->first()
+                        ->first(),
         ], 201);
     }
 

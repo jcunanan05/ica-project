@@ -52,6 +52,7 @@
 import Form from '../../utilities/Form.js';
 
 
+
 export default {
   name: 'login',
 
@@ -72,12 +73,21 @@ export default {
       this.isLoading = true;
 
       this.form.submit('post', '/api/login')
-        .then(response => console.log(response))
+        .then(response => {
+          console.log(response);
+
+          this.redirectToHome();
+        })
         .catch(errors => {
           console.log(errors);
           
           this.isLoading = false;
         });
+    },
+
+
+    redirectToHome() {
+      this.$router.push({name: 'welcome'});
     }
 
   }

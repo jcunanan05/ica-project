@@ -13534,9 +13534,11 @@ var app = new __WEBPACK_IMPORTED_MODULE_1_vue___default.a({
 
 var routes = [{
     path: '/',
+    name: 'welcome',
     component: __webpack_require__(14)
 }, {
     path: '/login',
+    name: 'login',
     component: __webpack_require__(17)
 }];
 
@@ -13743,11 +13745,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.isLoading = true;
 
       this.form.submit('post', '/api/login').then(function (response) {
-        return console.log(response);
+        console.log(response);
+
+        _this.redirectToHome();
       }).catch(function (errors) {
         console.log(errors);
+
         _this.isLoading = false;
       });
+    },
+    redirectToHome: function redirectToHome() {
+      this.$router.push({ name: 'welcome' });
     }
   }
 });
@@ -14146,6 +14154,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('navbar-link', {
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'app-navbar'
+
 });
 
 /***/ }),
