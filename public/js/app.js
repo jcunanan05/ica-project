@@ -13746,6 +13746,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       this.form.submit('post', '/api/login').then(function (response) {
         console.log(response);
+        _this.$emit('userLoggedIn', response.user);
 
         _this.redirectToHome();
       }).catch(function (errors) {
@@ -14048,6 +14049,7 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navbar_vue__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navbar_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_Navbar_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_User_js__ = __webpack_require__(64);
 //
 //
 //
@@ -14056,15 +14058,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	name: 'app',
+  name: 'app',
 
-	components: {
-		'app-navbar': __WEBPACK_IMPORTED_MODULE_0__components_Navbar_vue___default.a
-	}
+  data: function data() {
+    return {
+      user: new __WEBPACK_IMPORTED_MODULE_1__models_User_js__["a" /* default */]()
+    };
+  },
+
+  components: {
+    'app-navbar': __WEBPACK_IMPORTED_MODULE_0__components_Navbar_vue___default.a
+  },
+
+  methods: {
+    login: function login(userDetails) {
+      this.user.setInfo(userDetails);
+    }
+  }
 });
 
 /***/ }),
@@ -14140,6 +14162,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -14153,8 +14179,13 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('navbar-link', {
 });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	name: 'app-navbar'
+	name: 'app-navbar',
 
+	props: {
+		user: {
+			type: Object
+		}
+	}
 });
 
 /***/ }),
@@ -14193,12 +14224,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('ul', {
     staticClass: "nav navbar-nav ml-auto"
-  }, [_c('navbar-link', {
+  }, [(!_vm.user) ? _c('navbar-link', {
     attrs: {
       "uri": "#/login",
       "text": "Login"
     }
-  })], 1)])], 1)])
+  }) : [_c('navbar-link', {
+    attrs: {
+      "uri": "#/login",
+      "text": _vm.user.getInfo()['first_name']
+    }
+  })]], 2)])], 1)])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -14217,7 +14253,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": "app"
     }
-  }, [_c('app-navbar'), _vm._v(" "), _c('router-view')], 1)
+  }, [(_vm.user.getInfo() == {}) ? [_c('app-navbar')] : [_c('app-navbar', {
+    attrs: {
+      "user": _vm.user.getInfo()
+    }
+  })], _vm._v(" "), _c('router-view', {
+    on: {
+      "userLoggedIn": _vm.login
+    }
+  })], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -49010,6 +49054,48 @@ module.exports = function spread(callback) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var User = function () {
+  function User() {
+    _classCallCheck(this, User);
+
+    this.info = {};
+  }
+
+  _createClass(User, [{
+    key: "setInfo",
+    value: function setInfo(info) {
+      this.info = info;
+    }
+  }, {
+    key: "getInfo",
+    value: function getInfo() {
+      return this.info;
+    }
+  }]);
+
+  return User;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (User);
 
 /***/ })
 /******/ ]);

@@ -15,7 +15,11 @@
 
 
   	  	<ul class="nav navbar-nav ml-auto">
-  	  	  <navbar-link uri="#/login" text="Login" />
+  	  	  <navbar-link uri="#/login" text="Login" v-if="! user"/>
+					
+					<template v-else>
+						<navbar-link uri="#/login" :text="user.getInfo()['first_name']" />
+					</template>
   	  	</ul>
   	  </div>
 
@@ -44,5 +48,10 @@ Vue.component('navbar-link', {
 export default {
 	name: 'app-navbar',
 
+	props: {
+		user: {
+			type: Object
+		}
+	}
 }
 </script>

@@ -75,6 +75,7 @@ export default {
       this.form.submit('post', '/api/login')
         .then(response => {
           console.log(response);
+          this.$emit('userLoggedIn', response.user);
 
           this.redirectToHome();
         })

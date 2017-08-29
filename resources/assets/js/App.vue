@@ -1,19 +1,37 @@
 <template lang="html">
   <div id="app">
-    <app-navbar />
+    <template v-if="user.getInfo() == {}">
+      <app-navbar />
+    </template>
 
-    <router-view></router-view>
+    <template v-else>
+      <app-navbar :user="user.getInfo()" />
+    </template>
+    
+
+    <router-view @userLoggedIn="login"></router-view>
   </div>
 </template>
 
 <script>
 import Navbar from './components/Navbar.vue';
+import User from './models/User.js';
 
 export default {
-	name: 'app',
+  name: 'app',
+  
+  data: () => ({
+    user: new User()
+  }),
 
 	components: {
 		'app-navbar': Navbar
-	}
+  },
+  
+  methods: {
+    login(userDetails) {
+      this.user.setInfo(userDetails);
+    }
+  }
 }
 </script>
