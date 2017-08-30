@@ -17,9 +17,7 @@
   	  	<ul class="nav navbar-nav ml-auto">
   	  	  <navbar-link uri="#/login" text="Login" v-if="! user"/>
 					
-					<template v-else>
-						<navbar-link uri="#/login" :text="user.getInfo()['first_name']" />
-					</template>
+					<navbar-link v-else uri="#/" :text="user['first_name']" />
   	  	</ul>
   	  </div>
 
@@ -49,9 +47,7 @@ export default {
 	name: 'app-navbar',
 
 	props: {
-		user: {
-			type: Object
-		}
+		user: { type: Object }
 	}
 }
 </script>

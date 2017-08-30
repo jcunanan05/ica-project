@@ -1,12 +1,9 @@
 <template lang="html">
   <div id="app">
-    <template v-if="user.getInfo() == {}">
-      <app-navbar />
-    </template>
 
-    <template v-else>
-      <app-navbar :user="user.getInfo()" />
-    </template>
+    <app-navbar v-if="user.isEmpty()" />
+    <app-navbar v-else :user="user.getInfo()" />
+    
     
 
     <router-view @userLoggedIn="login"></router-view>
@@ -31,6 +28,8 @@ export default {
   methods: {
     login(userDetails) {
       this.user.setInfo(userDetails);
+      
+      alert('yehey logged in');
     }
   }
 }

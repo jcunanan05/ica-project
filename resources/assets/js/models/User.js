@@ -13,6 +13,10 @@ class User {
     return this.info;
   }
 
+  isEmpty() {
+    return _.isEmpty(this.getInfo());
+  }
+
 }
 
 export default User;
