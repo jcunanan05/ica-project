@@ -1,11 +1,9 @@
 <template lang="html">
   <div id="app">
-
     <app-navbar v-if="user.isEmpty()" />
     <app-navbar v-else :user="user.getInfo()" />
     
     
-
     <router-view @userLoggedIn="login"></router-view>
   </div>
 </template>
@@ -28,9 +26,15 @@ export default {
   methods: {
     login(userDetails) {
       this.user.setInfo(userDetails);
-      
-      alert('yehey logged in');
     }
+
+  },
+
+  beforeMount() {
+    this.user.getAuthenticated()
+      .then(response => console.log(response))
+      .catch(errors => console.log(errors));
   }
+
 }
 </script>

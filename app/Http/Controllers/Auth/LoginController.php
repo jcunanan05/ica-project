@@ -13,7 +13,8 @@ class LoginController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except(['logout', 'authenticatedUser']);
+        $this->middleware('auth')->only('logout');
     }
 
     /** 
@@ -41,6 +42,18 @@ class LoginController extends Controller
         $request->session()->regenerate();
 
         return redirect('/');
+    }
+
+
+    public function authenticatedUser() 
+    {
+        if (! Auth::user()) {
+            return response()->json([
+                'errors' => 'Authenticated user not found.'
+            ], 422);
+        }
+
+        return $this->success();
     }
 
 

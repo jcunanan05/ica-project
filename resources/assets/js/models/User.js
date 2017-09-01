@@ -17,6 +17,20 @@ class User {
     return _.isEmpty(this.getInfo());
   }
 
+  
+  getAuthenticated() {
+    return new Promise ((resolve, reject) => {
+      axios.get('/api/auth/user')
+        .then(response => {
+          this.setInfo(response.data.user);
+
+          resolve(response.data)
+        })
+        .catch(errors => reject(errors.response.data));
+    });
+  }
+
+
 }
 
 export default User;

@@ -14061,8 +14061,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 
 
@@ -14083,9 +14081,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   methods: {
     login: function login(userDetails) {
       this.user.setInfo(userDetails);
-
-      alert('yehey logged in');
     }
+  },
+
+  beforeMount: function beforeMount() {
+    this.user.getAuthenticated().then(function (response) {
+      return console.log(response);
+    }).catch(function (errors) {
+      return console.log(errors);
+    });
   }
 });
 
@@ -14164,6 +14168,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -14203,7 +14209,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('ul', {
     staticClass: "navbar-nav"
-  }, [_c('navbar-link', {
+  }, [(!_vm.user) ? [_c('navbar-link', {
     attrs: {
       "uri": "#",
       "text": "Home"
@@ -14218,7 +14224,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "uri": "#",
       "text": "Contact"
     }
-  })], 1), _vm._v(" "), _c('ul', {
+  })] : _vm._e()], 2), _vm._v(" "), _c('ul', {
     staticClass: "nav navbar-nav ml-auto"
   }, [(!_vm.user) ? _c('navbar-link', {
     attrs: {
@@ -14257,19 +14263,34 @@ var User = function () {
   }
 
   _createClass(User, [{
-    key: "setInfo",
+    key: 'setInfo',
     value: function setInfo(info) {
       this.info = info;
     }
   }, {
-    key: "getInfo",
+    key: 'getInfo',
     value: function getInfo() {
       return this.info;
     }
   }, {
-    key: "isEmpty",
+    key: 'isEmpty',
     value: function isEmpty() {
       return _.isEmpty(this.getInfo());
+    }
+  }, {
+    key: 'getAuthenticated',
+    value: function getAuthenticated() {
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        axios.get('/api/auth/user').then(function (response) {
+          _this.setInfo(response.data.user);
+
+          resolve(response.data);
+        }).catch(function (errors) {
+          return reject(errors.response.data);
+        });
+      });
     }
   }]);
 

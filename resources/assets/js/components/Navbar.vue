@@ -8,9 +8,11 @@
 
   	  <div class="collapse navbar-collapse" id="navbarMenu">
   	  	<ul class="navbar-nav">
-  	  	  <navbar-link uri="#" text="Home" />
-  	  	  <navbar-link uri="#" text="About" />
-  	  	  <navbar-link uri="#" text="Contact" />
+					<template v-if="! user">
+						<navbar-link uri="#" text="Home" />
+  	  	  	<navbar-link uri="#" text="About" />
+  	  	  	<navbar-link uri="#" text="Contact" />
+					</template>
   	  	</ul>
 
 
