@@ -8,6 +8,7 @@
   </div>
 </template>
 
+
 <script>
 import Navbar from './components/Navbar.vue';
 import User from './models/User.js';
@@ -32,7 +33,7 @@ export default {
 
   beforeMount() {
     this.user.getAuthenticated()
-      .then(response => console.log(response))
+      .then(response => this.user.setInfo(response.user))
       .catch(errors => console.log(errors));
   }
 

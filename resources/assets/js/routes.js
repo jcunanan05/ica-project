@@ -1,13 +1,13 @@
 import VueRouter from 'vue-router';
 
 
-
 const routes = [
     {
         path: '/',
         name: 'welcome',
         component: require('./views/welcome/index.vue')
     },
+    
     {
       path: '/login',
       name: 'login',

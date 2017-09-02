@@ -21,11 +21,7 @@ class User {
   getAuthenticated() {
     return new Promise ((resolve, reject) => {
       axios.get('/api/auth/user')
-        .then(response => {
-          this.setInfo(response.data.user);
-
-          resolve(response.data)
-        })
+        .then(response => resolve(response.data))
         .catch(errors => reject(errors.response.data));
     });
   }

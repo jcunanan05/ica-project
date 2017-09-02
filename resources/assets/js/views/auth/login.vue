@@ -50,7 +50,7 @@
 
 <script>
 import Form from '../../utilities/Form.js';
-
+import User from '../../models/User.js';
 
 
 export default {
@@ -88,10 +88,24 @@ export default {
     },
 
 
-    redirectToHome() {
+    redirectToHome () {
       this.$router.push({name: 'welcome'});
     }
 
+  },
+
+  beforeRouteEnter (to, from, next) {
+    let user = new User();
+
+    user.getAuthenticated()
+      .then(response => {
+        next({
+          name: 'welcome'
+        });
+      })
+      .catch(errors => {
+        next();
+      });
   }
 }
 </script>
