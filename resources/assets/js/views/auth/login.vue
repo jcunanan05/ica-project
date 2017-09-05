@@ -2,33 +2,33 @@
   <div class="container-fluid">
 
     <form method="POST" 
-      @submit.prevent="login" 
-      @keydown="form.errors.clear($event.target.name), form.setSubmitDisabled(form.errors.any())" >
+      @submit.prevent="auth.login" 
+      @keydown="auth.errors.clear($event.target.name), auth.form.setSubmitDisabled(auth.errors.any())" >
+
       <div class="form-group">
         <input
-          :class="{'form-control': true,'is-invalid':form.errors.has('email')}"
+          :class="{'form-control': true,'is-invalid':auth.errors.has('email')}"
           type="email"
           name="email"
           placeholder="email"
-          v-model="form.email" >
+          v-model="auth.form.email" >
 
-          <div class="invalid-feedback" v-if="form.errors.has('email')">
-            {{ form.errors.get('email') }}
+          <div class="invalid-feedback" v-if="auth.errors.has('email')">
+            {{ auth.errors.get('email') }}
           </div>
-
       </div>
       
 
       <div class="form-group">
         <input
-          :class="{'form-control': true,'is-invalid': form.errors.has('password')}"
+          :class="{'form-control': true,'is-invalid': auth.errors.has('password')}"
           type="password"
           name="password"
           placeholder="Password"
-          v-model="form.password" >
+          v-model="auth.form.password" >
 
-          <div class="invalid-feedback" v-if="form.errors.has('password')">
-            {{ form.errors.get('password') }}
+          <div class="invalid-feedback" v-if="auth.errors.has('password')">
+            {{ auth.errors.get('password') }}
           </div>
       </div>
 
@@ -38,8 +38,8 @@
           class="btn btn-primary"
           type="submit"
           name="login"
-          :disabled="form.submitDisabled" >
-            <span v-if="isLoading"><i class="fa fa-circle-o-notch fa-spin"></i></span>
+          :disabled="auth.form.submitDisabled" >
+            <span v-if="auth.form.isLoading"><i class="fa fa-circle-o-notch fa-spin"></i></span>
             Login
         </button>
       </div>
@@ -49,63 +49,14 @@
 </template>
 
 <script>
-import Form from '../../utilities/Form.js';
-import User from '../../models/User.js';
+import auth from '../../utilities/auth/Auth.js';
 
 
 export default {
-  name: 'login',
+  name: 'loginTest',
 
-  data () {
-    return {
-      form: new Form({
-        email: '',
-        password: ''
-      }),
-
-      isLoading: false
-    };
-  },
-
-  methods: {
-    login() {
-      this.form.setSubmitDisabled(true);
-      this.isLoading = true;
-
-      this.form.submit('post', '/api/login')
-        .then(response => {
-          console.log(response);
-
-          this.$emit('userLoggedIn', response.user);
-
-          this.redirectToHome();
-        })
-        .catch(errors => {
-          console.log(errors);
-          
-          this.isLoading = false;
-        });
-    },
-
-
-    redirectToHome () {
-      this.$router.push({name: 'welcome'});
-    }
-
-  },
-
-  beforeRouteEnter (to, from, next) {
-    let user = new User();
-
-    user.getAuthenticated()
-      .then(response => {
-        next({
-          name: 'welcome'
-        });
-      })
-      .catch(errors => {
-        next();
-      });
-  }
+  data: () => ({
+    auth
+  })
 }
 </script>

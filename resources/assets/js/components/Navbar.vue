@@ -8,7 +8,7 @@
 
   	  <div class="collapse navbar-collapse" id="navbarMenu">
   	  	<ul class="navbar-nav">
-					<template v-if="! user">
+					<template v-if="! auth.isLoggedIn()">
 						<navbar-link uri="#" text="Home" />
   	  	  	<navbar-link uri="#" text="About" />
   	  	  	<navbar-link uri="#" text="Contact" />
@@ -17,9 +17,9 @@
 
 
   	  	<ul class="nav navbar-nav ml-auto">
-  	  	  <navbar-link uri="#/login" text="Login" v-if="! user"/>
+  	  	  <navbar-link v-if="! auth.isLoggedIn()" uri="#/login" text="Login"/>
 					
-					<navbar-link v-else uri="#/" :text="user['first_name']" />
+					<navbar-link v-else uri="#/" :text="auth.user['first_name']" />
   	  	</ul>
   	  </div>
 
@@ -29,6 +29,17 @@
 
 <script>
 import Vue from 'vue';
+import auth from '../utilities/auth/Auth.js';
+
+
+export default {
+  name: 'app-navbar',
+  
+  data: () => ({
+    auth
+  })
+}
+
 
 Vue.component('burger', {
 	template: `
@@ -44,12 +55,4 @@ Vue.component('navbar-link', {
 	`,
 	props: ['uri', 'text']
 })
-
-export default {
-	name: 'app-navbar',
-
-	props: {
-		user: { type: Object }
-	}
-}
 </script>

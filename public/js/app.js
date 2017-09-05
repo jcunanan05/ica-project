@@ -475,49 +475,13 @@ module.exports = function normalizeComponent (
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var User = function () {
-  function User() {
-    _classCallCheck(this, User);
+var User = function User() {
+  _classCallCheck(this, User);
+};
 
-    this.info = {};
-  }
-
-  _createClass(User, [{
-    key: 'setInfo',
-    value: function setInfo(info) {
-      this.info = info;
-    }
-  }, {
-    key: 'getInfo',
-    value: function getInfo() {
-      return this.info;
-    }
-  }, {
-    key: 'isEmpty',
-    value: function isEmpty() {
-      return _.isEmpty(this.getInfo());
-    }
-  }, {
-    key: 'getAuthenticated',
-    value: function getAuthenticated() {
-      return new Promise(function (resolve, reject) {
-        axios.get('/api/auth/user').then(function (response) {
-          return resolve(response.data);
-        }).catch(function (errors) {
-          return reject(errors.response.data);
-        });
-      });
-    }
-  }]);
-
-  return User;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (User);
+/* unused harmony default export */ var _unused_webpack_default_export = (User);
 
 /***/ }),
 /* 3 */
@@ -13542,12 +13506,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__App_vue__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__App_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__App_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_User_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utilities_auth_Auth_js__ = __webpack_require__(67);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+
 
 
 
@@ -13581,20 +13547,23 @@ var app = new __WEBPACK_IMPORTED_MODULE_1_vue___default.a({
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_auth_Auth_js__ = __webpack_require__(67);
+
 
 
 var routes = [{
-    path: '/',
-    name: 'welcome',
-    component: __webpack_require__(15)
+  path: '/',
+  name: 'welcome',
+  component: __webpack_require__(15)
 }, {
-    path: '/login',
-    name: 'login',
-    component: __webpack_require__(18)
+  path: '/login',
+  name: 'login',
+  beforeEnter: __WEBPACK_IMPORTED_MODULE_1__utilities_auth_Auth_js__["b" /* requireGuest */],
+  component: __webpack_require__(18)
 }];
 
 var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
-    routes: routes
+  routes: routes
 });
 
 /* harmony default export */ __webpack_exports__["a"] = (router);
@@ -13719,8 +13688,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utilities_Form_js__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_User_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utilities_auth_Auth_js__ = __webpack_require__(67);
 //
 //
 //
@@ -13771,59 +13739,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'login',
+  name: 'loginTest',
 
   data: function data() {
     return {
-      form: new __WEBPACK_IMPORTED_MODULE_0__utilities_Form_js__["a" /* default */]({
-        email: '',
-        password: ''
-      }),
-
-      isLoading: false
+      auth: __WEBPACK_IMPORTED_MODULE_0__utilities_auth_Auth_js__["a" /* default */]
     };
-  },
-
-
-  methods: {
-    login: function login() {
-      var _this = this;
-
-      this.form.setSubmitDisabled(true);
-      this.isLoading = true;
-
-      this.form.submit('post', '/api/login').then(function (response) {
-        console.log(response);
-
-        _this.$emit('userLoggedIn', response.user);
-
-        _this.redirectToHome();
-      }).catch(function (errors) {
-        console.log(errors);
-
-        _this.isLoading = false;
-      });
-    },
-    redirectToHome: function redirectToHome() {
-      this.$router.push({ name: 'welcome' });
-    }
-  },
-
-  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-    var user = new __WEBPACK_IMPORTED_MODULE_1__models_User_js__["a" /* default */]();
-
-    user.getAuthenticated().then(function (response) {
-      next({
-        name: 'welcome'
-      });
-    }).catch(function (errors) {
-      next();
-    });
   }
 });
 
@@ -13852,12 +13777,19 @@ var Form = function () {
     this.errors = new __WEBPACK_IMPORTED_MODULE_0__Errors_js__["a" /* default */]();
 
     this.submitDisabled = false;
+
+    this.isLoading = false;
   }
 
   _createClass(Form, [{
     key: 'setSubmitDisabled',
     value: function setSubmitDisabled(isDisabled) {
       this.submitDisabled = isDisabled;
+    }
+  }, {
+    key: 'setLoading',
+    value: function setLoading(isLoading) {
+      this.isLoading = isLoading;
     }
   }, {
     key: 'data',
@@ -13884,13 +13816,20 @@ var Form = function () {
     value: function submit(requestType, uri) {
       var _this = this;
 
+      this.setLoading(true);
+      this.setSubmitDisabled(true);
+
       return new Promise(function (resolve, reject) {
         axios[requestType](uri, _this.data()).then(function (response) {
           _this.onSuccess(response.data);
 
+          _this.setLoading(false);
+
           resolve(response.data);
         }).catch(function (errors) {
           _this.onFail(errors.response.data);
+
+          _this.setLoading(false);
 
           reject(errors.response.data);
         });
@@ -13984,10 +13923,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "submit": function($event) {
         $event.preventDefault();
-        _vm.login($event)
+        _vm.auth.login($event)
       },
       "keydown": function($event) {
-        _vm.form.errors.clear($event.target.name), _vm.form.setSubmitDisabled(_vm.form.errors.any())
+        _vm.auth.errors.clear($event.target.name), _vm.auth.form.setSubmitDisabled(_vm.auth.errors.any())
       }
     }
   }, [_c('div', {
@@ -13996,11 +13935,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.form.email),
-      expression: "form.email"
+      value: (_vm.auth.form.email),
+      expression: "auth.form.email"
     }],
     class: {
-      'form-control': true, 'is-invalid': _vm.form.errors.has('email')
+      'form-control': true, 'is-invalid': _vm.auth.errors.has('email')
     },
     attrs: {
       "type": "email",
@@ -14008,27 +13947,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "email"
     },
     domProps: {
-      "value": (_vm.form.email)
+      "value": (_vm.auth.form.email)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.form.email = $event.target.value
+        _vm.auth.form.email = $event.target.value
       }
     }
-  }), _vm._v(" "), (_vm.form.errors.has('email')) ? _c('div', {
+  }), _vm._v(" "), (_vm.auth.errors.has('email')) ? _c('div', {
     staticClass: "invalid-feedback"
-  }, [_vm._v("\n          " + _vm._s(_vm.form.errors.get('email')) + "\n        ")]) : _vm._e()]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n          " + _vm._s(_vm.auth.errors.get('email')) + "\n        ")]) : _vm._e()]), _vm._v(" "), _c('div', {
     staticClass: "form-group"
   }, [_c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.form.password),
-      expression: "form.password"
+      value: (_vm.auth.form.password),
+      expression: "auth.form.password"
     }],
     class: {
-      'form-control': true, 'is-invalid': _vm.form.errors.has('password')
+      'form-control': true, 'is-invalid': _vm.auth.errors.has('password')
     },
     attrs: {
       "type": "password",
@@ -14036,26 +13975,26 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "Password"
     },
     domProps: {
-      "value": (_vm.form.password)
+      "value": (_vm.auth.form.password)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.form.password = $event.target.value
+        _vm.auth.form.password = $event.target.value
       }
     }
-  }), _vm._v(" "), (_vm.form.errors.has('password')) ? _c('div', {
+  }), _vm._v(" "), (_vm.auth.errors.has('password')) ? _c('div', {
     staticClass: "invalid-feedback"
-  }, [_vm._v("\n          " + _vm._s(_vm.form.errors.get('password')) + "\n        ")]) : _vm._e()]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n          " + _vm._s(_vm.auth.errors.get('password')) + "\n        ")]) : _vm._e()]), _vm._v(" "), _c('div', {
     staticClass: "form-group"
   }, [_c('button', {
     staticClass: "btn btn-primary",
     attrs: {
       "type": "submit",
       "name": "login",
-      "disabled": _vm.form.submitDisabled
+      "disabled": _vm.auth.form.submitDisabled
     }
-  }, [(_vm.isLoading) ? _c('span', [_c('i', {
+  }, [(_vm.auth.form.isLoading) ? _c('span', [_c('i', {
     staticClass: "fa fa-circle-o-notch fa-spin"
   })]) : _vm._e(), _vm._v("\n          Login\n      ")])])])])
 },staticRenderFns: []}
@@ -14115,7 +14054,6 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navbar_vue__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navbar_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_Navbar_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_User_js__ = __webpack_require__(2);
 //
 //
 //
@@ -14126,38 +14064,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'app',
 
-  data: function data() {
-    return {
-      user: new __WEBPACK_IMPORTED_MODULE_1__models_User_js__["a" /* default */]()
-    };
-  },
-
   components: {
     'app-navbar': __WEBPACK_IMPORTED_MODULE_0__components_Navbar_vue___default.a
-  },
-
-  methods: {
-    login: function login(userDetails) {
-      this.user.setInfo(userDetails);
-    }
-  },
-
-  beforeMount: function beforeMount() {
-    var _this = this;
-
-    this.user.getAuthenticated().then(function (response) {
-      return _this.user.setInfo(response.user);
-    }).catch(function (errors) {
-      return console.log(errors);
-    });
   }
 });
 
@@ -14209,6 +14123,7 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_auth_Auth_js__ = __webpack_require__(67);
 //
 //
 //
@@ -14240,22 +14155,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'app-navbar',
+
+  data: function data() {
+    return {
+      auth: __WEBPACK_IMPORTED_MODULE_1__utilities_auth_Auth_js__["a" /* default */]
+    };
+  }
+});
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('burger', {
-	template: '\n\t\t<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu">\n  \t    \t<span class="navbar-toggler-icon"></span>\n  \t  \t</button>\n\t'
+  template: '\n\t\t<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu">\n  \t    \t<span class="navbar-toggler-icon"></span>\n  \t  \t</button>\n\t'
 });
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('navbar-link', {
-	template: '\n\t\t<a :href="uri" class="nav-item nav-link">{{ text }}</a>\n\t',
-	props: ['uri', 'text']
-});
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	name: 'app-navbar',
-
-	props: {
-		user: { type: Object }
-	}
+  template: '\n\t\t<a :href="uri" class="nav-item nav-link">{{ text }}</a>\n\t',
+  props: ['uri', 'text']
 });
 
 /***/ }),
@@ -14277,7 +14195,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('ul', {
     staticClass: "navbar-nav"
-  }, [(!_vm.user) ? [_c('navbar-link', {
+  }, [(!_vm.auth.isLoggedIn()) ? [_c('navbar-link', {
     attrs: {
       "uri": "#",
       "text": "Home"
@@ -14294,7 +14212,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })] : _vm._e()], 2), _vm._v(" "), _c('ul', {
     staticClass: "nav navbar-nav ml-auto"
-  }, [(!_vm.user) ? _c('navbar-link', {
+  }, [(!_vm.auth.isLoggedIn()) ? _c('navbar-link', {
     attrs: {
       "uri": "#/login",
       "text": "Login"
@@ -14302,7 +14220,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }) : _c('navbar-link', {
     attrs: {
       "uri": "#/",
-      "text": _vm.user['first_name']
+      "text": _vm.auth.user['first_name']
     }
   })], 1)])], 1)])
 },staticRenderFns: []}
@@ -14323,15 +14241,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": "app"
     }
-  }, [(_vm.user.isEmpty()) ? _c('app-navbar') : _c('app-navbar', {
-    attrs: {
-      "user": _vm.user.getInfo()
-    }
-  }), _vm._v(" "), _c('router-view', {
-    on: {
-      "userLoggedIn": _vm.login
-    }
-  })], 1)
+  }, [_c('app-navbar'), _vm._v(" "), _c('router-view')], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -49124,6 +49034,133 @@ module.exports = function spread(callback) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export requireAuth */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return requireGuest; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Form_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_User_js__ = __webpack_require__(2);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+
+var Auth = function () {
+  function Auth() {
+    _classCallCheck(this, Auth);
+
+    this.form = new __WEBPACK_IMPORTED_MODULE_0__Form_js__["a" /* default */]({
+      email: '',
+      password: ''
+    });
+
+    this.errors = this.form.errors;
+
+    this.user = {};
+  }
+
+  _createClass(Auth, [{
+    key: 'setUser',
+    value: function setUser(info) {
+      this.user = info;
+    }
+  }, {
+    key: 'getUser',
+    value: function getUser() {
+      return this.user;
+    }
+  }, {
+    key: 'getLogin',
+    value: function getLogin() {
+      return new Promise(function (resolve, reject) {
+        axios.get('/api/auth/user').then(function (response) {
+          return resolve(response.data);
+        }).catch(function (errors) {
+          return reject(errors.response.data);
+        });
+      });
+    }
+  }, {
+    key: 'isLoggedIn',
+    value: function isLoggedIn() {
+      var _this = this;
+
+      if (_.isEmpty(this.user)) {
+        this.getLogin().then(function (response) {
+          return _this.setUser(response.user);
+        }).catch(function (errors) {
+          console.log(errors);
+          return false;
+        });
+      }
+
+      return true;
+    }
+  }, {
+    key: 'login',
+    value: function login() {
+      var _this2 = this;
+
+      this.form.submit('post', '/api/login').then(function (response) {
+        console.log(response);
+
+        _this2.setUser(response.user);
+      }).catch(function (errors) {
+        console.log(errors);
+      });
+    }
+  }, {
+    key: 'logout',
+    value: function logout() {}
+  }]);
+
+  return Auth;
+}();
+// end of Auth class
+
+var auth = new Auth();
+
+// for route guard
+function requireAuth(to, from, next) {
+  if (auth.isLoggedIn()) {
+    next();
+  } else {
+    next({
+      name: 'welcome'
+    });
+  }
+};
+
+function requireGuest(to, from, next) {
+  if (!auth.isLoggedIn()) {
+    next();
+  } else {
+    next({
+      name: 'welcome'
+    });
+  }
+};
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = (auth);
 
 /***/ })
 /******/ ]);

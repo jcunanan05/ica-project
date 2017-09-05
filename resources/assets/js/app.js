@@ -9,6 +9,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import App from './App.vue'
 import User from './models/User.js';
+import auth from './utilities/auth/Auth.js';
 
 require('./bootstrap');
 

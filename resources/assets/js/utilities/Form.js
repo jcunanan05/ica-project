@@ -11,11 +11,18 @@ class Form {
     this.errors = new Errors();
 
     this.submitDisabled = false;
+
+    this.isLoading = false;
   }
 
 
   setSubmitDisabled(isDisabled) {
     this.submitDisabled = isDisabled;
+  }
+
+
+  setLoading(isLoading) {
+    this.isLoading = isLoading;
   }
   
 
@@ -40,19 +47,28 @@ class Form {
 
 
   submit(requestType, uri) {
+    this.setLoading(true);
+    this.setSubmitDisabled(true);
+
     return new Promise((resolve, reject) => {
       axios[requestType](uri, this.data())
         .then(response => {
           this.onSuccess(response.data);
+
+          this.setLoading(false);
 
           resolve(response.data)
         })
         .catch(errors => {
           this.onFail(errors.response.data);
 
+          this.setLoading(false);
+
           reject(errors.response.data);
         });
     });
+
+    
   }
 
 
