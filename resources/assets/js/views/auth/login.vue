@@ -2,7 +2,7 @@
   <div class="container-fluid">
 
     <form method="POST" 
-      @submit.prevent="auth.login" 
+      @submit.prevent="login" 
       @keydown="auth.errors.clear($event.target.name), auth.form.setSubmitDisabled(auth.errors.any())" >
 
       <div class="form-group">
@@ -57,6 +57,21 @@ export default {
 
   data: () => ({
     auth
-  })
+  }),
+
+  methods: {
+    login() {
+      this.auth.login()
+        .then(response => {
+          this.redirectTo('welcome');
+        })
+        .catch(errors => {});
+    },
+
+    redirectTo(routeName) {
+      this.$router.push({ name: routeName });
+    }
+
+  }
 }
 </script>

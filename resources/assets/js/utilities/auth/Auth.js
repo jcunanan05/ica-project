@@ -52,14 +52,20 @@ class Auth {
 
 
   login() {
-    this.form.submit('post', '/api/login')
-    .then(response => {
-      console.log(response);
+    return new Promise((resolve, reject) => {
+      this.form.submit('post', '/api/login')
+      .then(response => {
+        console.log(response);
+  
+        this.setUser(response.user);
 
-      this.setUser(response.user);
-    })
-    .catch(errors => {
-      console.log(errors);
+        resolve(response.user);
+      })
+      .catch(errors => {
+        console.log(errors);
+
+        reject(errors);
+      });
     });
   }
 
