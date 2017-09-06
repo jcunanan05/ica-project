@@ -37,14 +37,17 @@ class Auth {
   isLoggedIn() {
     if(_.isEmpty(this.user)) {
       this.getLogin()
-        .then(response => this.setUser(response.user))
+        .then(response => {
+          this.setUser(response.user);
+          return true;
+        })
         .catch(errors => {
           console.log(errors);
           return false;
         });
+    } else {
+      return true;
     }
-
-    return true;
   }
 
 

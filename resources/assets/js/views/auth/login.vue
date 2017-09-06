@@ -53,7 +53,7 @@ import auth from '../../utilities/auth/Auth.js';
 
 
 export default {
-  name: 'loginTest',
+  name: 'login',
 
   data: () => ({
     auth
