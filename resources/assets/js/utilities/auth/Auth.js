@@ -12,6 +12,8 @@ class Auth {
     this.errors = this.form.errors;
 
     this.user = {};
+
+    this.isFetched = false;
   }
 
 
@@ -25,8 +27,15 @@ class Auth {
   }
 
 
+  setFetched(bool) {
+    this.isFetched = bool;
+  }
+
+
   getLogin() {
     return new Promise ((resolve, reject) => {
+      this.setFetched(true);
+
       axios.get('/api/auth/user')
         .then(response => resolve(response.data))
         .catch(errors => reject(errors.response.data));
@@ -36,15 +45,18 @@ class Auth {
 
   isLoggedIn() {
     if(_.isEmpty(this.user)) {
-      this.getLogin()
-        .then(response => {
-          this.setUser(response.user);
-          return true;
-        })
-        .catch(errors => {
-          console.log(errors);
-          return false;
-        });
+      //one time fetch of user data
+      if(! this.isFetched) {
+        this.getLogin()
+          .then(response => {
+            this.setUser(response.user);
+            return true;
+          })
+          .catch(errors => {
+            console.log(errors);
+            return false;
+          });
+      }
     } else {
       return true;
     }
@@ -54,18 +66,18 @@ class Auth {
   login() {
     return new Promise((resolve, reject) => {
       this.form.submit('post', '/api/login')
-      .then(response => {
-        console.log(response);
-  
-        this.setUser(response.user);
+        .then(response => {
+          console.log(response);
+    
+          this.setUser(response.user);
 
-        resolve(response.user);
-      })
-      .catch(errors => {
-        console.log(errors);
+          resolve(response.user);
+        })
+        .catch(errors => {
+          console.log(errors);
 
-        reject(errors);
-      });
+          reject(errors);
+        });
     });
   }
 

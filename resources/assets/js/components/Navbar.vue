@@ -17,9 +17,15 @@
 
 
   	  	<ul class="nav navbar-nav ml-auto">
-  	  	  <navbar-link v-if="! auth.isLoggedIn()" uri="#/login" text="Login"/>
+          <template v-if="! auth.isLoggedIn()">
+            <navbar-link  uri="#/login" text="Login" />
+          </template>
+  	  	  
 					
-					<navbar-link v-else uri="#/" :text="auth.user['first_name']" />
+          <template v-else>
+            <navbar-link uri="#/" :text="auth.user['first_name']" />
+            <navbar-link uri="#/logout" text="Logout" />
+          </template>
   	  	</ul>
   	  </div>
 

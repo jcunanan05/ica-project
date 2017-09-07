@@ -401,6 +401,8 @@ var Auth = function () {
     this.errors = this.form.errors;
 
     this.user = {};
+
+    this.isFetched = false;
   }
 
   _createClass(Auth, [{
@@ -414,9 +416,18 @@ var Auth = function () {
       return this.user;
     }
   }, {
+    key: 'setFetched',
+    value: function setFetched(bool) {
+      this.isFetched = bool;
+    }
+  }, {
     key: 'getLogin',
     value: function getLogin() {
+      var _this = this;
+
       return new Promise(function (resolve, reject) {
+        _this.setFetched(true);
+
         axios.get('/api/auth/user').then(function (response) {
           return resolve(response.data);
         }).catch(function (errors) {
@@ -427,16 +438,19 @@ var Auth = function () {
   }, {
     key: 'isLoggedIn',
     value: function isLoggedIn() {
-      var _this = this;
+      var _this2 = this;
 
       if (_.isEmpty(this.user)) {
-        this.getLogin().then(function (response) {
-          _this.setUser(response.user);
-          return true;
-        }).catch(function (errors) {
-          console.log(errors);
-          return false;
-        });
+        //one time fetch of user data
+        if (!this.isFetched) {
+          this.getLogin().then(function (response) {
+            _this2.setUser(response.user);
+            return true;
+          }).catch(function (errors) {
+            console.log(errors);
+            return false;
+          });
+        }
       } else {
         return true;
       }
@@ -444,13 +458,13 @@ var Auth = function () {
   }, {
     key: 'login',
     value: function login() {
-      var _this2 = this;
+      var _this3 = this;
 
       return new Promise(function (resolve, reject) {
-        _this2.form.submit('post', '/api/login').then(function (response) {
+        _this3.form.submit('post', '/api/login').then(function (response) {
           console.log(response);
 
-          _this2.setUser(response.user);
+          _this3.setUser(response.user);
 
           resolve(response.user);
         }).catch(function (errors) {
@@ -14289,6 +14303,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -14348,17 +14368,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })] : _vm._e()], 2), _vm._v(" "), _c('ul', {
     staticClass: "nav navbar-nav ml-auto"
-  }, [(!_vm.auth.isLoggedIn()) ? _c('navbar-link', {
+  }, [(!_vm.auth.isLoggedIn()) ? [_c('navbar-link', {
     attrs: {
       "uri": "#/login",
       "text": "Login"
     }
-  }) : _c('navbar-link', {
+  })] : [_c('navbar-link', {
     attrs: {
       "uri": "#/",
       "text": _vm.auth.user['first_name']
     }
-  })], 1)])], 1)])
+  }), _vm._v(" "), _c('navbar-link', {
+    attrs: {
+      "uri": "#/logout",
+      "text": "Logout"
+    }
+  })]], 2)])], 1)])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

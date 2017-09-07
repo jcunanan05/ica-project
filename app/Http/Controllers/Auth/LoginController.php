@@ -41,6 +41,10 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
+        if($request->expectsJson()) {
+            return response()->json(['success' => 'Logout Success.'], 201);
+        }
+
         return redirect('/');
     }
 
