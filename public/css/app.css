@@ -1,5 +1,22 @@
 @charset "UTF-8";
 
+#home-section {
+  background: url(/images/home.jpeg?6b015ad90489d26064cf3f674d719a11) no-repeat;
+  min-height: 700px;
+  background-size: cover;
+  background-attatchment: auto;
+}
+
+.navbar {
+  height: 100%;
+  background-color: #71bedc;
+  border-bottom: #0082b6 3px solid;
+}
+
+.color-font {
+  color: #ffffff !important;
+}
+
 /*!
  * Bootstrap v4.0.0-beta (https://getbootstrap.com)
  * Copyright 2011-2017 The Bootstrap Authors

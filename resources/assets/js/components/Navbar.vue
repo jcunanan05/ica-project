@@ -1,7 +1,8 @@
 <template>
-  <div>
-  	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  	  <a class="navbar-brand" href="#">ICA</a>
+  <div id="home">
+  	<nav class="navbar navbar-expand-lg navbar-light ">
+  	  <div class="container">
+      <a class="navbar-brand" href="#"><img src="img/icalogo.png" class="img-fluid"></a>
 
   	  <burger />
 
@@ -28,9 +29,10 @@
           </template>
   	  	</ul>
   	  </div>
-
+      </div>
   	</nav>
-  </div>
+    </div>
+  
 </template>
 
 <script>
@@ -57,7 +59,7 @@ Vue.component('burger', {
 
 Vue.component('navbar-link', {
 	template: `
-		<a :href="uri" class="nav-item nav-link">{{ text }}</a>
+		<a :href="uri" class="nav-item nav-link color-font">{{ text }}</a>
 	`,
 	props: ['uri', 'text']
 })

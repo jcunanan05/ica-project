@@ -13879,7 +13879,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\welcome\\index.vue"
+Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\views\\welcome\\index.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] index.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -13890,9 +13890,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6f9e2a3a", Component.options)
+    hotAPI.createRecord("data-v-77be3586", Component.options)
   } else {
-    hotAPI.reload("data-v-6f9e2a3a", Component.options)
+    hotAPI.reload("data-v-77be3586", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -13914,6 +13914,65 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'index'
@@ -13926,13 +13985,80 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _vm._m(0)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('h1', [_vm._v("Hello Laravel and Vue")])])
+  return _c('header', {
+    attrs: {
+      "id": "home-section"
+    }
+  }, [_c('div', {
+    staticClass: "dark-overlay"
+  }, [_c('div', {
+    staticClass: "home-inner"
+  }, [_c('div', {
+    staticClass: "container"
+  }, [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-lg-8"
+  }, [_c('h1', {
+    staticClass: "display-4"
+  }, [_vm._v("Informatics "), _c('strong', [_vm._v("Comprehensive Assestment")])]), _vm._v(" "), _c('div', {
+    staticClass: "d-flex flex-row"
+  }, [_c('div', {
+    staticClass: "p-4 align-self-start"
+  }, [_c('i', {
+    staticClass: " fa fa-check"
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "p-4 align-self-end"
+  }, [_vm._v("\n                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n                 tempor incididunt ut labore et dolore magna aliqua.\n               ")])]), _vm._v(" "), _c('div', {
+    staticClass: "d-flex flex-row"
+  }, [_c('div', {
+    staticClass: "p-4 align-self-start"
+  }, [_c('i', {
+    staticClass: " fa fa-check"
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "p-4 align-self-end"
+  }, [_vm._v("\n                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n                 tempor incididunt ut labore et dolore magna aliqua.\n               ")])]), _vm._v(" "), _c('div', {
+    staticClass: "d-flex flex-row"
+  }, [_c('div', {
+    staticClass: "p-4 align-self-start"
+  }, [_c('i', {
+    staticClass: " fa fa-check"
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "p-4 align-self-end"
+  }, [_vm._v("\n                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n                 tempor incididunt ut labore et dolore magna aliqua.\n               ")])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-lg-4"
+  }, [_c('div', {
+    staticClass: "card bg-info text-center card-form"
+  }, [_c('div', {
+    staticClass: "card-body"
+  }, [_c('h3', [_vm._v("Sign Up Today")]), _vm._v(" "), _c('p', [_vm._v("Please fill out this form to register")])]), _vm._v(" "), _c('form', [_c('div', {
+    staticClass: "form-group"
+  }, [_c('input', {
+    staticClass: "form control form control-lg",
+    attrs: {
+      "type": "text",
+      "placeholder": "Name"
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "form-group"
+  }, [_c('input', {
+    staticClass: "form control form control-lg",
+    attrs: {
+      "type": "text",
+      "placeholder": "Email"
+    }
+  })]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-outline-info",
+    attrs: {
+      "type": "button"
+    }
+  }, [_vm._v("Submit")])])])])])])])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-6f9e2a3a", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-77be3586", module.exports)
   }
 }
 
@@ -13953,7 +14079,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\auth\\login.vue"
+Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\views\\auth\\login.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] login.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -13964,9 +14090,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-d0002686", Component.options)
+    hotAPI.createRecord("data-v-3b1084f1", Component.options)
   } else {
-    hotAPI.reload("data-v-d0002686", Component.options)
+    hotAPI.reload("data-v-3b1084f1", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14152,7 +14278,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-d0002686", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-3b1084f1", module.exports)
   }
 }
 
@@ -14173,7 +14299,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\App.vue"
+Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\App.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] App.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14184,9 +14310,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6682b892", Component.options)
+    hotAPI.createRecord("data-v-5916c703", Component.options)
   } else {
-    hotAPI.reload("data-v-6682b892", Component.options)
+    hotAPI.reload("data-v-5916c703", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14242,7 +14368,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\components\\Navbar.vue"
+Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\components\\Navbar.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Navbar.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14253,9 +14379,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-d0061b02", Component.options)
+    hotAPI.createRecord("data-v-56ff60cb", Component.options)
   } else {
-    hotAPI.reload("data-v-d0061b02", Component.options)
+    hotAPI.reload("data-v-56ff60cb", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14274,6 +14400,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_auth_Auth_js__ = __webpack_require__(1);
+//
+//
 //
 //
 //
@@ -14328,7 +14456,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('burger', {
 });
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('navbar-link', {
-  template: '\n\t\t<a :href="uri" class="nav-item nav-link">{{ text }}</a>\n\t',
+  template: '\n\t\t<a :href="uri" class="nav-item nav-link color-font">{{ text }}</a>\n\t',
   props: ['uri', 'text']
 });
 
@@ -14337,14 +14465,15 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('navbar-link', {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('nav', {
-    staticClass: "navbar navbar-expand-lg navbar-light bg-light"
-  }, [_c('a', {
-    staticClass: "navbar-brand",
+  return _c('div', {
     attrs: {
-      "href": "#"
+      "id": "home"
     }
-  }, [_vm._v("ICA")]), _vm._v(" "), _c('burger'), _vm._v(" "), _c('div', {
+  }, [_c('nav', {
+    staticClass: "navbar navbar-expand-lg navbar-light "
+  }, [_c('div', {
+    staticClass: "container"
+  }, [_vm._m(0), _vm._v(" "), _c('burger'), _vm._v(" "), _c('div', {
     staticClass: "collapse navbar-collapse",
     attrs: {
       "id": "navbarMenu"
@@ -14383,13 +14512,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "uri": "#/logout",
       "text": "Logout"
     }
-  })]], 2)])], 1)])
-},staticRenderFns: []}
+  })]], 2)])], 1)])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('a', {
+    staticClass: "navbar-brand",
+    attrs: {
+      "href": "#"
+    }
+  }, [_c('img', {
+    staticClass: "img-fluid",
+    attrs: {
+      "src": "img/icalogo.png"
+    }
+  })])
+}]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-d0061b02", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-56ff60cb", module.exports)
   }
 }
 
@@ -14408,7 +14549,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-6682b892", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-5916c703", module.exports)
   }
 }
 
