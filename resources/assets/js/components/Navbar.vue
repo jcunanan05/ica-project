@@ -2,7 +2,7 @@
   <div id="home">
   	<nav class="navbar navbar-expand-lg navbar-light ">
   	  <div class="container">
-      <a class="navbar-brand" href="#"><img src="img/icalogo.png" class="img-fluid"></a>
+      <a class="navbar-brand" href="#/"><img src="images/icalogo.png" width="auto" height="25px"></a>
 
   	  <burger />
 
