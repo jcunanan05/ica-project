@@ -1,0 +1,15 @@
+#home-section{
+  background:url('../img/home.jpeg') no-repeat;
+  min-height:700px;
+  background-size:cover;
+  background-attatchment:auto;
+}
+
+.dark-overlay{
+  background-color:$dark-overlay;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  min-height:700px;
+}

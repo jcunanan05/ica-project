@@ -1,0 +1,13 @@
+$dark-blue:#0082b6;
+$primary-color:#71bedc;
+$font-color:#ffffff;
+
+.navbar{
+  height:100%;
+  background-color:$primary-color;
+  border-bottom:$dark-blue 3px solid;
+
+}
+.color-font{
+  color:$font-color !important;
+}
