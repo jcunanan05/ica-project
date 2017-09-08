@@ -13879,7 +13879,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\views\\welcome\\index.vue"
+Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\welcome\\index.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] index.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -13890,9 +13890,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-77be3586", Component.options)
+    hotAPI.createRecord("data-v-6f9e2a3a", Component.options)
   } else {
-    hotAPI.reload("data-v-77be3586", Component.options)
+    hotAPI.reload("data-v-6f9e2a3a", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14058,7 +14058,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-77be3586", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-6f9e2a3a", module.exports)
   }
 }
 
@@ -14079,7 +14079,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\views\\auth\\login.vue"
+Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\auth\\login.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] login.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14090,9 +14090,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3b1084f1", Component.options)
+    hotAPI.createRecord("data-v-d0002686", Component.options)
   } else {
-    hotAPI.reload("data-v-3b1084f1", Component.options)
+    hotAPI.reload("data-v-d0002686", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14278,7 +14278,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-3b1084f1", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-d0002686", module.exports)
   }
 }
 
@@ -14299,7 +14299,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\App.vue"
+Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\App.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] App.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14310,9 +14310,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5916c703", Component.options)
+    hotAPI.createRecord("data-v-6682b892", Component.options)
   } else {
-    hotAPI.reload("data-v-5916c703", Component.options)
+    hotAPI.reload("data-v-6682b892", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14368,7 +14368,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\components\\Navbar.vue"
+Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\components\\Navbar.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Navbar.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14379,9 +14379,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-56ff60cb", Component.options)
+    hotAPI.createRecord("data-v-d0061b02", Component.options)
   } else {
-    hotAPI.reload("data-v-56ff60cb", Component.options)
+    hotAPI.reload("data-v-d0061b02", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14517,12 +14517,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('a', {
     staticClass: "navbar-brand",
     attrs: {
-      "href": "#"
+      "href": "#/"
     }
   }, [_c('img', {
-    staticClass: "img-fluid",
     attrs: {
-      "src": "img/icalogo.png"
+      "src": "images/icalogo.png",
+      "width": "auto",
+      "height": "25px"
     }
   })])
 }]}
@@ -14530,7 +14531,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-56ff60cb", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-d0061b02", module.exports)
   }
 }
 
@@ -14549,7 +14550,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-5916c703", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-6682b892", module.exports)
   }
 }
 
