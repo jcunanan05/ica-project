@@ -8,9 +8,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\CustomRules\LoginRules;
+use App\Transformers\UserTransformer;
 
 class LoginController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('guest')->except(['logout', 'authenticatedUser']);
@@ -40,10 +42,6 @@ class LoginController extends Controller
         $request->session()->flush();
 
         $request->session()->regenerate();
-
-        if($request->expectsJson()) {
-            return response()->json(['success' => 'Logout Success.'], 201);
-        }
 
         return redirect('/');
     }
@@ -108,16 +106,12 @@ class LoginController extends Controller
 
     protected function success() 
     {
+        $userTransformer = new UserTransformer();
+
+
         return response()->json([
             'success' => 'Login Successful!',
-            'user' => User::find(Auth::user()->id)
-                        ->select(
-                            'first_name',
-                            'middle_name', 
-                            'last_name', 
-                            'email'
-                        )
-                        ->first(),
+            'user' => $userTransformer->transform(User::findIdWithRole(Auth::user()->id)),
         ], 201);
     }
 
