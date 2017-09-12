@@ -1,21 +1,59 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="card bg-light mb-3" style="max-width: 17rem;">
-  <div class="card-header">Admin</div>
-  <div class="card-body">
-    <div class="list-group" id="list-tab" role="tablist">
-      <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Home</a>
-      <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Profile</a>
-      <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Messages</a>
-      <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>
-    </div>
-  </div>
+
+
+
+
+
+
+
+
+ 
+    <div class="col-md-3" id="sidebar" >
+      <div class="list-group">
+                <a class="list-group-item disabled" id="headersidebar">
+                   <strong> Dashboard </strong>
+                </a>
+                <a href="" class="list-group-item list-group-item-action"><span class="fa fa-th-list" aria-hidden="true"></span>  Courses</a>
+                <a href="" class="list-group-item list-group-item-action"><span class="fa fa-user" aria-hidden="true"></span>  Registration</a>
+                <a href="" class="list-group-item list-group-item-action"><span class="fa fa-file-o" aria-hidden="true"></span>  Reports<span class="badge">2</span></a>
+        </div>
         
+    </div>
+
+
+    <div class="container">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header main-color">
+              <h3 class="panel-title">Website Overview</h3>
+          </div>
+          
+          <div class="card border-info mb-3" style="max-width: 15rem;">            
+            <div class="card-body text-info">
+              <h4 class="card-title">Info card title</h4>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+          </div>
+
+
+          <div class="card border-info mb-3" style="max-width: 15rem;">
+            
+            <div class="card-body text-info">
+              <h4 class="card-title">Info card title</h4>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+          </div>
+
+
+        </div>
       </div>
     </div>
-  </div>
-</template>
+
+      </div>
+    </div>
+  </template>
 
 
 
@@ -23,12 +61,8 @@
   export default {
 
   }
-//  Vue.component('navbar-link', {
-//   template: `
-//     <a :href="uri" class="nav-item nav-link color-font" :role="role" >{{ text }}</a>
-//   `,
-//   props: ['uri', 'text', 'role']
-// })
+
+
 
 </script>
 

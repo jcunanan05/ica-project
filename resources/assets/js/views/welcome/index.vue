@@ -36,30 +36,29 @@
                  </div>
                </div>
              </div>
-
-            <div class="col-lg-4">
-              <div class="card bg-info text-center card-form">
-                <div class="card-body">
-                <h3>Sign Up Today</h3>
-                <p>Please fill out this form to register</p>
-                </div> 
-                  <form>
-                    <div class="form-group">
-                      <input type="text" class= "form control form control-lg" placeholder="Name">
-                    </div>
-                    <div class="form-group">
-                      <input type="text" class= "form control form control-lg" placeholder="Email">
-                    </div>
-                    <button type="button" class="btn btn-outline-info">Submit</button>
-                  </form>
-                </div> 
-              </div>
-
-          </div>
+          </div>       
         </div>
       </div>
     </div>
   </header>
+
+<!-- 
+<section-about id="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-4">
+        
+
+
+        </div>
+      </div>
+    </div>
+
+</section-about> -->
+
+
+
+
 
 </template>
 

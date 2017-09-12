@@ -1,7 +1,29 @@
 @charset "UTF-8";
 
+#sidebar {
+  padding-left: 0px;
+  background: #00455f;
+  position: fixed;
+  width: auto;
+  height: 100%;
+}
+
+#sidebar #headersidebar {
+  background: #00455f;
+  font-color: #ffffff !important;
+}
+
+#sidebar a {
+  color: #ffffff !important;
+}
+
+#sidebar .list-group-item {
+  border: none !important;
+  background: none !important;
+}
+
 #home-section {
-  background: url(/images/home.jpeg?6b015ad90489d26064cf3f674d719a11) no-repeat;
+  background: url(/images/icabanner2.jpg?ed5c8c26702b19fa3e34edaa39760b13) no-repeat;
   min-height: 700px;
   background-size: cover;
   background-attatchment: auto;
@@ -9,12 +31,15 @@
 
 .navbar {
   height: 100%;
-  background-color: #71bedc;
-  border-bottom: #0082b6 3px solid;
+  background-color: #00455f;
 }
 
 .color-font {
   color: #ffffff !important;
+}
+
+.btn-outline-light {
+  font-color: #00455f !important;
 }
 
 /*!

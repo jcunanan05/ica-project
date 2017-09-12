@@ -13697,6 +13697,10 @@ var routes = [{
   name: 'login',
   beforeEnter: __WEBPACK_IMPORTED_MODULE_1__utilities_auth_Auth_js__["b" /* requireGuest */],
   component: __webpack_require__(21)
+}, {
+  path: '/dashboard',
+  name: 'dashboard',
+  component: __webpack_require__(67)
 }];
 
 var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
@@ -13879,7 +13883,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\welcome\\index.vue"
+Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\views\\welcome\\index.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] index.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -13890,9 +13894,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6f9e2a3a", Component.options)
+    hotAPI.createRecord("data-v-77be3586", Component.options)
   } else {
-    hotAPI.reload("data-v-6f9e2a3a", Component.options)
+    hotAPI.reload("data-v-77be3586", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -13908,7 +13912,6 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
 //
 //
 //
@@ -14009,7 +14012,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: " fa fa-check"
   })]), _vm._v(" "), _c('div', {
     staticClass: "p-4 align-self-end"
-  }, [_vm._v("\n                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n                 tempor incididunt ut labore et dolore magna aliqua.\n               ")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n                   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n                   tempor incididunt ut labore et dolore magna aliqua.\n                 ")])]), _vm._v(" "), _c('div', {
     staticClass: "d-flex flex-row"
   }, [_c('div', {
     staticClass: "p-4 align-self-start"
@@ -14017,7 +14020,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: " fa fa-check"
   })]), _vm._v(" "), _c('div', {
     staticClass: "p-4 align-self-end"
-  }, [_vm._v("\n                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n                 tempor incididunt ut labore et dolore magna aliqua.\n               ")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n                   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n                   tempor incididunt ut labore et dolore magna aliqua.\n                 ")])]), _vm._v(" "), _c('div', {
     staticClass: "d-flex flex-row"
   }, [_c('div', {
     staticClass: "p-4 align-self-start"
@@ -14025,40 +14028,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: " fa fa-check"
   })]), _vm._v(" "), _c('div', {
     staticClass: "p-4 align-self-end"
-  }, [_vm._v("\n                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n                 tempor incididunt ut labore et dolore magna aliqua.\n               ")])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-lg-4"
-  }, [_c('div', {
-    staticClass: "card bg-info text-center card-form"
-  }, [_c('div', {
-    staticClass: "card-body"
-  }, [_c('h3', [_vm._v("Sign Up Today")]), _vm._v(" "), _c('p', [_vm._v("Please fill out this form to register")])]), _vm._v(" "), _c('form', [_c('div', {
-    staticClass: "form-group"
-  }, [_c('input', {
-    staticClass: "form control form control-lg",
-    attrs: {
-      "type": "text",
-      "placeholder": "Name"
-    }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "form-group"
-  }, [_c('input', {
-    staticClass: "form control form control-lg",
-    attrs: {
-      "type": "text",
-      "placeholder": "Email"
-    }
-  })]), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-outline-info",
-    attrs: {
-      "type": "button"
-    }
-  }, [_vm._v("Submit")])])])])])])])])])
+  }, [_vm._v("\n                   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n                   tempor incididunt ut labore et dolore magna aliqua.\n                 ")])])])])])])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-6f9e2a3a", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-77be3586", module.exports)
   }
 }
 
@@ -14079,7 +14055,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\auth\\login.vue"
+Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\views\\auth\\login.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] login.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14090,9 +14066,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-d0002686", Component.options)
+    hotAPI.createRecord("data-v-3b1084f1", Component.options)
   } else {
-    hotAPI.reload("data-v-d0002686", Component.options)
+    hotAPI.reload("data-v-3b1084f1", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14278,7 +14254,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-d0002686", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-3b1084f1", module.exports)
   }
 }
 
@@ -14299,7 +14275,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\App.vue"
+Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\App.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] App.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14310,9 +14286,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6682b892", Component.options)
+    hotAPI.createRecord("data-v-5916c703", Component.options)
   } else {
-    hotAPI.reload("data-v-6682b892", Component.options)
+    hotAPI.reload("data-v-5916c703", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14368,7 +14344,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\components\\Navbar.vue"
+Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\components\\Navbar.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Navbar.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14379,9 +14355,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-d0061b02", Component.options)
+    hotAPI.createRecord("data-v-56ff60cb", Component.options)
   } else {
-    hotAPI.reload("data-v-d0061b02", Component.options)
+    hotAPI.reload("data-v-56ff60cb", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14456,9 +14432,17 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('burger', {
 });
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('navbar-link', {
-  template: '\n\t\t<a :href="uri" class="nav-item nav-link color-font">{{ text }}</a>\n\t',
-  props: ['uri', 'text']
+  template: '\n\t\t<a :href="uri" class="nav-item nav-link color-font" :role="role" >{{ text }}</a>\n\t',
+  props: ['uri', 'text', 'role']
 });
+
+// Vue.component('navbar-btn', {
+//   template: `
+
+//     <a :href="uri"class= btn btn-warning> {{ text }} </a>
+//   `,
+//   props: ['uri', 'text']
+// })
 
 /***/ }),
 /* 28 */
@@ -14498,9 +14482,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   })] : _vm._e()], 2), _vm._v(" "), _c('ul', {
     staticClass: "nav navbar-nav ml-auto"
   }, [(!_vm.auth.isLoggedIn()) ? [_c('navbar-link', {
+    staticClass: "btn btn-outline-info",
     attrs: {
       "uri": "#/login",
-      "text": "Login"
+      "text": "Login",
+      "role": "button"
     }
   })] : [_c('navbar-link', {
     attrs: {
@@ -14531,7 +14517,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-d0061b02", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-56ff60cb", module.exports)
   }
 }
 
@@ -14550,7 +14536,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-6682b892", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-5916c703", module.exports)
   }
 }
 
@@ -49337,6 +49323,221 @@ module.exports = function spread(callback) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(2)(
+  /* script */
+  __webpack_require__(68),
+  /* template */
+  __webpack_require__(69),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\views\\registrar\\dashboard.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] dashboard.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4be1375a", Component.options)
+  } else {
+    hotAPI.reload("data-v-4be1375a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 68 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _vm._m(0)
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "container-fluid"
+  }, [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-3",
+    attrs: {
+      "id": "sidebar"
+    }
+  }, [_c('div', {
+    staticClass: "list-group"
+  }, [_c('a', {
+    staticClass: "list-group-item disabled",
+    attrs: {
+      "id": "headersidebar"
+    }
+  }, [_c('strong', [_vm._v(" Dashboard ")])]), _vm._v(" "), _c('a', {
+    staticClass: "list-group-item list-group-item-action",
+    attrs: {
+      "href": ""
+    }
+  }, [_c('span', {
+    staticClass: "fa fa-th-list",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v("  Courses")]), _vm._v(" "), _c('a', {
+    staticClass: "list-group-item list-group-item-action",
+    attrs: {
+      "href": ""
+    }
+  }, [_c('span', {
+    staticClass: "fa fa-user",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v("  Registration")]), _vm._v(" "), _c('a', {
+    staticClass: "list-group-item list-group-item-action",
+    attrs: {
+      "href": ""
+    }
+  }, [_c('span', {
+    staticClass: "fa fa-file-o",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v("  Reports"), _c('span', {
+    staticClass: "badge"
+  }, [_vm._v("2")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "container"
+  }, [_c('div', {
+    staticClass: "col-md-8"
+  }, [_c('div', {
+    staticClass: "card"
+  }, [_c('div', {
+    staticClass: "card-header main-color"
+  }, [_c('h3', {
+    staticClass: "panel-title"
+  }, [_vm._v("Website Overview")])]), _vm._v(" "), _c('div', {
+    staticClass: "card border-info mb-3",
+    staticStyle: {
+      "max-width": "15rem"
+    }
+  }, [_c('div', {
+    staticClass: "card-body text-info"
+  }, [_c('h4', {
+    staticClass: "card-title"
+  }, [_vm._v("Info card title")]), _vm._v(" "), _c('p', {
+    staticClass: "card-text"
+  }, [_vm._v("Some quick example text to build on the card title and make up the bulk of the card's content.")])])]), _vm._v(" "), _c('div', {
+    staticClass: "card border-info mb-3",
+    staticStyle: {
+      "max-width": "15rem"
+    }
+  }, [_c('div', {
+    staticClass: "card-body text-info"
+  }, [_c('h4', {
+    staticClass: "card-title"
+  }, [_vm._v("Info card title")]), _vm._v(" "), _c('p', {
+    staticClass: "card-text"
+  }, [_vm._v("Some quick example text to build on the card title and make up the bulk of the card's content.")])])])])])])])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-4be1375a", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

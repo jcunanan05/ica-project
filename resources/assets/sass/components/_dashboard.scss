@@ -1,0 +1,25 @@
+@import "icaVariables";
+
+#sidebar{
+    padding-left:0px;
+    background:$primary-color;
+    position:fixed;
+    width: auto;
+    height: 100%;
+
+  #headersidebar{
+    background:$primary-color;
+    font-color:$font-color !important;
+  }
+  
+
+  a{
+    color:$font-color !important;
+  }
+
+  .list-group-item {
+    border:none !important;
+    background:none !important;
+  }
+
+}
