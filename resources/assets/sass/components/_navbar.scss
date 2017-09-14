@@ -1,13 +1,14 @@
-$dark-blue:#0082b6;
-$primary-color:#71bedc;
-$font-color:#ffffff;
+@import "icaVariables";
 
 .navbar{
   height:100%;
   background-color:$primary-color;
-  border-bottom:$dark-blue 3px solid;
+  // border-bottom:$dark-blue 3px solid;
 
 }
 .color-font{
   color:$font-color !important;
+}
+.btn-outline-light{
+  font-color:$primary-color !important;
 }

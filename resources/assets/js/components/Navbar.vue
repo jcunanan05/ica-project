@@ -19,7 +19,7 @@
 
   	  	<ul class="nav navbar-nav ml-auto">
           <template v-if="! auth.isLoggedIn()">
-            <navbar-link  uri="#/login" text="Login" />
+            <navbar-link uri="#/login" text="Login" role="button" class="btn btn-outline-info" />
           </template>
   	  	  
 					
@@ -59,8 +59,16 @@ Vue.component('burger', {
 
 Vue.component('navbar-link', {
 	template: `
-		<a :href="uri" class="nav-item nav-link color-font">{{ text }}</a>
+		<a :href="uri" class="nav-item nav-link color-font" :role="role" >{{ text }}</a>
 	`,
-	props: ['uri', 'text']
+	props: ['uri', 'text', 'role']
 })
+
+// Vue.component('navbar-btn', {
+//   template: `
+    
+//     <a :href="uri"class= btn btn-warning> {{ text }} </a>
+//   `,
+//   props: ['uri', 'text']
+// })
 </script>

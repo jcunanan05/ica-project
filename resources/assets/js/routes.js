@@ -14,6 +14,11 @@ const routes = [
       name: 'login',
       beforeEnter: requireGuest,
       component: require('./views/auth/login.vue')
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: require('./views/registrar/dashboard.vue')
     }
     
 ];
