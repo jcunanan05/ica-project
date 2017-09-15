@@ -14033,6 +14033,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
@@ -14044,18 +14078,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _vm._m(0)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('main', {
-    staticClass: "col-sm-9 pt-3",
+    staticClass: "col-sm-9 pt-3 card",
     attrs: {
       "role": "main"
     }
   }, [_c('h1', {
     staticClass: "mb-4"
-  }, [_vm._v("Registration")]), _vm._v(" "), _c('form', [_c('div', {
-    staticClass: "form-group ml-1 "
+  }, [_vm._v("Registration")]), _vm._v(" "), _c('form', {
+    staticClass: "bg-light py-3"
   }, [_c('div', {
-    staticClass: "row"
+    staticClass: "form-group ml-2 "
   }, [_c('p', [_c('strong', [_vm._v("Name")])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3 ml-2"
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-3 ml-3"
   }, [_c('input', {
     staticClass: "form-control",
     attrs: {
@@ -14063,7 +14099,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "Firts name"
     }
   })]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3 ml-2"
+    staticClass: "col-md-3"
   }, [_c('input', {
     staticClass: "form-control",
     attrs: {
@@ -14071,7 +14107,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "Midle name"
     }
   })]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3 ml-2"
+    staticClass: "col-md-3"
   }, [_c('input', {
     staticClass: "form-control",
     attrs: {
@@ -14079,9 +14115,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "Last name"
     }
   })])])]), _vm._v(" "), _c('div', {
-    staticClass: "form-group ml-1"
-  }, [_c('div', {
-    staticClass: "row"
+    staticClass: "form-group ml-2"
   }, [_c('p', [_c('strong', [_vm._v("School Index No")])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-3 ml-2"
   }, [_c('input', {
@@ -14090,10 +14124,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "type": "text",
       "placeholder": "1234-1234-4321"
     }
-  })])])]), _vm._v(" "), _c('div', {
-    staticClass: "form-group ml-1"
-  }, [_c('div', {
-    staticClass: "row"
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "form-group ml-2"
   }, [_c('p', [_c('strong', [_vm._v("Email")])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-3 ml-2"
   }, [_c('input', {
@@ -14102,10 +14134,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "type": "email",
       "placeholder": "Enter Email"
     }
-  })]), _vm._v(" "), _c('div', {
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "row ml-5"
+  }, [_c('div', {
     staticClass: "btn-group"
   }, [_c('button', {
-    staticClass: "btn btn-light btn-sm dropdown-toggle",
+    staticClass: "btn btn-secondary btn-sm dropdown-toggle",
     attrs: {
       "type": "button",
       "data-toggle": "dropdown",
@@ -14118,36 +14152,86 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "dropdown-item"
   }, [_vm._v("Lecturer")]), _vm._v(" "), _c('p', {
     staticClass: "dropdown-item"
-  }, [_vm._v("Student")])])])])]), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-info",
+  }, [_vm._v("Student")])])]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-info ml-5",
     attrs: {
       "type": "submit"
     }
-  }, [_vm._v("Submit")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("Submit")])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('h1', {
+    staticClass: "text-dark mb-4"
+  }, [_vm._v("Users")]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "input-group"
+  }, [_c('input', {
+    staticClass: "form-control",
+    attrs: {
+      "type": "text",
+      "placeholder": "Search for...",
+      "aria-label": "Search for..."
+    }
+  }), _vm._v(" "), _c('span', {
+    staticClass: "input-group-btn"
+  }, [_c('button', {
+    staticClass: "btn btn-warning",
+    attrs: {
+      "type": "button"
+    }
+  }, [_vm._v("Go!")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "row"
+  }, [_c('p', {
+    staticClass: "ml-5"
+  }, [_c('strong', [_vm._v("Status")])]), _vm._v(" "), _c('div', {
+    staticClass: "form-check form-check-inline ml-5"
+  }, [_c('label', {
+    staticClass: "form-check-label"
+  }, [_c('input', {
+    staticClass: "form-check-input",
+    attrs: {
+      "type": "radio",
+      "name": "inlineRadioOptions",
+      "id": "inlineRadio1",
+      "value": "option1"
+    }
+  }), _vm._v("Active")]), _vm._v(" "), _c('label', {
+    staticClass: "form-check-label"
+  }, [_c('input', {
+    staticClass: "form-check-input",
+    attrs: {
+      "type": "radio",
+      "name": "inlineRadioOptions",
+      "id": "inlineRadio2",
+      "value": "option2"
+    }
+  }), _vm._v("Deactivate")])])])]), _vm._v(" "), _c('div', {
     staticClass: "container-fluid my-4 "
   }, [_c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-sm-12 "
   }, [_c('table', {
-    staticClass: "table table-hover table-inverse"
-  }, [_c('thead', [_c('tr', [_c('th', [_vm._v("#")]), _vm._v(" "), _c('th', [_vm._v("First Name")]), _vm._v(" "), _c('th', [_vm._v("Last Name")]), _vm._v(" "), _c('th', [_vm._v("Username")])])]), _vm._v(" "), _c('tbody', [_c('tr', [_c('th', {
+    staticClass: "table table-sm table-responsive table-hover"
+  }, [_c('thead', [_c('tr', {
+    staticClass: "bg-info text-light"
+  }, [_c('th', [_vm._v("#")]), _vm._v(" "), _c('th', [_vm._v("Name")]), _vm._v(" "), _c('th', [_vm._v("Index No.")]), _vm._v(" "), _c('th', [_vm._v("Email")]), _vm._v(" "), _c('th', [_vm._v("User Type")]), _vm._v(" "), _c('th', [_vm._v("Status")]), _vm._v(" "), _c('th', [_vm._v("Edit")]), _vm._v(" "), _c('th', [_vm._v("Delete")])])]), _vm._v(" "), _c('tbody', [_c('tr', [_c('th', {
     attrs: {
       "scope": "row"
     }
-  }, [_vm._v("1")]), _vm._v(" "), _c('td', [_vm._v("Mark")]), _vm._v(" "), _c('td', [_vm._v("Otto")]), _vm._v(" "), _c('td', [_vm._v("@mdo")])]), _vm._v(" "), _c('tr', [_c('th', {
-    attrs: {
-      "scope": "row"
-    }
-  }, [_vm._v("2")]), _vm._v(" "), _c('td', [_vm._v("Jacob")]), _vm._v(" "), _c('td', [_vm._v("Thornton")]), _vm._v(" "), _c('td', [_vm._v("@fat")])]), _vm._v(" "), _c('tr', [_c('th', {
-    attrs: {
-      "scope": "row"
-    }
-  }, [_vm._v("3")]), _vm._v(" "), _c('td', {
-    attrs: {
-      "colspan": "2"
-    }
-  }, [_vm._v("Larry the Bird")]), _vm._v(" "), _c('td', [_vm._v("@twitter")])])])])])])])])
+  }, [_vm._v("1")]), _vm._v(" "), _c('td', [_vm._v("Juan Pedro")]), _vm._v(" "), _c('td', [_vm._v("1234-3214-4321")]), _vm._v(" "), _c('td', [_vm._v("email@email.com")]), _vm._v(" "), _c('td', [_vm._v("Student")]), _vm._v(" "), _c('td', [_vm._v("Active")]), _vm._v(" "), _c('td', [_c('button', {
+    staticClass: "btn btn-secondary btn-xs text-center"
+  }, [_c('span', {
+    staticClass: "fa fa-pencil"
+  })])]), _vm._v(" "), _c('td', [_c('button', {
+    staticClass: "btn btn-danger btn-xs"
+  }, [_c('span', {
+    staticClass: "fa fa-trash"
+  })])])])])])])])])])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
