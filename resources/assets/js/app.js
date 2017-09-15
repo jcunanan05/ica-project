@@ -4,7 +4,7 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-import router from './routes.js';
+import router from './routes/routes.js';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import App from './App.vue'
