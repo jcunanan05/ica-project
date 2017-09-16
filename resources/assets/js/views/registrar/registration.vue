@@ -38,10 +38,16 @@
               <!-- dropdown user type -->
         <div class="row ml-5">    
           <div class="btn-group">
-            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User Type</button>
-              <div class="dropdown-menu">
-                <p class="dropdown-item">Lecturer</p>
-                <p class="dropdown-item">Student</p>
+            <button @click="toggleDropdown()" 
+                class="btn btn-secondary btn-sm dropdown-toggle"
+                :class="{ show: dropdownToggled }" 
+                type="button">
+                User Type
+            </button>
+              <div class="dropdown-menu"
+                  :class="{ show: dropdownToggled }" >
+                  <p class="dropdown-item">Lecturer</p>
+                  <p class="dropdown-item">Student</p>
               </div>
           </div>
 
@@ -51,7 +57,7 @@
       </form>
     
 
-      <!-- USERS h1 -->
+      <!-- USERS -->
     <div class="col-md-12">
       <h1 class="text-dark mb-4">Users</h1>  
       <div class="row">
@@ -129,7 +135,18 @@
 </template>
 
 <script>
-  export default {
+export default {
+  name: 'registration',
 
+  data: () => ({
+    dropdownToggled: false
+  }),
+
+  methods: {
+    toggleDropdown() {
+      this.dropdownToggled = ! this.dropdownToggled;
+    }  
   }
+
+}
 </script>
