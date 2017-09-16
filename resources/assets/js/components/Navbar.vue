@@ -25,7 +25,10 @@
 					
           <template v-else>
             <navbar-link uri="#/" :text="auth.user['first_name']" />
-            <navbar-link uri="#/logout" text="Logout" />
+            <a href="" class="nav-item nav-link color-font" @click="logout()">Logout</a>
+
+            <form id="logout" method="POST" action="/api/logout" style="display: none;">
+            </form>
           </template>
   	  	</ul>
   	  </div>
@@ -45,7 +48,13 @@ export default {
   
   data: () => ({
     auth
-  })
+  }),
+
+  methods: {
+    logout() {
+      document.querySelector('#logout').submit();
+    }
+  }
 }
 
 

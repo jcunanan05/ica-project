@@ -25,14 +25,14 @@ class UserTransformer extends Transformer
         ];
     }
 
-    public function role(array $user) 
+    public function role($user) 
     {
         $roleTransformer = new RoleTransformer();
 
-        if(array_key_exists('role', $user)) {
+        if($user->role) {
             return $roleTransformer->transform($user['role']);
         }
 
-        return;
+        return null;
     }
 }

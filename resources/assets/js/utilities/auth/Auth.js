@@ -113,7 +113,18 @@ function requireGuest(to, from, next) {
 };
 
 
-export { requireAuth, requireGuest };
+function requireRegistrar(to, from, next) {
+  if(auth.user.role.name === 'registrar') {
+    next();
+  } else {
+    next({
+      name: 'welcome'
+    });
+  }
+}
+
+
+export { requireAuth, requireGuest, requireRegistrar };
 
 
 export default auth;

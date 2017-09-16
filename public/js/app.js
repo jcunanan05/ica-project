@@ -477,6 +477,7 @@ module.exports = function normalizeComponent (
 "use strict";
 /* unused harmony export requireAuth */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return requireGuest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return requireRegistrar; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Form_js__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_User_js__ = __webpack_require__(7);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -602,6 +603,16 @@ function requireGuest(to, from, next) {
     });
   }
 };
+
+function requireRegistrar(to, from, next) {
+  if (auth.user.role.name === 'registrar') {
+    next();
+  } else {
+    next({
+      name: 'welcome'
+    });
+  }
+}
 
 
 
@@ -13703,6 +13714,7 @@ var routes = [{
   path: '/registrar',
   name: 'registrar',
   component: __webpack_require__(37),
+  beforeEnter: __WEBPACK_IMPORTED_MODULE_1__utilities_auth_Auth_js__["c" /* requireRegistrar */],
   children: __WEBPACK_IMPORTED_MODULE_2__registrar_js__["a" /* registrar */]
 }];
 
@@ -13908,7 +13920,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\views\\registrar\\registration.vue"
+Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\registrar\\registration.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] registration.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -13919,9 +13931,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6900804a", Component.options)
+    hotAPI.createRecord("data-v-c112d3d4", Component.options)
   } else {
-    hotAPI.reload("data-v-6900804a", Component.options)
+    hotAPI.reload("data-v-c112d3d4", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14237,7 +14249,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-6900804a", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-c112d3d4", module.exports)
   }
 }
 
@@ -14258,7 +14270,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\views\\registrar\\dashboard.vue"
+Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\registrar\\dashboard.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] dashboard.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14269,9 +14281,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4be1375a", Component.options)
+    hotAPI.createRecord("data-v-5debfbf2", Component.options)
   } else {
-    hotAPI.reload("data-v-4be1375a", Component.options)
+    hotAPI.reload("data-v-5debfbf2", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14414,7 +14426,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-4be1375a", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-5debfbf2", module.exports)
   }
 }
 
@@ -14435,7 +14447,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\views\\registrar\\courses.vue"
+Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\registrar\\courses.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] courses.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14446,9 +14458,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-63ec8937", Component.options)
+    hotAPI.createRecord("data-v-66c9f82a", Component.options)
   } else {
-    hotAPI.reload("data-v-63ec8937", Component.options)
+    hotAPI.reload("data-v-66c9f82a", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14495,7 +14507,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-63ec8937", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-66c9f82a", module.exports)
   }
 }
 
@@ -14516,7 +14528,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\views\\registrar\\reports.vue"
+Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\registrar\\reports.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] reports.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14527,9 +14539,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5a2d5bbe", Component.options)
+    hotAPI.createRecord("data-v-7a48531c", Component.options)
   } else {
-    hotAPI.reload("data-v-5a2d5bbe", Component.options)
+    hotAPI.reload("data-v-7a48531c", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14576,7 +14588,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-5a2d5bbe", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-7a48531c", module.exports)
   }
 }
 
@@ -14597,7 +14609,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\views\\welcome\\index.vue"
+Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\welcome\\index.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] index.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14608,9 +14620,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-77be3586", Component.options)
+    hotAPI.createRecord("data-v-6f9e2a3a", Component.options)
   } else {
-    hotAPI.reload("data-v-77be3586", Component.options)
+    hotAPI.reload("data-v-6f9e2a3a", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14748,7 +14760,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-77be3586", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-6f9e2a3a", module.exports)
   }
 }
 
@@ -14769,7 +14781,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\views\\auth\\login.vue"
+Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\auth\\login.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] login.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14780,9 +14792,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3b1084f1", Component.options)
+    hotAPI.createRecord("data-v-d0002686", Component.options)
   } else {
-    hotAPI.reload("data-v-3b1084f1", Component.options)
+    hotAPI.reload("data-v-d0002686", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -14968,7 +14980,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-3b1084f1", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-d0002686", module.exports)
   }
 }
 
@@ -14989,7 +15001,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\views\\registrar\\registrar.vue"
+Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\registrar\\registrar.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] registrar.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -15000,9 +15012,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-448f7a2c", Component.options)
+    hotAPI.createRecord("data-v-3b8a17e0", Component.options)
   } else {
-    hotAPI.reload("data-v-448f7a2c", Component.options)
+    hotAPI.reload("data-v-3b8a17e0", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -15095,7 +15107,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-448f7a2c", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-3b8a17e0", module.exports)
   }
 }
 
@@ -15116,7 +15128,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\App.vue"
+Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\App.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] App.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -15127,9 +15139,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5916c703", Component.options)
+    hotAPI.createRecord("data-v-6682b892", Component.options)
   } else {
-    hotAPI.reload("data-v-5916c703", Component.options)
+    hotAPI.reload("data-v-6682b892", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -15185,7 +15197,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\GLORYB1\\Desktop\\ica\\ica-project\\resources\\assets\\js\\components\\Navbar.vue"
+Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\components\\Navbar.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Navbar.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -15196,9 +15208,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-56ff60cb", Component.options)
+    hotAPI.createRecord("data-v-d0061b02", Component.options)
   } else {
-    hotAPI.reload("data-v-56ff60cb", Component.options)
+    hotAPI.reload("data-v-d0061b02", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -15254,6 +15266,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -15265,6 +15280,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       auth: __WEBPACK_IMPORTED_MODULE_1__utilities_auth_Auth_js__["a" /* default */]
     };
+  },
+
+  methods: {
+    logout: function logout() {
+      document.querySelector('#logout').submit();
+    }
   }
 });
 
@@ -15334,10 +15355,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "uri": "#/",
       "text": _vm.auth.user['first_name']
     }
-  }), _vm._v(" "), _c('navbar-link', {
+  }), _vm._v(" "), _c('a', {
+    staticClass: "nav-item nav-link color-font",
     attrs: {
-      "uri": "#/logout",
-      "text": "Logout"
+      "href": ""
+    },
+    on: {
+      "click": function($event) {
+        _vm.logout()
+      }
+    }
+  }, [_vm._v("Logout")]), _vm._v(" "), _c('form', {
+    staticStyle: {
+      "display": "none"
+    },
+    attrs: {
+      "id": "logout",
+      "method": "POST",
+      "action": "/api/logout"
     }
   })]], 2)])], 1)])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -15358,7 +15393,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-56ff60cb", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-d0061b02", module.exports)
   }
 }
 
@@ -15377,7 +15412,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-5916c703", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-6682b892", module.exports)
   }
 }
 
