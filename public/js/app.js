@@ -14079,16 +14079,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'registration',
+
+  data: function data() {
+    return {
+      dropdownToggled: false
+    };
+  },
+
+  methods: {
+    toggleDropdown: function toggleDropdown() {
+      this.dropdownToggled = !this.dropdownToggled;
+    }
+  }
+
+});
 
 /***/ }),
 /* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _vm._m(0)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('main', {
     staticClass: "col-sm-9 pt-3 card",
     attrs: {
@@ -14098,7 +14117,40 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "mb-4"
   }, [_vm._v("Registration")]), _vm._v(" "), _c('form', {
     staticClass: "bg-light py-3"
+  }, [_vm._m(0), _vm._v(" "), _vm._m(1), _vm._v(" "), _vm._m(2), _vm._v(" "), _c('div', {
+    staticClass: "row ml-5"
   }, [_c('div', {
+    staticClass: "btn-group"
+  }, [_c('button', {
+    staticClass: "btn btn-secondary btn-sm dropdown-toggle",
+    class: {
+      show: _vm.dropdownToggled
+    },
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        _vm.toggleDropdown()
+      }
+    }
+  }, [_vm._v("\n              User Type\n          ")]), _vm._v(" "), _c('div', {
+    staticClass: "dropdown-menu",
+    class: {
+      show: _vm.dropdownToggled
+    }
+  }, [_c('p', {
+    staticClass: "dropdown-item"
+  }, [_vm._v("Lecturer")]), _vm._v(" "), _c('p', {
+    staticClass: "dropdown-item"
+  }, [_vm._v("Student")])])]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-info ml-5",
+    attrs: {
+      "type": "submit"
+    }
+  }, [_vm._v("Submit")])])]), _vm._v(" "), _vm._m(3)])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
     staticClass: "form-group ml-2 "
   }, [_c('p', [_c('strong', [_vm._v("Name")])]), _vm._v(" "), _c('div', {
     staticClass: "row"
@@ -14126,7 +14178,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "type": "text",
       "placeholder": "Last name"
     }
-  })])])]), _vm._v(" "), _c('div', {
+  })])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
     staticClass: "form-group ml-2"
   }, [_c('p', [_c('strong', [_vm._v("School Index No")])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-3 ml-2"
@@ -14136,7 +14190,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "type": "text",
       "placeholder": "1234-1234-4321"
     }
-  })])]), _vm._v(" "), _c('div', {
+  })])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
     staticClass: "form-group ml-2"
   }, [_c('p', [_c('strong', [_vm._v("Email")])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-3 ml-2"
@@ -14146,30 +14202,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "type": "email",
       "placeholder": "Enter Email"
     }
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "row ml-5"
-  }, [_c('div', {
-    staticClass: "btn-group"
-  }, [_c('button', {
-    staticClass: "btn btn-secondary btn-sm dropdown-toggle",
-    attrs: {
-      "type": "button",
-      "data-toggle": "dropdown",
-      "aria-haspopup": "true",
-      "aria-expanded": "false"
-    }
-  }, [_vm._v("User Type")]), _vm._v(" "), _c('div', {
-    staticClass: "dropdown-menu"
-  }, [_c('p', {
-    staticClass: "dropdown-item"
-  }, [_vm._v("Lecturer")]), _vm._v(" "), _c('p', {
-    staticClass: "dropdown-item"
-  }, [_vm._v("Student")])])]), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-info ml-5",
-    attrs: {
-      "type": "submit"
-    }
-  }, [_vm._v("Submit")])])]), _vm._v(" "), _c('div', {
+  })])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
     staticClass: "col-md-12"
   }, [_c('h1', {
     staticClass: "text-dark mb-4"
@@ -14243,7 +14278,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "btn btn-danger btn-xs"
   }, [_c('span', {
     staticClass: "fa fa-trash"
-  })])])])])])])])])])])])
+  })])])])])])])])])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -14486,22 +14521,243 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'registration',
+
+  data: function data() {
+    return {
+      dropdownToggled: false
+    };
+  },
+
+  methods: {
+    toggleDropdown: function toggleDropdown() {
+      this.dropdownToggled = !this.dropdownToggled;
+    }
+  }
+
+});
 
 /***/ }),
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _vm._m(0)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('main', {
-    staticClass: "col-sm-9 pt-3",
+    staticClass: "col-sm-9 pt-3 card",
     attrs: {
       "role": "main"
     }
-  }, [_c('h1', [_vm._v("COURSES")])])
+  }, [_c('h1', {
+    staticClass: "mb-4"
+  }, [_vm._v("COURSES")]), _vm._v(" "), _c('div', {
+    staticClass: "container-fluid"
+  }, [_c('div', {
+    staticClass: "col-md-12 bg-light py-2"
+  }, [_c('div', {
+    staticClass: "row"
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "btn-group ml-5"
+  }, [_c('button', {
+    staticClass: "btn btn-info btn-sm dropdown-toggle",
+    class: {
+      show: _vm.dropdownToggled
+    },
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        _vm.toggleDropdown()
+      }
+    }
+  }, [_vm._v("Courses")]), _vm._v(" "), _c('div', {
+    staticClass: "dropdown-menu",
+    class: {
+      show: _vm.dropdownToggled
+    }
+  }, [_c('a', {
+    staticClass: "dropdown-item",
+    attrs: {
+      "href": "#"
+    }
+  }, [_vm._v("BSIS")]), _vm._v(" "), _c('a', {
+    staticClass: "dropdown-item",
+    attrs: {
+      "href": "#"
+    }
+  }, [_vm._v("BSCS")]), _vm._v(" "), _c('a', {
+    staticClass: "dropdown-item",
+    attrs: {
+      "href": "#"
+    }
+  }, [_vm._v("BSBA")])])])])]), _vm._v(" "), _vm._m(1)])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h2', [_c('span', {
+    staticClass: "fa fa-list",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v("  Curriculum"), _c('small', [_vm._v("     Bachelor of Science in Information Technology")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "card mt-5"
+  }, [_c('div', {
+    staticClass: "card-header bg-info text text-light"
+  }, [_c('strong', [_vm._v("Year Level")])]), _vm._v(" "), _c('div', {
+    staticClass: "card-body"
+  }, [_c('h2', [_vm._v("First Year")]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "list-group"
+  }, [_c('a', {
+    staticClass: "list-group-item list-group-item-action list-group-item-secondary",
+    attrs: {
+      "href": "#"
+    }
+  }, [_c('strong', [_vm._v("First Term")]), _vm._v(" "), _c('span', {
+    staticClass: "fa fa-plus pull-right "
+  })]), _vm._v(" "), _c('a', {
+    staticClass: "list-group-item list-group-item-action",
+    attrs: {
+      "href": "#"
+    }
+  }, [_vm._v("ENG 111    Communication Arts and Skills"), _c('span', {
+    staticClass: "fa fa-pencil pull-right",
+    attrs: {
+      "data-toggle": "modal",
+      "data-target": "#updateSubject"
+    }
+  })]), _vm._v(" "), _c('a', {
+    staticClass: "list-group-item list-group-item-action",
+    attrs: {
+      "href": "#"
+    }
+  }, [_vm._v("FIL 111 Sining ng Komunikasyon")])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "list-group"
+  }, [_c('a', {
+    staticClass: "list-group-item list-group-item-action list-group-item-secondary",
+    attrs: {
+      "href": "#"
+    }
+  }, [_c('strong', [_vm._v("Second Term")]), _vm._v(" "), _c('span', {
+    staticClass: "fa fa-plus pull-right "
+  })]), _vm._v(" "), _c('a', {
+    staticClass: "list-group-item list-group-item-action",
+    attrs: {
+      "href": "#"
+    }
+  }, [_vm._v("ENG 111    Communication Arts and Skills"), _c('span', {
+    staticClass: "fa fa-pencil pull-right",
+    attrs: {
+      "data-toggle": "modal",
+      "data-target": "#updateSubject"
+    }
+  })]), _vm._v(" "), _c('a', {
+    staticClass: "list-group-item list-group-item-action",
+    attrs: {
+      "href": "#"
+    }
+  }, [_vm._v("FIL 111 Sining ng Komunikasyon")])])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-4"
+  }, [_c('div', {
+    staticClass: "list-group"
+  }, [_c('a', {
+    staticClass: "list-group-item list-group-item-action list-group-item-secondary",
+    attrs: {
+      "href": "#"
+    }
+  }, [_c('strong', [_vm._v("Second Term")]), _vm._v(" "), _c('span', {
+    staticClass: "fa fa-plus pull-right "
+  })]), _vm._v(" "), _c('a', {
+    staticClass: "list-group-item list-group-item-action",
+    attrs: {
+      "href": "#"
+    }
+  }, [_vm._v("ENG 111    Communication Arts and Skills"), _c('span', {
+    staticClass: "fa fa-pencil pull-right",
+    attrs: {
+      "data-toggle": "modal",
+      "data-target": "#updateSubject"
+    }
+  })]), _vm._v(" "), _c('a', {
+    staticClass: "list-group-item list-group-item-action",
+    attrs: {
+      "href": "#"
+    }
+  }, [_vm._v("FIL 111 Sining ng Komunikasyon")])])])])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
