@@ -1,41 +1,39 @@
 <template>
   <div id="home">
-  	<nav class="navbar navbar-expand-lg navbar-light ">
-  	  <div class="container">
-      <a class="navbar-brand" href="#/"><img src="images/icalogo.png" width="auto" height="25px"></a>
+    <nav class="navbar navbar-expand-lg navbar-light ">
+      <div class="container">
+        <a class="navbar-brand" href="#/"><img src="images/icalogo.png" width="auto" height="25px"></a>
 
-  	  <burger />
+        <burger />
 
+        <div class="collapse navbar-collapse" id="navbarMenu">
+          <ul class="navbar-nav">
+            <template v-if="! auth.isLoggedIn()">
+              <navbar-link uri="#" text="Home" />
+              <navbar-link uri="#" text="About" />
+              <navbar-link uri="#" text="Contact" />
+            </template>
+          </ul>
 
-  	  <div class="collapse navbar-collapse" id="navbarMenu">
-  	  	<ul class="navbar-nav">
-					<template v-if="! auth.isLoggedIn()">
-						<navbar-link uri="#" text="Home" />
-  	  	  	<navbar-link uri="#" text="About" />
-  	  	  	<navbar-link uri="#" text="Contact" />
-					</template>
-  	  	</ul>
+          <ul class="nav navbar-nav ml-auto">
+            <template v-if="! auth.isLoggedIn()">
+              <navbar-link uri="#/login" text="Login" role="button" class="btn btn-outline-info" />
+            </template>
 
+            <template v-else>
+              <navbar-link uri="#/" :text="auth.user['first_name']" />
+              <a href="" class="nav-item nav-link color-font" @click="logout()">Logout</a>
 
-  	  	<ul class="nav navbar-nav ml-auto">
-          <template v-if="! auth.isLoggedIn()">
-            <navbar-link uri="#/login" text="Login" role="button" class="btn btn-outline-info" />
-          </template>
-  	  	  
-					
-          <template v-else>
-            <navbar-link uri="#/" :text="auth.user['first_name']" />
-            <a href="" class="nav-item nav-link color-font" @click="logout()">Logout</a>
-
-            <form id="logout" method="POST" action="/api/logout" style="display: none;">
-            </form>
-          </template>
-  	  	</ul>
-  	  </div>
+              <form id="logout" method="POST" action="/api/logout" style="display: none;">
+              </form>
+            </template>
+          </ul>
+          
+        </div>
       </div>
-  	</nav>
-    </div>
-  
+    </nav>
+
+  </div>
 </template>
 
 <script>

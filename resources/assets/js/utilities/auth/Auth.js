@@ -37,28 +37,33 @@ class Auth {
       this.setFetched(true);
 
       axios.get('/api/auth/user')
-        .then(response => resolve(response.data))
-        .catch(errors => reject(errors.response.data));
+        .then(response => {
+          this.setUser(response.data.user);
+
+          resolve(response.data)
+        })
+        .catch(errors => {
+          console.log(errors);
+          reject(errors.response.data);
+        });
     });
   }
 
 
   isLoggedIn() {
-    if(_.isEmpty(this.user)) {
-      //one time fetch of user data
-      if(! this.isFetched) {
-        this.getLogin()
-          .then(response => {
-            this.setUser(response.user);
-            return true;
-          })
-          .catch(errors => {
-            console.log(errors);
-            return false;
-          });
-      }
+    if (! this.isFetched) {
+      this.getLogin()
+        .then(response => {
+          this.setFetched(true);
+
+          return true;
+        })
+        .catch(errors => {
+
+          return false;
+        });
     } else {
-      return true;
+      return ! _.isEmpty(this.user);
     }
   }
 
@@ -92,35 +97,31 @@ var auth = new Auth();
 
 // for route guard
 function requireAuth(to, from, next) {
-  if(auth.isLoggedIn()) {
-    next();
-  } else {
-    next({
-      name: 'welcome'
-    });
-  }
+  //if auth proceed
+  auth.getLogin()
+    .then(response => next())
+    .catch(errors => next({ name: 'welcome' }));
 };
 
 
 function requireGuest(to, from, next) {
-  if(! auth.isLoggedIn()) {
-    next();
-  } else {
-    next({
-      name: 'welcome'
-    });
-  }
+  //if auth then redirect to home
+  auth.getLogin()
+    .then(response => next({ name: 'welcome' }))
+    .catch(errors => next());
 };
 
 
 function requireRegistrar(to, from, next) {
-  if(auth.user.role.name === 'registrar') {
-    next();
-  } else {
-    next({
-      name: 'welcome'
-    });
-  }
+  auth.getLogin()
+    .then(response => {
+      if (auth.user.role.name === 'registrar') {
+        next();
+      } else {
+        next({ name: 'welcome' })
+      }
+    })
+    .catch(errors => next({ name: 'welcome' }));
 }
 
 
