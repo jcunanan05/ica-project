@@ -1,5 +1,5 @@
 import VueRouter from 'vue-router';
-import { requireGuest, requireRegistrar } from '../utilities/auth/Auth.js';
+import { requireGuest, requireRegistrar } from '../utilities/auth/guards.js';
 import { registrar } from './registrar.js';
 
 

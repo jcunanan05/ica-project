@@ -475,9 +475,6 @@ module.exports = function normalizeComponent (
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony export requireAuth */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return requireGuest; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return requireRegistrar; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Form_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_User_js__ = __webpack_require__(8);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -583,39 +580,6 @@ var Auth = function () {
 // end of Auth class
 
 var auth = new Auth();
-
-// for route guard
-function requireAuth(to, from, next) {
-  //if auth proceed
-  auth.getLogin().then(function (response) {
-    return next();
-  }).catch(function (errors) {
-    return next({ name: 'welcome' });
-  });
-};
-
-function requireGuest(to, from, next) {
-  //if auth then redirect to home
-  auth.getLogin().then(function (response) {
-    return next({ name: 'welcome' });
-  }).catch(function (errors) {
-    return next();
-  });
-};
-
-function requireRegistrar(to, from, next) {
-  auth.getLogin().then(function (response) {
-    if (auth.user.role.name === 'registrar') {
-      next();
-    } else {
-      next({ name: 'welcome' });
-    }
-  }).catch(function (errors) {
-    return next({ name: 'welcome' });
-  });
-}
-
-
 
 /* harmony default export */ __webpack_exports__["a"] = (auth);
 
@@ -13796,7 +13760,7 @@ var app = new __WEBPACK_IMPORTED_MODULE_1_vue___default.a({
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_auth_Auth_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_auth_guards_js__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__registrar_js__ = __webpack_require__(18);
 
 
@@ -13809,13 +13773,13 @@ var routes = [{
 }, {
   path: '/login',
   name: 'login',
-  beforeEnter: __WEBPACK_IMPORTED_MODULE_1__utilities_auth_Auth_js__["b" /* requireGuest */],
+  beforeEnter: __WEBPACK_IMPORTED_MODULE_1__utilities_auth_guards_js__["a" /* requireGuest */],
   component: __webpack_require__(34)
 }, {
   path: '/registrar',
   name: 'registrar',
   component: __webpack_require__(37),
-  beforeEnter: __WEBPACK_IMPORTED_MODULE_1__utilities_auth_Auth_js__["c" /* requireRegistrar */],
+  beforeEnter: __WEBPACK_IMPORTED_MODULE_1__utilities_auth_guards_js__["b" /* requireRegistrar */],
   children: __WEBPACK_IMPORTED_MODULE_2__registrar_js__["a" /* registrar */]
 }];
 
@@ -50523,6 +50487,60 @@ module.exports = function spread(callback) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export requireAuth */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return requireGuest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return requireRegistrar; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Auth_js__ = __webpack_require__(2);
+
+
+// for route guard
+function requireAuth(to, from, next) {
+  //if auth proceed
+  __WEBPACK_IMPORTED_MODULE_0__Auth_js__["a" /* default */].getLogin().then(function (response) {
+    return next();
+  }).catch(function (errors) {
+    return next({ name: 'welcome' });
+  });
+};
+
+function requireGuest(to, from, next) {
+  //if auth then redirect to home
+  __WEBPACK_IMPORTED_MODULE_0__Auth_js__["a" /* default */].getLogin().then(function (response) {
+    return next({ name: 'welcome' });
+  }).catch(function (errors) {
+    return next();
+  });
+};
+
+function requireRegistrar(to, from, next) {
+  __WEBPACK_IMPORTED_MODULE_0__Auth_js__["a" /* default */].getLogin().then(function (response) {
+    if (__WEBPACK_IMPORTED_MODULE_0__Auth_js__["a" /* default */].user.role.name === 'registrar') {
+      next();
+    } else {
+      next({ name: 'welcome' });
+    }
+  }).catch(function (errors) {
+    return next({ name: 'welcome' });
+  });
+}
+
+
 
 /***/ })
 /******/ ]);
