@@ -20,7 +20,7 @@ const routes = [
       path: '/registrar',
       name: 'registrar',
       component: require('../views/registrar/registrar.vue'),
-      beforeEnter: requireRegistrar,
+      // beforeEnter: requireRegistrar,
       children: registrar
     }
     

@@ -29,7 +29,7 @@ class UserTransformer extends Transformer
     {
         $roleTransformer = new RoleTransformer();
 
-        if($user->role) {
+        if($user['role']) {
             return $roleTransformer->transform($user['role']);
         }
 

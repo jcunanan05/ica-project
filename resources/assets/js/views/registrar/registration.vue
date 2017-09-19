@@ -38,7 +38,11 @@
           <strong>School Index No</strong>
         </p>
         <div class="col-md-3 ml-2">
-          <input type="text" class="form-control" placeholder="1234-1234-4321">
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="1234-1234-4321" 
+            v-model="newUser.schoolIndexNo" >
         </div>
       </div>
 
@@ -48,7 +52,11 @@
           <strong>Email</strong>
         </p>
         <div class="col-md-3 ml-2">
-          <input type="email" class="form-control" placeholder="Enter Email">
+          <input 
+            type="email" 
+            class="form-control" 
+            placeholder="Enter Email"
+            v-model="newUser.email" >
         </div>
       </div>
 
@@ -119,14 +127,17 @@
                     <th>Delete</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Juan Pedro</td>
-                    <td>1234-3214-4321</td>
-                    <td>email@email.com</td>
-                    <td>Student</td>
-                    <td>Active</td>
+
+
+                <tbody v-if="! userIsEmpty">
+                  <tr v-for="user in users" :key="user.id">
+                    <th scope="row" v-text="user.id"></th>
+                    <td v-text="user['first_name'] + ' ' + user['middle_name'] + ' ' + user['last_name']"></td>
+                    <td v-text="user['school_index_no']"></td>
+                    <td v-text="user.email"></td>
+                    <td v-text="user.role.name"></td>
+                    <td v-text="user['is_active']"></td>
+                    
                     <td>
                       <button class="btn btn-secondary btn-xs text-center">
                         <span class="fa fa-pencil"></span>
@@ -139,6 +150,7 @@
                     </td>
                   </tr>
                 </tbody>
+
               </table>
             </div>
           </div>
@@ -161,15 +173,40 @@ export default {
     newUser: new Form({
       firstName: 'Jonathan',
       middleName: 'Albert',
-      lastName: 'Cunanan'
-    })
+      lastName: 'Cunanan',
+      schoolIndexNo: '1234-1234-1234',
+      email: 'asdf@example.com'
+    }),
+    users: []
   }),
+
+  computed: {
+    userIsEmpty() {
+      if (_.isEmpty(this.users)) {
+        return true;
+      }
+
+      return false;
+    }
+  },
 
   methods: {
     toggleDropdown() {
       this.dropdownToggled = ! this.dropdownToggled;
-    }  
-  }
+    },
+
+    fetchUsers() {
+      axios.get('/api/users')
+        .then(response => {
+          this.users = response.data.data;
+        })
+        .catch(errors => console.log('errors on fetchUsers. error: ' + errors));
+    }
+  },
+
+  mounted() {
+    this.fetchUsers();
+  },
 
 }
 </script>
