@@ -14118,11 +14118,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 
@@ -14137,7 +14132,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         middleName: 'Albert',
         lastName: 'Cunanan',
         schoolIndexNo: '1234-1234-1234',
-        email: 'asdf@example.com'
+        email: 'asdf@example.com',
+        userType: ''
       }),
       users: []
     };
@@ -14311,43 +14307,41 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }
   })])]), _vm._v(" "), _c('div', {
-    staticClass: "row ml-5"
-  }, [_c('div', {
-    staticClass: "btn-group"
-  }, [_c('button', {
-    staticClass: "btn btn-secondary btn-sm dropdown-toggle",
-    class: {
-      show: _vm.dropdownToggled
-    },
-    attrs: {
-      "type": "button"
-    },
+    staticClass: "form-group ml-2"
+  }, [_vm._m(3), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.newUser.userType),
+      expression: "newUser.userType"
+    }],
+    staticClass: "form-control col-md-3 form-control-sm",
     on: {
-      "click": function($event) {
-        _vm.toggleDropdown()
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.newUser.userType = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
       }
     }
-  }, [_vm._v("\n          User Type\n        ")]), _vm._v(" "), _c('div', {
-    staticClass: "dropdown-menu",
-    class: {
-      show: _vm.dropdownToggled
-    }
-  }, [_c('p', {
-    staticClass: "dropdown-item"
-  }, [_vm._v("Lecturer")]), _vm._v(" "), _c('p', {
-    staticClass: "dropdown-item"
-  }, [_vm._v("Student")])])]), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-info ml-5",
+  }, [_c('option', {
     attrs: {
-      "type": "submit"
+      "value": "student"
     }
-  }, [_vm._v("Submit")])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("Student")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "registrar"
+    }
+  }, [_vm._v("Registrar")])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-12"
   }, [_c('h1', {
     staticClass: "text-dark mb-4"
   }, [_vm._v("Users")]), _vm._v(" "), _c('div', {
     staticClass: "row"
-  }, [_vm._m(3), _vm._v(" "), _vm._m(4), _vm._v(" "), _c('div', {
+  }, [_vm._m(4), _vm._v(" "), _vm._m(5), _vm._v(" "), _c('div', {
     staticClass: "container-fluid my-4 "
   }, [_c('div', {
     staticClass: "row"
@@ -14355,7 +14349,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "col-sm-12 "
   }, [_c('table', {
     staticClass: "table table-sm table-responsive table-hover"
-  }, [_vm._m(5), _vm._v(" "), (!_vm.userIsEmpty) ? _c('tbody', _vm._l((_vm.users), function(user) {
+  }, [_vm._m(6), _vm._v(" "), (!_vm.userIsEmpty) ? _c('tbody', _vm._l((_vm.users), function(user) {
     return _c('tr', {
       key: user.id
     }, [_c('th', {
@@ -14385,7 +14379,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       domProps: {
         "textContent": _vm._s(user['is_active'])
       }
-    }), _vm._v(" "), _vm._m(6, true), _vm._v(" "), _vm._m(7, true)])
+    }), _vm._v(" "), _vm._m(7, true), _vm._v(" "), _vm._m(8, true)])
   })) : _vm._e()])])])])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('p', [_c('strong', [_vm._v("Name")])])
@@ -14393,6 +14387,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('p', [_c('strong', [_vm._v("School Index No")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('p', [_c('strong', [_vm._v("Email")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('p', [_c('strong', [_vm._v("User type")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "col-md-6"

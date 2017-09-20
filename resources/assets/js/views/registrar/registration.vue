@@ -60,20 +60,15 @@
         </div>
       </div>
 
-      <!-- dropdown user type -->
-      <div class="row ml-5">
-        <div class="btn-group">
-          <button @click="toggleDropdown()" class="btn btn-secondary btn-sm dropdown-toggle" :class="{ show: dropdownToggled }" type="button">
-            User Type
-          </button>
-          <div class="dropdown-menu" :class="{ show: dropdownToggled }">
-            <p class="dropdown-item">Lecturer</p>
-            <p class="dropdown-item">Student</p>
-          </div>
-        </div>
 
-        <!-- SUBMIT BTN -->
-        <button type="submit" class="btn btn-info ml-5">Submit</button>
+      <!-- dropdown user type -->
+      <div class="form-group ml-2">
+        <p><strong>User type</strong></p>
+        <select class="form-control col-md-3 form-control-sm"
+          v-model="newUser.userType" >
+          <option value="student">Student</option>
+          <option value="registrar">Registrar</option>
+        </select>
       </div>
     </form>
 
@@ -175,7 +170,8 @@ export default {
       middleName: 'Albert',
       lastName: 'Cunanan',
       schoolIndexNo: '1234-1234-1234',
-      email: 'asdf@example.com'
+      email: 'asdf@example.com',
+      userType: ''
     }),
     users: []
   }),
