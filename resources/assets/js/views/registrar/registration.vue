@@ -1,5 +1,5 @@
 <template>
-  <main class="col-sm-9 pt-3 card" role="main">
+  <main class="col-lg-9 col-xs-12 pt-3 card" role="main">
     <h1 class="mb-4">Registration</h1>
 
     <form class="bg-light py-3">

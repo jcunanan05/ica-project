@@ -1,6 +1,6 @@
 <template>
 
-  <main class="col-sm-9 pt-3 card" role="main">
+  <main class="col-lg-9 col-xs-12 pt-3 card" role="main">
     <h1 class="mb-4">COURSES</h1>
     <div class="container-fluid">
       <div class="col-md-12 bg-light py-2">
