@@ -133,10 +133,21 @@
                     <td v-text="user.role.name"></td>
                     <td v-text="user['is_active']"></td>
                     
+                    
                     <td>
-                      <button class="btn btn-secondary btn-xs text-center">
+                      <button class="btn btn-secondary btn-xs text-center"
+                        @click="showModal = true">
+
+                        
+
                         <span class="fa fa-pencil"></span>
                       </button>
+
+                      
+                      <modal v-if="showModal" @close="showModal = false">
+                        <div class="box">hello modal</div>
+                      </modal>
+
                     </td>
                     <td>
                       <button class="btn btn-danger btn-xs">
@@ -159,9 +170,15 @@
 
 <script>
 import Form from '../../utilities/Form.js';
+import Modal from '../../components/Modal.vue';
+
 
 export default {
   name: 'registration',
+
+  components: {
+    'modal': Modal
+  },
 
   data: () => ({
     dropdownToggled: false,
@@ -173,7 +190,9 @@ export default {
       email: 'asdf@example.com',
       userType: ''
     }),
-    users: []
+    users: [],
+
+    showModal: false
   }),
 
   computed: {

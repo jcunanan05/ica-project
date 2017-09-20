@@ -26,6 +26,7 @@
           Contact
         </a>
 
+
         <template v-if="! auth.isLoggedIn()">
           <a href="#/login" class="navbar-item">
             Login

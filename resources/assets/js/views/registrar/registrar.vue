@@ -1,23 +1,17 @@
 <template>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-lg-3 d-sm-block"   >
-        <div class="list-group">
-
-
-            <nav-link uri="#/registrar/dashboard" text="Dashboard"/>
-            <nav-link uri="#/registrar/registration" text="Registration"/>
-            <nav-link uri="#/registrar/courses" text="Courses"/>
-            <nav-link uri="#/registrar/reports" text="Reports"/>
-
-
-          
-        </div>
+  <div class="container is-fluid">
+    <div class="columns">
+      <div class="column is-2">
+        <a href="#/registrar/dashboard">Dashboard</a>
+        <a href="#/registrar/registration">Registration</a>
+        <a href="#/registrar/courses">Courses</a>
+        <a href="#/registrar/reports">Reports</a>
       </div>
 
-      
 
-      <router-view></router-view>
+      <div class="column is-10">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
