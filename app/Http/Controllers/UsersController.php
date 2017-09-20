@@ -14,6 +14,7 @@ class UsersController extends Controller
     public function __construct(UserTransformer $userTransformer)
     {
         $this->userTransformer = $userTransformer;
+        $this->middleware('auth')->only(['index']);
     }
 
 
@@ -21,7 +22,10 @@ class UsersController extends Controller
     {
         return response()->json([
             'data' => $this->userTransformer
-                ->transformCollection(User::all()->toArray())
+                ->transformCollection(
+                    User::with('role')->where("id",">",0)->get()->toArray()
+                )
         ], 200);
     }
+
 }

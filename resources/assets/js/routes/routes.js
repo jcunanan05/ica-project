@@ -1,5 +1,5 @@
 import VueRouter from 'vue-router';
-import { requireGuest } from '../utilities/auth/Auth.js';
+import { requireGuest, requireRegistrar } from '../utilities/auth/guards.js';
 import { registrar } from './registrar.js';
 
 
@@ -20,6 +20,7 @@ const routes = [
       path: '/registrar',
       name: 'registrar',
       component: require('../views/registrar/registrar.vue'),
+      // beforeEnter: requireRegistrar,
       children: registrar
     }
     

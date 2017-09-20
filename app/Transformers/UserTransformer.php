@@ -8,8 +8,6 @@ class UserTransformer extends Transformer
 {
     public function transform($user)
     {
-        $roleTransformer = new RoleTransformer();
-
         return [
             'id' => $user['id'],
             'first_name' => $user['first_name'],
@@ -23,9 +21,18 @@ class UserTransformer extends Transformer
             'contact_no' => $user['contact_no'], 
             'home_address' => $user['home_address'], 
             'birthday' => $user['birthday'],
-            'role' => $roleTransformer->transform($user['role'])
+            'role' => $this->role($user)
         ];
     }
 
-    
+    public function role($user) 
+    {
+        $roleTransformer = new RoleTransformer();
+
+        if($user['role']) {
+            return $roleTransformer->transform($user['role']);
+        }
+
+        return null;
+    }
 }
