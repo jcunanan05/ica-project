@@ -589,7 +589,7 @@ var auth = new Auth();
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {/*!
- * Vue.js v2.4.2
+ * Vue.js v2.4.4
  * (c) 2014-2017 Evan You
  * Released under the MIT License.
  */
@@ -754,12 +754,9 @@ var capitalize = cached(function (str) {
 /**
  * Hyphenate a camelCase string.
  */
-var hyphenateRE = /([^-])([A-Z])/g;
+var hyphenateRE = /\B([A-Z])/g;
 var hyphenate = cached(function (str) {
-  return str
-    .replace(hyphenateRE, '$1-$2')
-    .replace(hyphenateRE, '$1-$2')
-    .toLowerCase()
+  return str.replace(hyphenateRE, '-$1').toLowerCase()
 });
 
 /**
@@ -1178,7 +1175,7 @@ var isAndroid = UA && UA.indexOf('android') > 0;
 var isIOS = UA && /iphone|ipad|ipod|ios/.test(UA);
 var isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
 
-// Firefix has a "watch" function on Object.prototype...
+// Firefox has a "watch" function on Object.prototype...
 var nativeWatch = ({}).watch;
 
 var supportsPassive = false;
@@ -1260,13 +1257,13 @@ var nextTick = (function () {
       // "force" the microtask queue to be flushed by adding an empty timer.
       if (isIOS) { setTimeout(noop); }
     };
-  } else if (typeof MutationObserver !== 'undefined' && (
+  } else if (!isIE && typeof MutationObserver !== 'undefined' && (
     isNative(MutationObserver) ||
     // PhantomJS and iOS 7.x
     MutationObserver.toString() === '[object MutationObserverConstructor]'
   )) {
     // use MutationObserver where native Promise is not available,
-    // e.g. PhantomJS IE11, iOS7, Android 4.4
+    // e.g. PhantomJS, iOS7, Android 4.4
     var counter = 1;
     var observer = new MutationObserver(nextTickHandler);
     var textNode = document.createTextNode(String(counter));
@@ -1566,9 +1563,9 @@ function defineReactive$$1 (
         dep.depend();
         if (childOb) {
           childOb.dep.depend();
-        }
-        if (Array.isArray(value)) {
-          dependArray(value);
+          if (Array.isArray(value)) {
+            dependArray(value);
+          }
         }
       }
       return value
@@ -1745,7 +1742,7 @@ function mergeDataOrFn (
         : childVal;
       var defaultData = typeof parentVal === 'function'
         ? parentVal.call(vm)
-        : undefined;
+        : parentVal;
       if (instanceData) {
         return mergeData(instanceData, defaultData)
       } else {
@@ -2148,7 +2145,12 @@ function assertType (value, type) {
   var valid;
   var expectedType = getType(type);
   if (simpleCheckRE.test(expectedType)) {
-    valid = typeof value === expectedType.toLowerCase();
+    var t = typeof value;
+    valid = t === expectedType.toLowerCase();
+    // for primitive wrapper objects
+    if (!valid && t === 'object') {
+      valid = value instanceof type;
+    }
   } else if (expectedType === 'Object') {
     valid = isPlainObject(value);
   } else if (expectedType === 'Array') {
@@ -2346,7 +2348,7 @@ function createTextVNode (val) {
 // used for static nodes and slot nodes because they may be reused across
 // multiple renders, cloning them avoids errors when DOM manipulations rely
 // on their elm reference.
-function cloneVNode (vnode) {
+function cloneVNode (vnode, deep) {
   var cloned = new VNode(
     vnode.tag,
     vnode.data,
@@ -2362,14 +2364,17 @@ function cloneVNode (vnode) {
   cloned.key = vnode.key;
   cloned.isComment = vnode.isComment;
   cloned.isCloned = true;
+  if (deep && vnode.children) {
+    cloned.children = cloneVNodes(vnode.children);
+  }
   return cloned
 }
 
-function cloneVNodes (vnodes) {
+function cloneVNodes (vnodes, deep) {
   var len = vnodes.length;
   var res = new Array(len);
   for (var i = 0; i < len; i++) {
-    res[i] = cloneVNode(vnodes[i]);
+    res[i] = cloneVNode(vnodes[i], deep);
   }
   return res
 }
@@ -2383,8 +2388,10 @@ var normalizeEvent = cached(function (name) {
   name = once$$1 ? name.slice(1) : name;
   var capture = name.charAt(0) === '!';
   name = capture ? name.slice(1) : name;
+  var plain = !(passive || once$$1 || capture);
   return {
     name: name,
+    plain: plain,
     once: once$$1,
     capture: capture,
     passive: passive
@@ -2410,6 +2417,11 @@ function createFnInvoker (fns) {
   return invoker
 }
 
+// #6552
+function prioritizePlainEvents (a, b) {
+  return a.plain ? -1 : b.plain ? 1 : 0
+}
+
 function updateListeners (
   on,
   oldOn,
@@ -2418,10 +2430,13 @@ function updateListeners (
   vm
 ) {
   var name, cur, old, event;
+  var toAdd = [];
+  var hasModifier = false;
   for (name in on) {
     cur = on[name];
     old = oldOn[name];
     event = normalizeEvent(name);
+    if (!event.plain) { hasModifier = true; }
     if (isUndef(cur)) {
       "development" !== 'production' && warn(
         "Invalid handler for event \"" + (event.name) + "\": got " + String(cur),
@@ -2431,10 +2446,18 @@ function updateListeners (
       if (isUndef(cur.fns)) {
         cur = on[name] = createFnInvoker(cur);
       }
-      add(event.name, cur, event.once, event.capture, event.passive);
+      event.handler = cur;
+      toAdd.push(event);
     } else if (cur !== old) {
       old.fns = cur;
       on[name] = old;
+    }
+  }
+  if (toAdd.length) {
+    if (hasModifier) { toAdd.sort(prioritizePlainEvents); }
+    for (var i = 0; i < toAdd.length; i++) {
+      var event$1 = toAdd[i];
+      add(event$1.name, event$1.handler, event$1.once, event$1.capture, event$1.passive);
     }
   }
   for (name in oldOn) {
@@ -2751,11 +2774,17 @@ function resolveAsyncComponent (
 
 /*  */
 
+function isAsyncPlaceholder (node) {
+  return node.isComment && node.asyncFactory
+}
+
+/*  */
+
 function getFirstComponentChild (children) {
   if (Array.isArray(children)) {
     for (var i = 0; i < children.length; i++) {
       var c = children[i];
-      if (isDef(c) && isDef(c.componentOptions)) {
+      if (isDef(c) && (isDef(c.componentOptions) || isAsyncPlaceholder(c))) {
         return c
       }
     }
@@ -2842,8 +2871,8 @@ function eventsMixin (Vue) {
     }
     // array of events
     if (Array.isArray(event)) {
-      for (var i$1 = 0, l = event.length; i$1 < l; i$1++) {
-        this$1.$off(event[i$1], fn);
+      for (var i = 0, l = event.length; i < l; i++) {
+        this$1.$off(event[i], fn);
       }
       return vm
     }
@@ -2856,14 +2885,16 @@ function eventsMixin (Vue) {
       vm._events[event] = null;
       return vm
     }
-    // specific handler
-    var cb;
-    var i = cbs.length;
-    while (i--) {
-      cb = cbs[i];
-      if (cb === fn || cb.fn === fn) {
-        cbs.splice(i, 1);
-        break
+    if (fn) {
+      // specific handler
+      var cb;
+      var i$1 = cbs.length;
+      while (i$1--) {
+        cb = cbs[i$1];
+        if (cb === fn || cb.fn === fn) {
+          cbs.splice(i$1, 1);
+          break
+        }
       }
     }
     return vm
@@ -2915,10 +2946,15 @@ function resolveSlots (
   var defaultSlot = [];
   for (var i = 0, l = children.length; i < l; i++) {
     var child = children[i];
+    var data = child.data;
+    // remove slot attribute if the node is resolved as a Vue slot node
+    if (data && data.attrs && data.attrs.slot) {
+      delete data.attrs.slot;
+    }
     // named slots should only be respected if the vnode was rendered in the
     // same context.
     if ((child.context === context || child.functionalContext === context) &&
-      child.data && child.data.slot != null
+      data && data.slot != null
     ) {
       var name = child.data.slot;
       var slot = (slots[name] || (slots[name] = []));
@@ -3171,11 +3207,11 @@ function updateChildComponent (
   }
   vm.$options._renderChildren = renderChildren;
 
-  // update $attrs and $listensers hash
+  // update $attrs and $listeners hash
   // these are also reactive so they may trigger child update if the child
   // used them during render
-  vm.$attrs = parentVnode.data && parentVnode.data.attrs;
-  vm.$listeners = listeners;
+  vm.$attrs = (parentVnode.data && parentVnode.data.attrs) || emptyObject;
+  vm.$listeners = listeners || emptyObject;
 
   // update props
   if (propsData && vm.$options.props) {
@@ -3762,7 +3798,7 @@ function initData (vm) {
     if (true) {
       if (methods && hasOwn(methods, key)) {
         warn(
-          ("method \"" + key + "\" has already been defined as a data property."),
+          ("Method \"" + key + "\" has already been defined as a data property."),
           vm
         );
       }
@@ -3795,6 +3831,8 @@ var computedWatcherOptions = { lazy: true };
 function initComputed (vm, computed) {
   "development" !== 'production' && checkOptionType(vm, 'computed');
   var watchers = vm._computedWatchers = Object.create(null);
+  // computed properties are just getters during SSR
+  var isSSR = isServerRendering();
 
   for (var key in computed) {
     var userDef = computed[key];
@@ -3805,8 +3843,16 @@ function initComputed (vm, computed) {
         vm
       );
     }
-    // create internal watcher for the computed property.
-    watchers[key] = new Watcher(vm, getter || noop, noop, computedWatcherOptions);
+
+    if (!isSSR) {
+      // create internal watcher for the computed property.
+      watchers[key] = new Watcher(
+        vm,
+        getter || noop,
+        noop,
+        computedWatcherOptions
+      );
+    }
 
     // component-defined computed properties are already defined on the
     // component prototype. We only need to define computed properties defined
@@ -3823,13 +3869,20 @@ function initComputed (vm, computed) {
   }
 }
 
-function defineComputed (target, key, userDef) {
+function defineComputed (
+  target,
+  key,
+  userDef
+) {
+  var shouldCache = !isServerRendering();
   if (typeof userDef === 'function') {
-    sharedPropertyDefinition.get = createComputedGetter(key);
+    sharedPropertyDefinition.get = shouldCache
+      ? createComputedGetter(key)
+      : userDef;
     sharedPropertyDefinition.set = noop;
   } else {
     sharedPropertyDefinition.get = userDef.get
-      ? userDef.cache !== false
+      ? shouldCache && userDef.cache !== false
         ? createComputedGetter(key)
         : userDef.get
       : noop;
@@ -3868,22 +3921,28 @@ function initMethods (vm, methods) {
   "development" !== 'production' && checkOptionType(vm, 'methods');
   var props = vm.$options.props;
   for (var key in methods) {
-    vm[key] = methods[key] == null ? noop : bind(methods[key], vm);
     if (true) {
       if (methods[key] == null) {
         warn(
-          "method \"" + key + "\" has an undefined value in the component definition. " +
+          "Method \"" + key + "\" has an undefined value in the component definition. " +
           "Did you reference the function correctly?",
           vm
         );
       }
       if (props && hasOwn(props, key)) {
         warn(
-          ("method \"" + key + "\" has already been defined as a prop."),
+          ("Method \"" + key + "\" has already been defined as a prop."),
           vm
         );
       }
+      if ((key in vm) && isReserved(key)) {
+        warn(
+          "Method \"" + key + "\" conflicts with an existing Vue instance method. " +
+          "Avoid defining component methods that start with _ or $."
+        );
+      }
     }
+    vm[key] = methods[key] == null ? noop : bind(methods[key], vm);
   }
 }
 
@@ -4003,7 +4062,10 @@ function resolveInject (inject, vm) {
     // inject is :any because flow is not smart enough to figure out cached
     var result = Object.create(null);
     var keys = hasSymbol
-        ? Reflect.ownKeys(inject)
+        ? Reflect.ownKeys(inject).filter(function (key) {
+          /* istanbul ignore next */
+          return Object.getOwnPropertyDescriptor(inject, key).enumerable
+        })
         : Object.keys(inject);
 
     for (var i = 0; i < keys.length; i++) {
@@ -4038,7 +4100,7 @@ function createFunctionalComponent (
   var propOptions = Ctor.options.props;
   if (isDef(propOptions)) {
     for (var key in propOptions) {
-      props[key] = validateProp(key, propOptions, propsData || {});
+      props[key] = validateProp(key, propOptions, propsData || emptyObject);
     }
   } else {
     if (isDef(data.attrs)) { mergeProps(props, data.attrs); }
@@ -4053,7 +4115,7 @@ function createFunctionalComponent (
     props: props,
     children: children,
     parent: context,
-    listeners: data.on || {},
+    listeners: data.on || emptyObject,
     injections: resolveInject(Ctor.options.inject, context),
     slots: function () { return resolveSlots(children, context); }
   });
@@ -4377,7 +4439,7 @@ function _createElement (
   var vnode, ns;
   if (typeof tag === 'string') {
     var Ctor;
-    ns = config.getTagNamespace(tag);
+    ns = (context.$vnode && context.$vnode.ns) || config.getTagNamespace(tag);
     if (config.isReservedTag(tag)) {
       // platform built-in elements
       vnode = new VNode(
@@ -4673,17 +4735,18 @@ function initRender (vm) {
   // $attrs & $listeners are exposed for easier HOC creation.
   // they need to be reactive so that HOCs using them are always updated
   var parentData = parentVnode && parentVnode.data;
+
   /* istanbul ignore else */
   if (true) {
-    defineReactive$$1(vm, '$attrs', parentData && parentData.attrs, function () {
+    defineReactive$$1(vm, '$attrs', parentData && parentData.attrs || emptyObject, function () {
       !isUpdatingChildComponent && warn("$attrs is readonly.", vm);
     }, true);
-    defineReactive$$1(vm, '$listeners', vm.$options._parentListeners, function () {
+    defineReactive$$1(vm, '$listeners', vm.$options._parentListeners || emptyObject, function () {
       !isUpdatingChildComponent && warn("$listeners is readonly.", vm);
     }, true);
   } else {
-    defineReactive$$1(vm, '$attrs', parentData && parentData.attrs, null, true);
-    defineReactive$$1(vm, '$listeners', vm.$options._parentListeners, null, true);
+    defineReactive$$1(vm, '$attrs', parentData && parentData.attrs || emptyObject, null, true);
+    defineReactive$$1(vm, '$listeners', vm.$options._parentListeners || emptyObject, null, true);
   }
 }
 
@@ -4700,9 +4763,13 @@ function renderMixin (Vue) {
     var _parentVnode = ref._parentVnode;
 
     if (vm._isMounted) {
-      // clone slot nodes on re-renders
+      // if the parent didn't update, the slot nodes will be the ones from
+      // last render. They need to be cloned to ensure "freshness" for this render.
       for (var key in vm.$slots) {
-        vm.$slots[key] = cloneVNodes(vm.$slots[key]);
+        var slot = vm.$slots[key];
+        if (slot._rendered) {
+          vm.$slots[key] = cloneVNodes(slot, true /* deep */);
+        }
       }
     }
 
@@ -5247,7 +5314,7 @@ Object.defineProperty(Vue$3.prototype, '$ssrContext', {
   }
 });
 
-Vue$3.version = '2.4.2';
+Vue$3.version = '2.4.4';
 
 /*  */
 
@@ -5256,7 +5323,7 @@ Vue$3.version = '2.4.2';
 var isReservedAttr = makeMap('style,class');
 
 // attributes that should be using props for binding
-var acceptValue = makeMap('input,textarea,option,select');
+var acceptValue = makeMap('input,textarea,option,select,progress');
 var mustUseProp = function (tag, type, attr) {
   return (
     (attr === 'value' && acceptValue(tag)) && type !== 'button' ||
@@ -5445,6 +5512,8 @@ function isUnknownElement (tag) {
   }
 }
 
+var isTextInputType = makeMap('text,number,password,search,email,tel,url');
+
 /*  */
 
 /**
@@ -5591,8 +5660,6 @@ function registerRef (vnode, isRemoval) {
  *
  * modified by Evan You (@yyx990803)
  *
-
-/*
  * Not type-checking this because this file is perf-critical and the cost
  * of making flow understand it is not worth it.
  */
@@ -5618,14 +5685,12 @@ function sameVnode (a, b) {
   )
 }
 
-// Some browsers do not support dynamically changing type for <input>
-// so they need to be treated as different nodes
 function sameInputType (a, b) {
   if (a.tag !== 'input') { return true }
   var i;
   var typeA = isDef(i = a.data) && isDef(i = i.attrs) && i.type;
   var typeB = isDef(i = b.data) && isDef(i = i.attrs) && i.type;
-  return typeA === typeB
+  return typeA === typeB || isTextInputType(typeA) && isTextInputType(typeB)
 }
 
 function createKeyToOldIdx (children, beginIdx, endIdx) {
@@ -5957,10 +6022,11 @@ function createPatchFunction (backend) {
         newStartVnode = newCh[++newStartIdx];
       } else {
         if (isUndef(oldKeyToIdx)) { oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx); }
-        idxInOld = isDef(newStartVnode.key) ? oldKeyToIdx[newStartVnode.key] : null;
+        idxInOld = isDef(newStartVnode.key)
+          ? oldKeyToIdx[newStartVnode.key]
+          : findIdxInOld(newStartVnode, oldCh, oldStartIdx, oldEndIdx);
         if (isUndef(idxInOld)) { // New element
           createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm);
-          newStartVnode = newCh[++newStartIdx];
         } else {
           elmToMove = oldCh[idxInOld];
           /* istanbul ignore if */
@@ -5974,13 +6040,12 @@ function createPatchFunction (backend) {
             patchVnode(elmToMove, newStartVnode, insertedVnodeQueue);
             oldCh[idxInOld] = undefined;
             canMove && nodeOps.insertBefore(parentElm, elmToMove.elm, oldStartVnode.elm);
-            newStartVnode = newCh[++newStartIdx];
           } else {
             // same key but different element. treat as new element
             createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm);
-            newStartVnode = newCh[++newStartIdx];
           }
         }
+        newStartVnode = newCh[++newStartIdx];
       }
     }
     if (oldStartIdx > oldEndIdx) {
@@ -5988,6 +6053,13 @@ function createPatchFunction (backend) {
       addVnodes(parentElm, refElm, newCh, newStartIdx, newEndIdx, insertedVnodeQueue);
     } else if (newStartIdx > newEndIdx) {
       removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);
+    }
+  }
+
+  function findIdxInOld (node, oldCh, start, end) {
+    for (var i = start; i < end; i++) {
+      var c = oldCh[i];
+      if (isDef(c) && sameVnode(node, c)) { return i }
     }
   }
 
@@ -6098,27 +6170,46 @@ function createPatchFunction (backend) {
         if (!elm.hasChildNodes()) {
           createChildren(vnode, children, insertedVnodeQueue);
         } else {
-          var childrenMatch = true;
-          var childNode = elm.firstChild;
-          for (var i$1 = 0; i$1 < children.length; i$1++) {
-            if (!childNode || !hydrate(childNode, children[i$1], insertedVnodeQueue)) {
-              childrenMatch = false;
-              break
+          // v-html and domProps: innerHTML
+          if (isDef(i = data) && isDef(i = i.domProps) && isDef(i = i.innerHTML)) {
+            if (i !== elm.innerHTML) {
+              /* istanbul ignore if */
+              if ("development" !== 'production' &&
+                typeof console !== 'undefined' &&
+                !bailed
+              ) {
+                bailed = true;
+                console.warn('Parent: ', elm);
+                console.warn('server innerHTML: ', i);
+                console.warn('client innerHTML: ', elm.innerHTML);
+              }
+              return false
             }
-            childNode = childNode.nextSibling;
-          }
-          // if childNode is not null, it means the actual childNodes list is
-          // longer than the virtual children list.
-          if (!childrenMatch || childNode) {
-            if ("development" !== 'production' &&
-              typeof console !== 'undefined' &&
-              !bailed
-            ) {
-              bailed = true;
-              console.warn('Parent: ', elm);
-              console.warn('Mismatching childNodes vs. VNodes: ', elm.childNodes, children);
+          } else {
+            // iterate and compare children lists
+            var childrenMatch = true;
+            var childNode = elm.firstChild;
+            for (var i$1 = 0; i$1 < children.length; i$1++) {
+              if (!childNode || !hydrate(childNode, children[i$1], insertedVnodeQueue)) {
+                childrenMatch = false;
+                break
+              }
+              childNode = childNode.nextSibling;
             }
-            return false
+            // if childNode is not null, it means the actual childNodes list is
+            // longer than the virtual children list.
+            if (!childrenMatch || childNode) {
+              /* istanbul ignore if */
+              if ("development" !== 'production' &&
+                typeof console !== 'undefined' &&
+                !bailed
+              ) {
+                bailed = true;
+                console.warn('Parent: ', elm);
+                console.warn('Mismatching childNodes vs. VNodes: ', elm.childNodes, children);
+              }
+              return false
+            }
           }
         }
       }
@@ -6209,14 +6300,28 @@ function createPatchFunction (backend) {
           // component root element replaced.
           // update parent placeholder node element, recursively
           var ancestor = vnode.parent;
+          var patchable = isPatchable(vnode);
           while (ancestor) {
-            ancestor.elm = vnode.elm;
-            ancestor = ancestor.parent;
-          }
-          if (isPatchable(vnode)) {
-            for (var i = 0; i < cbs.create.length; ++i) {
-              cbs.create[i](emptyNode, vnode.parent);
+            for (var i = 0; i < cbs.destroy.length; ++i) {
+              cbs.destroy[i](ancestor);
             }
+            ancestor.elm = vnode.elm;
+            if (patchable) {
+              for (var i$1 = 0; i$1 < cbs.create.length; ++i$1) {
+                cbs.create[i$1](emptyNode, ancestor);
+              }
+              // #6513
+              // invoke insert hooks that may have been merged by create hooks.
+              // e.g. for directives that uses the "inserted" hook.
+              var insert = ancestor.data.hook.insert;
+              if (insert.merged) {
+                // start at index 1 to avoid re-invoking component mounted hook
+                for (var i$2 = 1; i$2 < insert.fns.length; i$2++) {
+                  insert.fns[i$2]();
+                }
+              }
+            }
+            ancestor = ancestor.parent;
           }
         }
 
@@ -6400,7 +6505,12 @@ function setAttr (el, key, value) {
     if (isFalsyAttrValue(value)) {
       el.removeAttribute(key);
     } else {
-      el.setAttribute(key, key);
+      // technically allowfullscreen is a boolean attribute for <iframe>,
+      // but Flash expects a value of "true" when used on <embed> tag
+      value = key === 'allowfullscreen' && el.tagName === 'EMBED'
+        ? 'true'
+        : key;
+      el.setAttribute(key, value);
     }
   } else if (isEnumeratedAttr(key)) {
     el.setAttribute(key, isFalsyAttrValue(value) || value === 'false' ? 'false' : 'true');
@@ -6907,7 +7017,7 @@ function genCheckboxModel (
     'if(Array.isArray($$a)){' +
       "var $$v=" + (number ? '_n(' + valueBinding + ')' : valueBinding) + "," +
           '$$i=_i($$a,$$v);' +
-      "if($$el.checked){$$i<0&&(" + value + "=$$a.concat($$v))}" +
+      "if($$el.checked){$$i<0&&(" + value + "=$$a.concat([$$v]))}" +
       "else{$$i>-1&&(" + value + "=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}" +
     "}else{" + (genAssignmentCode(value, '$$c')) + "}",
     null, true
@@ -7276,7 +7386,7 @@ function updateStyle (oldVnode, vnode) {
   var style = normalizeStyleBinding(vnode.data.style) || {};
 
   // store normalized style under a different key for next diff
-  // make sure to clone it if it's reactive, since the user likley wants
+  // make sure to clone it if it's reactive, since the user likely wants
   // to mutate it.
   vnode.data.normalizedStyle = isDef(style.__ob__)
     ? extend({}, style)
@@ -7881,8 +7991,6 @@ var patch = createPatchFunction({ nodeOps: nodeOps, modules: modules });
  * properties to Elements.
  */
 
-var isTextInputType = makeMap('text,number,password,search,email,tel,url');
-
 /* istanbul ignore if */
 if (isIE9) {
   // http://www.matts411.com/post/internet-explorer-9-oninput/
@@ -7897,14 +8005,7 @@ if (isIE9) {
 var model$1 = {
   inserted: function inserted (el, binding, vnode) {
     if (vnode.tag === 'select') {
-      var cb = function () {
-        setSelected(el, binding, vnode.context);
-      };
-      cb();
-      /* istanbul ignore if */
-      if (isIE || isEdge) {
-        setTimeout(cb, 0);
-      }
+      setSelected(el, binding, vnode.context);
       el._vOptions = [].map.call(el.options, getValue);
     } else if (vnode.tag === 'textarea' || isTextInputType(el.type)) {
       el._vModifiers = binding.modifiers;
@@ -7935,13 +8036,30 @@ var model$1 = {
       var prevOptions = el._vOptions;
       var curOptions = el._vOptions = [].map.call(el.options, getValue);
       if (curOptions.some(function (o, i) { return !looseEqual(o, prevOptions[i]); })) {
-        trigger(el, 'change');
+        // trigger change event if
+        // no matching option found for at least one value
+        var needReset = el.multiple
+          ? binding.value.some(function (v) { return hasNoMatchingOption(v, curOptions); })
+          : binding.value !== binding.oldValue && hasNoMatchingOption(binding.value, curOptions);
+        if (needReset) {
+          trigger(el, 'change');
+        }
       }
     }
   }
 };
 
 function setSelected (el, binding, vm) {
+  actuallySetSelected(el, binding, vm);
+  /* istanbul ignore if */
+  if (isIE || isEdge) {
+    setTimeout(function () {
+      actuallySetSelected(el, binding, vm);
+    }, 0);
+  }
+}
+
+function actuallySetSelected (el, binding, vm) {
   var value = binding.value;
   var isMultiple = el.multiple;
   if (isMultiple && !Array.isArray(value)) {
@@ -7972,6 +8090,10 @@ function setSelected (el, binding, vm) {
   if (!isMultiple) {
     el.selectedIndex = -1;
   }
+}
+
+function hasNoMatchingOption (value, options) {
+  return options.every(function (o) { return !looseEqual(o, value); })
 }
 
 function getValue (option) {
@@ -8134,10 +8256,6 @@ function hasParentTransition (vnode) {
 
 function isSameChild (child, oldChild) {
   return oldChild.key === child.key && oldChild.tag === child.tag
-}
-
-function isAsyncPlaceholder (node) {
-  return node.isComment && node.asyncFactory
 }
 
 var Transition = {
@@ -8707,29 +8825,14 @@ var he = {
  */
 
 // Regular Expressions for parsing tags and attributes
-var singleAttrIdentifier = /([^\s"'<>/=]+)/;
-var singleAttrAssign = /(?:=)/;
-var singleAttrValues = [
-  // attr value double quotes
-  /"([^"]*)"+/.source,
-  // attr value, single quotes
-  /'([^']*)'+/.source,
-  // attr value, no quotes
-  /([^\s"'=<>`]+)/.source
-];
-var attribute = new RegExp(
-  '^\\s*' + singleAttrIdentifier.source +
-  '(?:\\s*(' + singleAttrAssign.source + ')' +
-  '\\s*(?:' + singleAttrValues.join('|') + '))?'
-);
-
+var attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/;
 // could use https://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-QName
 // but for Vue templates we can enforce a simple charset
 var ncname = '[a-zA-Z_][\\w\\-\\.]*';
-var qnameCapture = '((?:' + ncname + '\\:)?' + ncname + ')';
-var startTagOpen = new RegExp('^<' + qnameCapture);
+var qnameCapture = "((?:" + ncname + "\\:)?" + ncname + ")";
+var startTagOpen = new RegExp(("^<" + qnameCapture));
 var startTagClose = /^\s*(\/?)>/;
-var endTag = new RegExp('^<\\/' + qnameCapture + '[^>]*>');
+var endTag = new RegExp(("^<\\/" + qnameCapture + "[^>]*>"));
 var doctype = /^<!DOCTYPE [^>]+>/i;
 var comment = /^<!--/;
 var conditionalComment = /^<!\[/;
@@ -9429,6 +9532,8 @@ function processSlot (el) {
     var slotTarget = getBindingAttr(el, 'slot');
     if (slotTarget) {
       el.slotTarget = slotTarget === '""' ? '"default"' : slotTarget;
+      // preserve slot as an attribute for native shadow DOM compat
+      addAttr(el, 'slot', slotTarget);
     }
     if (el.tag === 'template') {
       el.slotScope = getAndRemoveAttr(el, 'scope');
@@ -9965,7 +10070,7 @@ function genOnce (el, state) {
       );
       return genElement(el, state)
     }
-    return ("_o(" + (genElement(el, state)) + "," + (state.onceId++) + (key ? ("," + key) : "") + ")")
+    return ("_o(" + (genElement(el, state)) + "," + (state.onceId++) + "," + key + ")")
   } else {
     return genStatic(el, state)
   }
@@ -13917,19 +14022,25 @@ var registrar = [{
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(21),
-  /* template */
-  __webpack_require__(22),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(21)
+/* template */
+var __vue_template__ = __webpack_require__(22)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\registrar\\registration.vue"
+Component.options.__file = "resources\\assets\\js\\views\\registrar\\registration.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] registration.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14173,290 +14284,410 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('main', {
-    staticClass: "col-sm-9 pt-3 card",
-    attrs: {
-      "role": "main"
-    }
-  }, [_c('h1', {
-    staticClass: "mb-4"
-  }, [_vm._v("Registration")]), _vm._v(" "), _c('form', {
-    staticClass: "bg-light py-3"
-  }, [_c('div', {
-    staticClass: "form-group ml-2 "
-  }, [_vm._m(0), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-3 ml-3"
-  }, [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.newUser.firstName),
-      expression: "newUser.firstName"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      "type": "text",
-      "placeholder": "First name"
-    },
-    domProps: {
-      "value": (_vm.newUser.firstName)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.newUser.firstName = $event.target.value
-      }
-    }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3"
-  }, [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.newUser.middleName),
-      expression: "newUser.middleName"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      "type": "text",
-      "placeholder": "Middle name"
-    },
-    domProps: {
-      "value": (_vm.newUser.middleName)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.newUser.middleName = $event.target.value
-      }
-    }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3"
-  }, [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.newUser.lastName),
-      expression: "newUser.lastName"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      "type": "text",
-      "placeholder": "Last name"
-    },
-    domProps: {
-      "value": (_vm.newUser.lastName)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.newUser.lastName = $event.target.value
-      }
-    }
-  })])])]), _vm._v(" "), _c('div', {
-    staticClass: "form-group ml-2"
-  }, [_vm._m(1), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3 ml-2"
-  }, [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.newUser.schoolIndexNo),
-      expression: "newUser.schoolIndexNo"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      "type": "text",
-      "placeholder": "1234-1234-4321"
-    },
-    domProps: {
-      "value": (_vm.newUser.schoolIndexNo)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.newUser.schoolIndexNo = $event.target.value
-      }
-    }
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "form-group ml-2"
-  }, [_vm._m(2), _vm._v(" "), _c('div', {
-    staticClass: "col-md-3 ml-2"
-  }, [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.newUser.email),
-      expression: "newUser.email"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      "type": "email",
-      "placeholder": "Enter Email"
-    },
-    domProps: {
-      "value": (_vm.newUser.email)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.newUser.email = $event.target.value
-      }
-    }
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "form-group ml-2"
-  }, [_vm._m(3), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.newUser.userType),
-      expression: "newUser.userType"
-    }],
-    staticClass: "form-control col-md-3 form-control-sm",
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.newUser.userType = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "student"
-    }
-  }, [_vm._v("Student")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "registrar"
-    }
-  }, [_vm._v("Registrar")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12"
-  }, [_c('h1', {
-    staticClass: "text-dark mb-4"
-  }, [_vm._v("Users")]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_vm._m(4), _vm._v(" "), _vm._m(5), _vm._v(" "), _c('div', {
-    staticClass: "container-fluid my-4 "
-  }, [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-sm-12 "
-  }, [_c('table', {
-    staticClass: "table table-sm table-responsive table-hover"
-  }, [_vm._m(6), _vm._v(" "), (!_vm.userIsEmpty) ? _c('tbody', _vm._l((_vm.users), function(user) {
-    return _c('tr', {
-      key: user.id
-    }, [_c('th', {
-      attrs: {
-        "scope": "row"
-      },
-      domProps: {
-        "textContent": _vm._s(user.id)
-      }
-    }), _vm._v(" "), _c('td', {
-      domProps: {
-        "textContent": _vm._s(user['first_name'] + ' ' + user['middle_name'] + ' ' + user['last_name'])
-      }
-    }), _vm._v(" "), _c('td', {
-      domProps: {
-        "textContent": _vm._s(user['school_index_no'])
-      }
-    }), _vm._v(" "), _c('td', {
-      domProps: {
-        "textContent": _vm._s(user.email)
-      }
-    }), _vm._v(" "), _c('td', {
-      domProps: {
-        "textContent": _vm._s(user.role.name)
-      }
-    }), _vm._v(" "), _c('td', {
-      domProps: {
-        "textContent": _vm._s(user['is_active'])
-      }
-    }), _vm._v(" "), _vm._m(7, true), _vm._v(" "), _vm._m(8, true)])
-  })) : _vm._e()])])])])])])])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('p', [_c('strong', [_vm._v("Name")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('p', [_c('strong', [_vm._v("School Index No")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('p', [_c('strong', [_vm._v("Email")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('p', [_c('strong', [_vm._v("User type")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "input-group"
-  }, [_c('input', {
-    staticClass: "form-control",
-    attrs: {
-      "type": "text",
-      "placeholder": "Search for...",
-      "aria-label": "Search for..."
-    }
-  }), _vm._v(" "), _c('span', {
-    staticClass: "input-group-btn"
-  }, [_c('button', {
-    staticClass: "btn btn-warning",
-    attrs: {
-      "type": "button"
-    }
-  }, [_vm._v("Go!")])])])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "col-md-6"
-  }, [_c('div', {
-    staticClass: "row"
-  }, [_c('p', {
-    staticClass: "ml-5"
-  }, [_c('strong', [_vm._v("Status")])]), _vm._v(" "), _c('div', {
-    staticClass: "form-check form-check-inline ml-5"
-  }, [_c('label', {
-    staticClass: "form-check-label"
-  }, [_c('input', {
-    staticClass: "form-check-input",
-    attrs: {
-      "type": "radio",
-      "name": "inlineRadioOptions",
-      "id": "inlineRadio1",
-      "value": "option1"
-    }
-  }), _vm._v("Active\n            ")]), _vm._v(" "), _c('label', {
-    staticClass: "form-check-label"
-  }, [_c('input', {
-    staticClass: "form-check-input",
-    attrs: {
-      "type": "radio",
-      "name": "inlineRadioOptions",
-      "id": "inlineRadio2",
-      "value": "option2"
-    }
-  }), _vm._v("Deactivate\n            ")])])])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', {
-    staticClass: "bg-info text-light"
-  }, [_c('th', [_vm._v("#")]), _vm._v(" "), _c('th', [_vm._v("Name")]), _vm._v(" "), _c('th', [_vm._v("Index No.")]), _vm._v(" "), _c('th', [_vm._v("Email")]), _vm._v(" "), _c('th', [_vm._v("User Type")]), _vm._v(" "), _c('th', [_vm._v("Status")]), _vm._v(" "), _c('th', [_vm._v("Edit")]), _vm._v(" "), _c('th', [_vm._v("Delete")])])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('td', [_c('button', {
-    staticClass: "btn btn-secondary btn-xs text-center"
-  }, [_c('span', {
-    staticClass: "fa fa-pencil"
-  })])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('td', [_c('button', {
-    staticClass: "btn btn-danger btn-xs"
-  }, [_c('span', {
-    staticClass: "fa fa-trash"
-  })])])
-}]}
-module.exports.render._withStripped = true
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "main",
+    { staticClass: "col-sm-9 pt-3 card", attrs: { role: "main" } },
+    [
+      _c("h1", { staticClass: "mb-4" }, [_vm._v("Registration")]),
+      _vm._v(" "),
+      _c("form", { staticClass: "bg-light py-3" }, [
+        _c("div", { staticClass: "form-group ml-2 " }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-md-3 ml-3" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.newUser.firstName,
+                    expression: "newUser.firstName"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: "First name" },
+                domProps: { value: _vm.newUser.firstName },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.newUser.firstName = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-3" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.newUser.middleName,
+                    expression: "newUser.middleName"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: "Middle name" },
+                domProps: { value: _vm.newUser.middleName },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.newUser.middleName = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-3" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.newUser.lastName,
+                    expression: "newUser.lastName"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: "Last name" },
+                domProps: { value: _vm.newUser.lastName },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.newUser.lastName = $event.target.value
+                  }
+                }
+              })
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group ml-2" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-3 ml-2" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.newUser.schoolIndexNo,
+                  expression: "newUser.schoolIndexNo"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "1234-1234-4321" },
+              domProps: { value: _vm.newUser.schoolIndexNo },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.newUser.schoolIndexNo = $event.target.value
+                }
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group ml-2" }, [
+          _vm._m(2),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-3 ml-2" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.newUser.email,
+                  expression: "newUser.email"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "email", placeholder: "Enter Email" },
+              domProps: { value: _vm.newUser.email },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.newUser.email = $event.target.value
+                }
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group ml-2" }, [
+          _vm._m(3),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.newUser.userType,
+                  expression: "newUser.userType"
+                }
+              ],
+              staticClass: "form-control col-md-3 form-control-sm",
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.newUser.userType = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
+            },
+            [
+              _c("option", { attrs: { value: "student" } }, [
+                _vm._v("Student")
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "registrar" } }, [
+                _vm._v("Registrar")
+              ])
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("h1", { staticClass: "text-dark mb-4" }, [_vm._v("Users")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _vm._m(4),
+          _vm._v(" "),
+          _vm._m(5),
+          _vm._v(" "),
+          _c("div", { staticClass: "container-fluid my-4 " }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-sm-12 " }, [
+                _c(
+                  "table",
+                  {
+                    staticClass: "table table-sm table-responsive table-hover"
+                  },
+                  [
+                    _vm._m(6),
+                    _vm._v(" "),
+                    !_vm.userIsEmpty
+                      ? _c(
+                          "tbody",
+                          _vm._l(_vm.users, function(user) {
+                            return _c("tr", { key: user.id }, [
+                              _c("th", {
+                                attrs: { scope: "row" },
+                                domProps: { textContent: _vm._s(user.id) }
+                              }),
+                              _vm._v(" "),
+                              _c("td", {
+                                domProps: {
+                                  textContent: _vm._s(
+                                    user["first_name"] +
+                                      " " +
+                                      user["middle_name"] +
+                                      " " +
+                                      user["last_name"]
+                                  )
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("td", {
+                                domProps: {
+                                  textContent: _vm._s(user["school_index_no"])
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("td", {
+                                domProps: { textContent: _vm._s(user.email) }
+                              }),
+                              _vm._v(" "),
+                              _c("td", {
+                                domProps: {
+                                  textContent: _vm._s(user.role.name)
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("td", {
+                                domProps: {
+                                  textContent: _vm._s(user["is_active"])
+                                }
+                              }),
+                              _vm._v(" "),
+                              _vm._m(7, true),
+                              _vm._v(" "),
+                              _vm._m(8, true)
+                            ])
+                          })
+                        )
+                      : _vm._e()
+                  ]
+                )
+              ])
+            ])
+          ])
+        ])
+      ])
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [_c("strong", [_vm._v("Name")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [_c("strong", [_vm._v("School Index No")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [_c("strong", [_vm._v("Email")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [_c("strong", [_vm._v("User type")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-6" }, [
+      _c("div", { staticClass: "input-group" }, [
+        _c("input", {
+          staticClass: "form-control",
+          attrs: {
+            type: "text",
+            placeholder: "Search for...",
+            "aria-label": "Search for..."
+          }
+        }),
+        _vm._v(" "),
+        _c("span", { staticClass: "input-group-btn" }, [
+          _c(
+            "button",
+            { staticClass: "btn btn-warning", attrs: { type: "button" } },
+            [_vm._v("Go!")]
+          )
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-6" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("p", { staticClass: "ml-5" }, [_c("strong", [_vm._v("Status")])]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-check form-check-inline ml-5" }, [
+          _c("label", { staticClass: "form-check-label" }, [
+            _c("input", {
+              staticClass: "form-check-input",
+              attrs: {
+                type: "radio",
+                name: "inlineRadioOptions",
+                id: "inlineRadio1",
+                value: "option1"
+              }
+            }),
+            _vm._v("Active\n            ")
+          ]),
+          _vm._v(" "),
+          _c("label", { staticClass: "form-check-label" }, [
+            _c("input", {
+              staticClass: "form-check-input",
+              attrs: {
+                type: "radio",
+                name: "inlineRadioOptions",
+                id: "inlineRadio2",
+                value: "option2"
+              }
+            }),
+            _vm._v("Deactivate\n            ")
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", { staticClass: "bg-info text-light" }, [
+        _c("th", [_vm._v("#")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Index No.")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Email")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("User Type")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Status")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Edit")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Delete")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [
+      _c("button", { staticClass: "btn btn-secondary btn-xs text-center" }, [
+        _c("span", { staticClass: "fa fa-pencil" })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [
+      _c("button", { staticClass: "btn btn-danger btn-xs" }, [
+        _c("span", { staticClass: "fa fa-trash" })
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -14469,19 +14700,25 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(24),
-  /* template */
-  __webpack_require__(25),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(24)
+/* template */
+var __vue_template__ = __webpack_require__(25)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\registrar\\dashboard.vue"
+Component.options.__file = "resources\\assets\\js\\views\\registrar\\dashboard.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] dashboard.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14569,71 +14806,122 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
   return _vm._m(0)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('main', {
-    staticClass: "col-sm-9 pt-3",
-    attrs: {
-      "role": "main"
-    }
-  }, [_c('h1', [_vm._v("Dashboard")]), _vm._v(" "), _c('section', {
-    staticClass: " card-group row text-center "
-  }, [_c('div', {
-    staticClass: "col-xs-6 col-3 d-md-block"
-  }, [_c('div', {
-    staticClass: "card border-info",
-    staticStyle: {
-      "max-width": "15rem"
-    }
-  }, [_c('div', {
-    staticClass: "card-body text-info"
-  }, [_c('h4', {
-    staticClass: "card-title"
-  }, [_vm._v("Info card title")]), _vm._v(" "), _c('p', {
-    staticClass: "card-text"
-  }, [_vm._v("Some quick example text to build on the card title and make up the bulk of the card's content.")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-xs-12 col-3 d-md-block"
-  }, [_c('div', {
-    staticClass: "card border-info",
-    staticStyle: {
-      "max-width": "15rem"
-    }
-  }, [_c('div', {
-    staticClass: "card-body text-info"
-  }, [_c('h4', {
-    staticClass: "card-title"
-  }, [_vm._v("Info card title")]), _vm._v(" "), _c('p', {
-    staticClass: "card-text"
-  }, [_vm._v("Some quick example text to build on the card title and make up the bulk of the card's content.")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-xs-6 col-3 d-md-block"
-  }, [_c('div', {
-    staticClass: "card border-info",
-    staticStyle: {
-      "max-width": "15rem"
-    }
-  }, [_c('div', {
-    staticClass: "card-body text-info"
-  }, [_c('h4', {
-    staticClass: "card-title"
-  }, [_vm._v("Info card title")]), _vm._v(" "), _c('p', {
-    staticClass: "card-text"
-  }, [_vm._v("Some quick example text to build on the card title and make up the bulk of the card's content.")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-xs-6 col-3 d-md-block"
-  }, [_c('div', {
-    staticClass: "card border-info",
-    staticStyle: {
-      "max-width": "15rem"
-    }
-  }, [_c('div', {
-    staticClass: "card-body text-info"
-  }, [_c('h4', {
-    staticClass: "card-title"
-  }, [_vm._v("Info card title")]), _vm._v(" "), _c('p', {
-    staticClass: "card-text"
-  }, [_vm._v("Some quick example text to build on the card title and make up the bulk of the card's content.")])])])])])])
-}]}
-module.exports.render._withStripped = true
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "main",
+      { staticClass: "col-sm-9 pt-3", attrs: { role: "main" } },
+      [
+        _c("h1", [_vm._v("Dashboard")]),
+        _vm._v(" "),
+        _c("section", { staticClass: " card-group row text-center " }, [
+          _c("div", { staticClass: "col-xs-6 col-3 d-md-block" }, [
+            _c(
+              "div",
+              {
+                staticClass: "card border-info",
+                staticStyle: { "max-width": "15rem" }
+              },
+              [
+                _c("div", { staticClass: "card-body text-info" }, [
+                  _c("h4", { staticClass: "card-title" }, [
+                    _vm._v("Info card title")
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "card-text" }, [
+                    _vm._v(
+                      "Some quick example text to build on the card title and make up the bulk of the card's content."
+                    )
+                  ])
+                ])
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-xs-12 col-3 d-md-block" }, [
+            _c(
+              "div",
+              {
+                staticClass: "card border-info",
+                staticStyle: { "max-width": "15rem" }
+              },
+              [
+                _c("div", { staticClass: "card-body text-info" }, [
+                  _c("h4", { staticClass: "card-title" }, [
+                    _vm._v("Info card title")
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "card-text" }, [
+                    _vm._v(
+                      "Some quick example text to build on the card title and make up the bulk of the card's content."
+                    )
+                  ])
+                ])
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-xs-6 col-3 d-md-block" }, [
+            _c(
+              "div",
+              {
+                staticClass: "card border-info",
+                staticStyle: { "max-width": "15rem" }
+              },
+              [
+                _c("div", { staticClass: "card-body text-info" }, [
+                  _c("h4", { staticClass: "card-title" }, [
+                    _vm._v("Info card title")
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "card-text" }, [
+                    _vm._v(
+                      "Some quick example text to build on the card title and make up the bulk of the card's content."
+                    )
+                  ])
+                ])
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-xs-6 col-3 d-md-block" }, [
+            _c(
+              "div",
+              {
+                staticClass: "card border-info",
+                staticStyle: { "max-width": "15rem" }
+              },
+              [
+                _c("div", { staticClass: "card-body text-info" }, [
+                  _c("h4", { staticClass: "card-title" }, [
+                    _vm._v("Info card title")
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "card-text" }, [
+                    _vm._v(
+                      "Some quick example text to build on the card title and make up the bulk of the card's content."
+                    )
+                  ])
+                ])
+              ]
+            )
+          ])
+        ])
+      ]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -14646,19 +14934,25 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(27),
-  /* template */
-  __webpack_require__(28),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(27)
+/* template */
+var __vue_template__ = __webpack_require__(28)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\registrar\\courses.vue"
+Component.options.__file = "resources\\assets\\js\\views\\registrar\\courses.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] courses.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14786,156 +15080,242 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('main', {
-    staticClass: "col-sm-9 pt-3 card",
-    attrs: {
-      "role": "main"
-    }
-  }, [_c('h1', {
-    staticClass: "mb-4"
-  }, [_vm._v("COURSES")]), _vm._v(" "), _c('div', {
-    staticClass: "container-fluid"
-  }, [_c('div', {
-    staticClass: "col-md-12 bg-light py-2"
-  }, [_c('div', {
-    staticClass: "row"
-  }, [_vm._m(0), _vm._v(" "), _c('div', {
-    staticClass: "btn-group ml-5"
-  }, [_c('button', {
-    staticClass: "btn btn-info btn-sm dropdown-toggle",
-    class: {
-      show: _vm.dropdownToggled
-    },
-    attrs: {
-      "type": "button"
-    },
-    on: {
-      "click": function($event) {
-        _vm.toggleDropdown()
-      }
-    }
-  }, [_vm._v("Courses")]), _vm._v(" "), _c('div', {
-    staticClass: "dropdown-menu",
-    class: {
-      show: _vm.dropdownToggled
-    }
-  }, [_c('a', {
-    staticClass: "dropdown-item",
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("BSIS")]), _vm._v(" "), _c('a', {
-    staticClass: "dropdown-item",
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("BSCS")]), _vm._v(" "), _c('a', {
-    staticClass: "dropdown-item",
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("BSBA")])])])])]), _vm._v(" "), _vm._m(1)])])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h2', [_c('span', {
-    staticClass: "fa fa-list",
-    attrs: {
-      "aria-hidden": "true"
-    }
-  }), _vm._v("  Curriculum"), _c('small', [_vm._v("     Bachelor of Science in Information Technology")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "card mt-5"
-  }, [_c('div', {
-    staticClass: "card-header bg-info text text-light"
-  }, [_c('strong', [_vm._v("Year Level")])]), _vm._v(" "), _c('div', {
-    staticClass: "card-body"
-  }, [_c('h2', [_vm._v("First Year")]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "list-group"
-  }, [_c('a', {
-    staticClass: "list-group-item list-group-item-action list-group-item-secondary",
-    attrs: {
-      "href": "#"
-    }
-  }, [_c('strong', [_vm._v("First Term")]), _vm._v(" "), _c('span', {
-    staticClass: "fa fa-plus pull-right "
-  })]), _vm._v(" "), _c('a', {
-    staticClass: "list-group-item list-group-item-action",
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("ENG 111    Communication Arts and Skills"), _c('span', {
-    staticClass: "fa fa-pencil pull-right",
-    attrs: {
-      "data-toggle": "modal",
-      "data-target": "#updateSubject"
-    }
-  })]), _vm._v(" "), _c('a', {
-    staticClass: "list-group-item list-group-item-action",
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("FIL 111 Sining ng Komunikasyon")])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "list-group"
-  }, [_c('a', {
-    staticClass: "list-group-item list-group-item-action list-group-item-secondary",
-    attrs: {
-      "href": "#"
-    }
-  }, [_c('strong', [_vm._v("Second Term")]), _vm._v(" "), _c('span', {
-    staticClass: "fa fa-plus pull-right "
-  })]), _vm._v(" "), _c('a', {
-    staticClass: "list-group-item list-group-item-action",
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("ENG 111    Communication Arts and Skills"), _c('span', {
-    staticClass: "fa fa-pencil pull-right",
-    attrs: {
-      "data-toggle": "modal",
-      "data-target": "#updateSubject"
-    }
-  })]), _vm._v(" "), _c('a', {
-    staticClass: "list-group-item list-group-item-action",
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("FIL 111 Sining ng Komunikasyon")])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "list-group"
-  }, [_c('a', {
-    staticClass: "list-group-item list-group-item-action list-group-item-secondary",
-    attrs: {
-      "href": "#"
-    }
-  }, [_c('strong', [_vm._v("Second Term")]), _vm._v(" "), _c('span', {
-    staticClass: "fa fa-plus pull-right "
-  })]), _vm._v(" "), _c('a', {
-    staticClass: "list-group-item list-group-item-action",
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("ENG 111    Communication Arts and Skills"), _c('span', {
-    staticClass: "fa fa-pencil pull-right",
-    attrs: {
-      "data-toggle": "modal",
-      "data-target": "#updateSubject"
-    }
-  })]), _vm._v(" "), _c('a', {
-    staticClass: "list-group-item list-group-item-action",
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("FIL 111 Sining ng Komunikasyon")])])])])])])
-}]}
-module.exports.render._withStripped = true
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "main",
+    { staticClass: "col-sm-9 pt-3 card", attrs: { role: "main" } },
+    [
+      _c("h1", { staticClass: "mb-4" }, [_vm._v("COURSES")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container-fluid" }, [
+        _c("div", { staticClass: "col-md-12 bg-light py-2" }, [
+          _c("div", { staticClass: "row" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "btn-group ml-5" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-info btn-sm dropdown-toggle",
+                  class: { show: _vm.dropdownToggled },
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      _vm.toggleDropdown()
+                    }
+                  }
+                },
+                [_vm._v("Courses")]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "dropdown-menu",
+                  class: { show: _vm.dropdownToggled }
+                },
+                [
+                  _c(
+                    "a",
+                    { staticClass: "dropdown-item", attrs: { href: "#" } },
+                    [_vm._v("BSIS")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    { staticClass: "dropdown-item", attrs: { href: "#" } },
+                    [_vm._v("BSCS")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    { staticClass: "dropdown-item", attrs: { href: "#" } },
+                    [_vm._v("BSBA")]
+                  )
+                ]
+              )
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _vm._m(1)
+      ])
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h2", [
+      _c("span", {
+        staticClass: "fa fa-list",
+        attrs: { "aria-hidden": "true" }
+      }),
+      _vm._v("  Curriculum"),
+      _c("small", [
+        _vm._v("     Bachelor of Science in Information Technology")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card mt-5" }, [
+      _c("div", { staticClass: "card-header bg-info text text-light" }, [
+        _c("strong", [_vm._v("Year Level")])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c("h2", [_vm._v("First Year")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-4" }, [
+            _c("div", { staticClass: "list-group" }, [
+              _c(
+                "a",
+                {
+                  staticClass:
+                    "list-group-item list-group-item-action list-group-item-secondary",
+                  attrs: { href: "#" }
+                },
+                [
+                  _c("strong", [_vm._v("First Term")]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "fa fa-plus pull-right " })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "list-group-item list-group-item-action",
+                  attrs: { href: "#" }
+                },
+                [
+                  _vm._v("ENG 111    Communication Arts and Skills"),
+                  _c("span", {
+                    staticClass: "fa fa-pencil pull-right",
+                    attrs: {
+                      "data-toggle": "modal",
+                      "data-target": "#updateSubject"
+                    }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "list-group-item list-group-item-action",
+                  attrs: { href: "#" }
+                },
+                [_vm._v("FIL 111 Sining ng Komunikasyon")]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-4" }, [
+            _c("div", { staticClass: "list-group" }, [
+              _c(
+                "a",
+                {
+                  staticClass:
+                    "list-group-item list-group-item-action list-group-item-secondary",
+                  attrs: { href: "#" }
+                },
+                [
+                  _c("strong", [_vm._v("Second Term")]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "fa fa-plus pull-right " })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "list-group-item list-group-item-action",
+                  attrs: { href: "#" }
+                },
+                [
+                  _vm._v("ENG 111    Communication Arts and Skills"),
+                  _c("span", {
+                    staticClass: "fa fa-pencil pull-right",
+                    attrs: {
+                      "data-toggle": "modal",
+                      "data-target": "#updateSubject"
+                    }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "list-group-item list-group-item-action",
+                  attrs: { href: "#" }
+                },
+                [_vm._v("FIL 111 Sining ng Komunikasyon")]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-4" }, [
+            _c("div", { staticClass: "list-group" }, [
+              _c(
+                "a",
+                {
+                  staticClass:
+                    "list-group-item list-group-item-action list-group-item-secondary",
+                  attrs: { href: "#" }
+                },
+                [
+                  _c("strong", [_vm._v("Second Term")]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "fa fa-plus pull-right " })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "list-group-item list-group-item-action",
+                  attrs: { href: "#" }
+                },
+                [
+                  _vm._v("ENG 111    Communication Arts and Skills"),
+                  _c("span", {
+                    staticClass: "fa fa-pencil pull-right",
+                    attrs: {
+                      "data-toggle": "modal",
+                      "data-target": "#updateSubject"
+                    }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "list-group-item list-group-item-action",
+                  attrs: { href: "#" }
+                },
+                [_vm._v("FIL 111 Sining ng Komunikasyon")]
+              )
+            ])
+          ])
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -14948,19 +15328,25 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(30),
-  /* template */
-  __webpack_require__(31),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(30)
+/* template */
+var __vue_template__ = __webpack_require__(31)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\registrar\\reports.vue"
+Component.options.__file = "resources\\assets\\js\\views\\registrar\\reports.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] reports.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -15006,17 +15392,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
   return _vm._m(0)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('main', {
-    staticClass: "col-sm-9 pt-3",
-    attrs: {
-      "role": "main"
-    }
-  }, [_c('h1', [_vm._v("REPORTS")])])
-}]}
-module.exports.render._withStripped = true
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "main",
+      { staticClass: "col-sm-9 pt-3", attrs: { role: "main" } },
+      [_c("h1", [_vm._v("REPORTS")])]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -15029,19 +15424,25 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(33),
-  /* template */
-  __webpack_require__(34),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(33)
+/* template */
+var __vue_template__ = __webpack_require__(34)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\welcome\\index.vue"
+Component.options.__file = "resources\\assets\\js\\views\\welcome\\index.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] index.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -15076,64 +15477,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'index'
@@ -15143,52 +15486,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _vm._m(0)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('header', {
-    attrs: {
-      "id": "home-section"
-    }
-  }, [_c('div', {
-    staticClass: "dark-overlay"
-  }, [_c('div', {
-    staticClass: "home-inner"
-  }, [_c('div', {
-    staticClass: "container"
-  }, [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-lg-8"
-  }, [_c('h1', {
-    staticClass: "display-4"
-  }, [_vm._v("Informatics "), _c('strong', [_vm._v("Comprehensive Assestment")])]), _vm._v(" "), _c('div', {
-    staticClass: "d-flex flex-row"
-  }, [_c('div', {
-    staticClass: "p-4 align-self-start"
-  }, [_c('i', {
-    staticClass: " fa fa-check"
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "p-4 align-self-end"
-  }, [_vm._v("\n                   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n                   tempor incididunt ut labore et dolore magna aliqua.\n                 ")])]), _vm._v(" "), _c('div', {
-    staticClass: "d-flex flex-row"
-  }, [_c('div', {
-    staticClass: "p-4 align-self-start"
-  }, [_c('i', {
-    staticClass: " fa fa-check"
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "p-4 align-self-end"
-  }, [_vm._v("\n                   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n                   tempor incididunt ut labore et dolore magna aliqua.\n                 ")])]), _vm._v(" "), _c('div', {
-    staticClass: "d-flex flex-row"
-  }, [_c('div', {
-    staticClass: "p-4 align-self-start"
-  }, [_c('i', {
-    staticClass: " fa fa-check"
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "p-4 align-self-end"
-  }, [_vm._v("\n                   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n                   tempor incididunt ut labore et dolore magna aliqua.\n                 ")])])])])])])])])
-}]}
-module.exports.render._withStripped = true
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("header", { attrs: { id: "home-section" } })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -15201,19 +15507,25 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(36),
-  /* template */
-  __webpack_require__(37),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(36)
+/* template */
+var __vue_template__ = __webpack_require__(37)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\auth\\login.vue"
+Component.options.__file = "resources\\assets\\js\\views\\auth\\login.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] login.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -15243,6 +15555,21 @@ module.exports = Component.exports
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utilities_auth_Auth_js__ = __webpack_require__(2);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -15323,92 +15650,162 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "container-fluid"
-  }, [_c('form', {
-    attrs: {
-      "method": "POST"
-    },
-    on: {
-      "submit": function($event) {
-        $event.preventDefault();
-        _vm.login($event)
-      },
-      "keydown": function($event) {
-        _vm.auth.errors.clear($event.target.name), _vm.auth.form.setSubmitDisabled(_vm.auth.errors.any())
-      }
-    }
-  }, [_c('div', {
-    staticClass: "form-group"
-  }, [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.auth.form.email),
-      expression: "auth.form.email"
-    }],
-    class: {
-      'form-control': true, 'is-invalid': _vm.auth.errors.has('email')
-    },
-    attrs: {
-      "type": "email",
-      "name": "email",
-      "placeholder": "email"
-    },
-    domProps: {
-      "value": (_vm.auth.form.email)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.auth.form.email = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.auth.errors.has('email')) ? _c('div', {
-    staticClass: "invalid-feedback"
-  }, [_vm._v("\n          " + _vm._s(_vm.auth.errors.get('email')) + "\n        ")]) : _vm._e()]), _vm._v(" "), _c('div', {
-    staticClass: "form-group"
-  }, [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.auth.form.password),
-      expression: "auth.form.password"
-    }],
-    class: {
-      'form-control': true, 'is-invalid': _vm.auth.errors.has('password')
-    },
-    attrs: {
-      "type": "password",
-      "name": "password",
-      "placeholder": "Password"
-    },
-    domProps: {
-      "value": (_vm.auth.form.password)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.auth.form.password = $event.target.value
-      }
-    }
-  }), _vm._v(" "), (_vm.auth.errors.has('password')) ? _c('div', {
-    staticClass: "invalid-feedback"
-  }, [_vm._v("\n          " + _vm._s(_vm.auth.errors.get('password')) + "\n        ")]) : _vm._e()]), _vm._v(" "), _c('div', {
-    staticClass: "form-group"
-  }, [_c('button', {
-    staticClass: "btn btn-primary",
-    attrs: {
-      "type": "submit",
-      "name": "login",
-      "disabled": _vm.auth.form.submitDisabled
-    }
-  }, [(_vm.auth.form.isLoading) ? _c('span', [_c('i', {
-    staticClass: "fa fa-circle-o-notch fa-spin"
-  })]) : _vm._e(), _vm._v("\n          Login\n      ")])])])])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("section", { staticClass: "section" }, [
+    _c("div", { staticClass: "container" }, [
+      _c(
+        "form",
+        {
+          attrs: { method: "POST" },
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              _vm.login($event)
+            },
+            keydown: function($event) {
+              _vm.auth.errors.clear($event.target.name),
+                _vm.auth.form.setSubmitDisabled(_vm.auth.errors.any())
+            }
+          }
+        },
+        [
+          _c("h1", { staticClass: "title" }, [
+            _vm._v("\n        Login\n      ")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "field" }, [
+            _c("label", { staticClass: "label" }, [_vm._v("Email")]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "control has-icons-left has-icons-right" },
+              [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.auth.form.email,
+                      expression: "auth.form.email"
+                    }
+                  ],
+                  staticClass: "input",
+                  attrs: {
+                    type: "email",
+                    name: "email",
+                    placeholder: "Enter Email..."
+                  },
+                  domProps: { value: _vm.auth.form.email },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.auth.form.email = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm._m(0)
+              ]
+            ),
+            _vm._v(" "),
+            _vm.auth.errors.has("email")
+              ? _c("p", { staticClass: "help is-danger" }, [
+                  _vm._v(
+                    "\n          " +
+                      _vm._s(_vm.auth.errors.get("email")) +
+                      "\n        "
+                  )
+                ])
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "field" }, [
+            _c("label", { staticClass: "label" }, [_vm._v("Password")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "control" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.auth.form.password,
+                    expression: "auth.form.password"
+                  }
+                ],
+                staticClass: "input",
+                attrs: {
+                  type: "password",
+                  name: "password",
+                  placeholder: "Enter password..."
+                },
+                domProps: { value: _vm.auth.form.password },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.auth.form.password = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _vm.auth.errors.has("password")
+              ? _c("p", { staticClass: "help is-danger" }, [
+                  _vm._v(
+                    "\n          " +
+                      _vm._s(_vm.auth.errors.get("password")) +
+                      "\n        "
+                  )
+                ])
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "field is-grouped" }, [
+            _c("div", { staticClass: "control" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "button is-primary",
+                  attrs: {
+                    type: "submit",
+                    name: "login",
+                    disabled: _vm.auth.form.submitDisabled
+                  }
+                },
+                [
+                  _vm.auth.form.isLoading
+                    ? _c("span", [
+                        _c("i", { staticClass: "fa fa-circle-o-notch fa-spin" })
+                      ])
+                    : _vm._e(),
+                  _vm._v("\n             Submit\n          ")
+                ]
+              )
+            ])
+          ])
+        ]
+      )
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "icon is-small is-left" }, [
+      _c("i", { staticClass: "fa fa-envelope" })
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -15421,19 +15818,25 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(39),
-  /* template */
-  __webpack_require__(40),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(39)
+/* template */
+var __vue_template__ = __webpack_require__(40)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\views\\registrar\\registrar.vue"
+Component.options.__file = "resources\\assets\\js\\views\\registrar\\registrar.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] registrar.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -15504,38 +15907,49 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('nav-link', {
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "container-fluid"
-  }, [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-lg-3 d-sm-block"
-  }, [_c('div', {
-    staticClass: "list-group"
-  }, [_c('nav-link', {
-    attrs: {
-      "uri": "#/registrar/dashboard",
-      "text": "Dashboard"
-    }
-  }), _vm._v(" "), _c('nav-link', {
-    attrs: {
-      "uri": "#/registrar/registration",
-      "text": "Registration"
-    }
-  }), _vm._v(" "), _c('nav-link', {
-    attrs: {
-      "uri": "#/registrar/courses",
-      "text": "Courses"
-    }
-  }), _vm._v(" "), _c('nav-link', {
-    attrs: {
-      "uri": "#/registrar/reports",
-      "text": "Reports"
-    }
-  })], 1)]), _vm._v(" "), _c('router-view')], 1)])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container-fluid" }, [
+    _c(
+      "div",
+      { staticClass: "row" },
+      [
+        _c("div", { staticClass: "col-lg-3 d-sm-block" }, [
+          _c(
+            "div",
+            { staticClass: "list-group" },
+            [
+              _c("nav-link", {
+                attrs: { uri: "#/registrar/dashboard", text: "Dashboard" }
+              }),
+              _vm._v(" "),
+              _c("nav-link", {
+                attrs: { uri: "#/registrar/registration", text: "Registration" }
+              }),
+              _vm._v(" "),
+              _c("nav-link", {
+                attrs: { uri: "#/registrar/courses", text: "Courses" }
+              }),
+              _vm._v(" "),
+              _c("nav-link", {
+                attrs: { uri: "#/registrar/reports", text: "Reports" }
+              })
+            ],
+            1
+          )
+        ]),
+        _vm._v(" "),
+        _c("router-view")
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -15548,19 +15962,25 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(42),
-  /* template */
-  __webpack_require__(46),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(42)
+/* template */
+var __vue_template__ = __webpack_require__(46)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\App.vue"
+Component.options.__file = "resources\\assets\\js\\App.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] App.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -15617,19 +16037,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(44),
-  /* template */
-  __webpack_require__(45),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(44)
+/* template */
+var __vue_template__ = __webpack_require__(45)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "D:\\User-Files\\programming-projects\\laravel-projects\\ica\\resources\\assets\\js\\components\\Navbar.vue"
+Component.options.__file = "resources\\assets\\js\\components\\Navbar.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Navbar.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -15699,6 +16125,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -15708,118 +16146,128 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   data: function data() {
     return {
-      auth: __WEBPACK_IMPORTED_MODULE_1__utilities_auth_Auth_js__["a" /* default */]
+      auth: __WEBPACK_IMPORTED_MODULE_1__utilities_auth_Auth_js__["a" /* default */],
+      burgerToggled: false
     };
   },
 
   methods: {
     logout: function logout() {
       document.querySelector('#logout').submit();
+    },
+    toggleBurger: function toggleBurger() {
+      this.burgerToggled = !this.burgerToggled;
     }
   }
 });
-
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('burger', {
-  template: '\n\t\t<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu">\n  \t    \t<span class="navbar-toggler-icon"></span>\n  \t  \t</button>\n\t'
-});
-
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('navbar-link', {
-  template: '\n\t\t<a :href="uri" class="nav-item nav-link color-font" :role="role" >{{ text }}</a>\n\t',
-  props: ['uri', 'text', 'role']
-});
-
-// Vue.component('navbar-btn', {
-//   template: `
-
-//     <a :href="uri"class= btn btn-warning> {{ text }} </a>
-//   `,
-//   props: ['uri', 'text']
-// })
 
 /***/ }),
 /* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    attrs: {
-      "id": "home"
-    }
-  }, [_c('nav', {
-    staticClass: "navbar navbar-expand-lg navbar-light "
-  }, [_c('div', {
-    staticClass: "container"
-  }, [_vm._m(0), _vm._v(" "), _c('burger'), _vm._v(" "), _c('div', {
-    staticClass: "collapse navbar-collapse",
-    attrs: {
-      "id": "navbarMenu"
-    }
-  }, [_c('ul', {
-    staticClass: "navbar-nav"
-  }, [(!_vm.auth.isLoggedIn()) ? [_c('navbar-link', {
-    attrs: {
-      "uri": "#",
-      "text": "Home"
-    }
-  }), _vm._v(" "), _c('navbar-link', {
-    attrs: {
-      "uri": "#",
-      "text": "About"
-    }
-  }), _vm._v(" "), _c('navbar-link', {
-    attrs: {
-      "uri": "#",
-      "text": "Contact"
-    }
-  })] : _vm._e()], 2), _vm._v(" "), _c('ul', {
-    staticClass: "nav navbar-nav ml-auto"
-  }, [(!_vm.auth.isLoggedIn()) ? [_c('navbar-link', {
-    staticClass: "btn btn-outline-info",
-    attrs: {
-      "uri": "#/login",
-      "text": "Login",
-      "role": "button"
-    }
-  })] : [_c('navbar-link', {
-    attrs: {
-      "uri": "#/",
-      "text": _vm.auth.user['first_name']
-    }
-  }), _vm._v(" "), _c('a', {
-    staticClass: "nav-item nav-link color-font",
-    attrs: {
-      "href": ""
-    },
-    on: {
-      "click": function($event) {
-        _vm.logout()
-      }
-    }
-  }, [_vm._v("Logout")]), _vm._v(" "), _c('form', {
-    staticStyle: {
-      "display": "none"
-    },
-    attrs: {
-      "id": "logout",
-      "method": "POST",
-      "action": "/api/logout"
-    }
-  })]], 2)])], 1)])])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('a', {
-    staticClass: "navbar-brand",
-    attrs: {
-      "href": "#/"
-    }
-  }, [_c('img', {
-    attrs: {
-      "src": "images/icalogo.png",
-      "width": "auto",
-      "height": "25px"
-    }
-  })])
-}]}
-module.exports.render._withStripped = true
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("nav", { staticClass: "navbar", attrs: { role: "navigation" } }, [
+    _c("div", { staticClass: "navbar-brand" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "button navbar-burger",
+          on: { click: _vm.toggleBurger }
+        },
+        [_c("span"), _vm._v(" "), _c("span"), _vm._v(" "), _c("span")]
+      )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "navbar-menu", class: { "is-active": _vm.burgerToggled } },
+      [
+        _c(
+          "div",
+          { staticClass: "navbar-end" },
+          [
+            _c("a", { staticClass: "navbar-item" }, [
+              _vm._v("\n        Home\n      ")
+            ]),
+            _vm._v(" "),
+            _c("a", { staticClass: "navbar-item" }, [
+              _vm._v("\n        About\n      ")
+            ]),
+            _vm._v(" "),
+            _c("a", { staticClass: "navbar-item" }, [
+              _vm._v("\n        Contact\n      ")
+            ]),
+            _vm._v(" "),
+            !_vm.auth.isLoggedIn()
+              ? [
+                  _c(
+                    "a",
+                    { staticClass: "navbar-item", attrs: { href: "#/login" } },
+                    [_vm._v("\n          Login\n        ")]
+                  )
+                ]
+              : [
+                  _c(
+                    "a",
+                    { staticClass: "navbar-item", attrs: { href: "#/" } },
+                    [
+                      _vm._v(
+                        "\n          " +
+                          _vm._s(_vm.auth.user["first_name"]) +
+                          "\n        "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      staticClass: "navbar-item",
+                      attrs: { href: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.logout()
+                        }
+                      }
+                    },
+                    [_vm._v("Logout")]
+                  ),
+                  _vm._v(" "),
+                  _c("form", {
+                    staticStyle: { display: "none" },
+                    attrs: {
+                      id: "logout",
+                      method: "POST",
+                      action: "/api/logout"
+                    }
+                  })
+                ]
+          ],
+          2
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("a", { staticClass: "navbar-item", attrs: { href: "#/" } }, [
+      _c("img", {
+        attrs: { src: "images/icalogo.png", width: "auto", height: "25px" }
+      })
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -15831,14 +16279,20 @@ if (false) {
 /* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    attrs: {
-      "id": "app"
-    }
-  }, [_c('app-navbar'), _vm._v(" "), _c('router-view')], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { attrs: { id: "app" } },
+    [_c("app-navbar"), _vm._v(" "), _c("router-view")],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {

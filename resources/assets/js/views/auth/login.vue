@@ -1,51 +1,66 @@
 <template lang="html">
-  <div class="container-fluid">
+  <section class="section">
+    <div class="container">
+      <form method="POST" 
+        @submit.prevent="login" 
+        @keydown="auth.errors.clear($event.target.name), auth.form.setSubmitDisabled(auth.errors.any())" >
+        
+        <h1 class="title">
+          Login
+        </h1>
 
-    <form method="POST" 
-      @submit.prevent="login" 
-      @keydown="auth.errors.clear($event.target.name), auth.form.setSubmitDisabled(auth.errors.any())" >
+        <div class="field">
+          <label class="label">Email</label>
+          <div class="control has-icons-left has-icons-right">
+            <input 
+              class="input" 
+              type="email" 
+              name="email"
+              placeholder="Enter Email..."
+              v-model="auth.form.email" >
 
-      <div class="form-group">
-        <input
-          :class="{'form-control': true,'is-invalid':auth.errors.has('email')}"
-          type="email"
-          name="email"
-          placeholder="email"
-          v-model="auth.form.email" >
+            <span class="icon is-small is-left">
+              <i class="fa fa-envelope"></i>
+            </span>
+          </div>
 
-          <div class="invalid-feedback" v-if="auth.errors.has('email')">
+          <p class="help is-danger" v-if="auth.errors.has('email')">
             {{ auth.errors.get('email') }}
+          </p>
+        </div>
+
+        <div class="field">
+          <label class="label">Password</label>
+          <div class="control">
+            <input 
+              class="input" 
+              type="password" 
+              name="password"
+              placeholder="Enter password..."
+              v-model="auth.form.password" >
           </div>
-      </div>
-      
 
-      <div class="form-group">
-        <input
-          :class="{'form-control': true,'is-invalid': auth.errors.has('password')}"
-          type="password"
-          name="password"
-          placeholder="Password"
-          v-model="auth.form.password" >
-
-          <div class="invalid-feedback" v-if="auth.errors.has('password')">
+          <p class="help is-danger" v-if="auth.errors.has('password')">
             {{ auth.errors.get('password') }}
+          </p>
+        </div>
+
+
+        <div class="field is-grouped">
+          <div class="control">
+            <button 
+              class="button is-primary"
+              type="submit"
+              name="login"
+              :disabled="auth.form.submitDisabled" >
+              <span v-if="auth.form.isLoading"><i class="fa fa-circle-o-notch fa-spin"></i></span>
+               Submit
+            </button>
           </div>
-      </div>
-
-
-      <div class="form-group">
-        <button
-          class="btn btn-primary"
-          type="submit"
-          name="login"
-          :disabled="auth.form.submitDisabled" >
-            <span v-if="auth.form.isLoading"><i class="fa fa-circle-o-notch fa-spin"></i></span>
-            Login
-        </button>
-      </div>
-
-    </form>
-  </div>
+        </div>
+      </form>
+    </div>
+  </section>
 </template>
 
 <script>
