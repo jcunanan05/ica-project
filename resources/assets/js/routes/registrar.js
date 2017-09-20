@@ -17,6 +17,10 @@ const registrar = [
   {
       path: 'reports',
       component: require('../views/registrar/reports.vue')
+    },
+  {
+      path: 'subjects',
+      component: require('../views/registrar/subjects.vue')
     }
 ];
 
