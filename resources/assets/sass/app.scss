@@ -1,9 +1,12 @@
 //scss variables
-@import "components/components";
+// @import "components/components";
 //custom.scss
-@import "custom";
+// @import "custom";
 // Bootstrap
-@import "~bootstrap/scss/bootstrap"; 
+// @import "~bootstrap/scss/bootstrap"; 
+
+//Bulma 
+@import "~bulma/scss/bulma";
 
 //font awesome
 @import "~font-awesome/scss/font-awesome";

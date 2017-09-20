@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "bootstrap": "4.0.0-beta",
+    "bulma": "^0.5.3",
     "font-awesome": "^4.7.0",
     "popper": "^1.0.0",
     "popper.js": "1.11.0",
