@@ -1,46 +1,37 @@
 <template>
   <nav class="navbar" role="navigation">
     <div class="navbar-brand">
-      <a href="#/" class="navbar-item">
+      <navbar-item uri="#/">
         <img src="images/icalogo.png" width="auto" height="25px">
-      </a>
+      </navbar-item>
 
-      <button class="button navbar-burger" @click="toggleBurger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+      <burger @click="toggleBurger()" />
     </div>
 
 
     <div class="navbar-menu"
-      :class="{ 'is-active': burgerToggled }" >
+      :class="{ 'is-active': showNavbarMenu }" >
       <div class="navbar-end">
-        <a class="navbar-item">
-          Home
-        </a>
-        <a class="navbar-item">
-          About
-        </a>
-        <a class="navbar-item">
-          Contact
-        </a>
+        <navbar-item uri="#/">Home</navbar-item>
+        <navbar-item uri="#/">About</navbar-item>
+        <navbar-item uri="#/">Contact</navbar-item>
 
 
         <template v-if="! auth.isLoggedIn()">
-          <a href="#/login" class="navbar-item">
-            Login
-          </a>
+          <navbar-item uri="#/login">Login</navbar-item>
         </template>
         
         <template v-else>
-          <a href="#/" class="navbar-item">
+          <navbar-item uri="#/">
             {{ auth.user['first_name'] }}
-          </a>
+          </navbar-item>
 
-          <a href="" class="navbar-item" @click="logout()">Logout</a>
+          <navbar-item @click="logout()">
+            Logout
+          </navbar-item>
 
           <form id="logout" method="POST" action="/api/logout" style="display: none;">
+            <input type="hidden" name="_token" :value="token.content">
           </form>
         </template>
       </div>
@@ -50,16 +41,24 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import auth from '../utilities/auth/Auth.js';
+import NavbarBurger from './navbar/Burger.vue';
+import NavbarItem from './navbar/NavbarItem.vue';
+import { token } from '../bootstrap.js';
 
 
 export default {
   name: 'app-navbar',
+
+  components: {
+    'burger': NavbarBurger,
+    'navbar-item': NavbarItem
+  },
   
   data: () => ({
     auth,
-    burgerToggled: false
+    showNavbarMenu: false,
+    token
   }),
 
   methods: {
@@ -68,7 +67,7 @@ export default {
     },
 
     toggleBurger() {
-      this.burgerToggled = ! this.burgerToggled;
+      this.showNavbarMenu = ! this.showNavbarMenu;
     }
   }
 }

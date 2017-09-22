@@ -1,6 +1,5 @@
 <template>
-  <div class="modal"
-    :class="{ 'is-active': true }" >
+  <div class="modal is-active">
     <div class="modal-background"></div>
     <div class="modal-content">
       <slot></slot>
@@ -13,10 +12,6 @@
 
 <script>
 export default {
-  name: 'modal',
-
-  data: () => ({
-    isActive: true
-  })
+  name: 'modal'
 }
 </script>
