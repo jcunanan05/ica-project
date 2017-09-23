@@ -14183,132 +14183,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -14478,408 +14352,59 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "main",
-    { staticClass: "col-lg-9 col-xs-12 pt-3 card", attrs: { role: "main" } },
-    [
-      _c("h1", { staticClass: "mb-4" }, [_vm._v("Registration")]),
+  return _c("section", { staticClass: "section" }, [
+    _c("h1", { staticClass: "title" }, [_vm._v("Users")]),
+    _vm._v(" "),
+    _c("table", { staticClass: "table" }, [
+      _vm._m(0),
       _vm._v(" "),
-      _c("form", { staticClass: "bg-light py-3" }, [
-        _c("div", { staticClass: "form-group ml-2 " }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-md-3 ml-3" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.newUser.firstName,
-                    expression: "newUser.firstName"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", placeholder: "First name" },
-                domProps: { value: _vm.newUser.firstName },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.newUser.firstName = $event.target.value
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-3" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.newUser.middleName,
-                    expression: "newUser.middleName"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", placeholder: "Middle name" },
-                domProps: { value: _vm.newUser.middleName },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.newUser.middleName = $event.target.value
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-3" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.newUser.lastName,
-                    expression: "newUser.lastName"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", placeholder: "Last name" },
-                domProps: { value: _vm.newUser.lastName },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.newUser.lastName = $event.target.value
-                  }
-                }
-              })
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group ml-2" }, [
-          _vm._m(1),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-md-3 ml-2" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.newUser.schoolIndexNo,
-                  expression: "newUser.schoolIndexNo"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text", placeholder: "1234-1234-4321" },
-              domProps: { value: _vm.newUser.schoolIndexNo },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.newUser.schoolIndexNo = $event.target.value
-                }
-              }
-            })
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group ml-2" }, [
-          _vm._m(2),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-md-3 ml-2" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.newUser.email,
-                  expression: "newUser.email"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "email", placeholder: "Enter Email" },
-              domProps: { value: _vm.newUser.email },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.newUser.email = $event.target.value
-                }
-              }
-            })
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group ml-2" }, [
-          _vm._m(3),
-          _vm._v(" "),
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.newUser.userType,
-                  expression: "newUser.userType"
-                }
-              ],
-              staticClass: "form-control col-md-3 form-control-sm",
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.newUser.userType = $event.target.multiple
-                    ? $$selectedVal
-                    : $$selectedVal[0]
-                }
-              }
-            },
-            [
-              _c("option", { attrs: { value: "student" } }, [
-                _vm._v("Student")
-              ]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "registrar" } }, [
-                _vm._v("Registrar")
+      !_vm.userIsEmpty
+        ? _c(
+            "tbody",
+            _vm._l(_vm.users, function(user) {
+              return _c("tr", { key: user.id }, [
+                _c("td", [_vm._v(_vm._s(user.id))]),
+                _vm._v(" "),
+                _c("td", [
+                  _vm._v(
+                    _vm._s(
+                      user["first_name"] +
+                        " " +
+                        user["middle_name"] +
+                        " " +
+                        user["last_name"]
+                    )
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(user["school_index_no"]))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(user.email))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(user.role.name))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(user["is_active"]))]),
+                _vm._v(" "),
+                _vm._m(1, true),
+                _vm._v(" "),
+                _vm._m(2, true)
               ])
-            ]
+            })
           )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-12" }, [
-        _c("h1", { staticClass: "text-dark mb-4" }, [_vm._v("Users")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _vm._m(4),
-          _vm._v(" "),
-          _vm._m(5),
-          _vm._v(" "),
-          _c("div", { staticClass: "container-fluid my-4 " }, [
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-sm-12 " }, [
-                _c(
-                  "table",
-                  {
-                    staticClass: "table table-sm table-responsive table-hover"
-                  },
-                  [
-                    _vm._m(6),
-                    _vm._v(" "),
-                    !_vm.userIsEmpty
-                      ? _c(
-                          "tbody",
-                          _vm._l(_vm.users, function(user) {
-                            return _c("tr", { key: user.id }, [
-                              _c("th", {
-                                attrs: { scope: "row" },
-                                domProps: { textContent: _vm._s(user.id) }
-                              }),
-                              _vm._v(" "),
-                              _c("td", {
-                                domProps: {
-                                  textContent: _vm._s(
-                                    user["first_name"] +
-                                      " " +
-                                      user["middle_name"] +
-                                      " " +
-                                      user["last_name"]
-                                  )
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("td", {
-                                domProps: {
-                                  textContent: _vm._s(user["school_index_no"])
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("td", {
-                                domProps: { textContent: _vm._s(user.email) }
-                              }),
-                              _vm._v(" "),
-                              _c("td", {
-                                domProps: {
-                                  textContent: _vm._s(user.role.name)
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("td", {
-                                domProps: {
-                                  textContent: _vm._s(user["is_active"])
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                [
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "btn btn-secondary btn-xs text-center",
-                                      on: {
-                                        click: function($event) {
-                                          _vm.showModal = true
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _c("span", {
-                                        staticClass: "fa fa-pencil"
-                                      })
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _vm.showModal
-                                    ? _c(
-                                        "modal",
-                                        {
-                                          on: {
-                                            close: function($event) {
-                                              _vm.showModal = false
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _c("div", { staticClass: "box" }, [
-                                            _vm._v("hello modal")
-                                          ])
-                                        ]
-                                      )
-                                    : _vm._e()
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _vm._m(7, true)
-                            ])
-                          })
-                        )
-                      : _vm._e()
-                  ]
-                )
-              ])
-            ])
-          ])
-        ])
-      ])
-    ]
-  )
+        : _vm._e()
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("p", [_c("strong", [_vm._v("Name")])])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", [_c("strong", [_vm._v("School Index No")])])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", [_c("strong", [_vm._v("Email")])])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", [_c("strong", [_vm._v("User type")])])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-6" }, [
-      _c("div", { staticClass: "input-group" }, [
-        _c("input", {
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            placeholder: "Search for...",
-            "aria-label": "Search for..."
-          }
-        }),
-        _vm._v(" "),
-        _c("span", { staticClass: "input-group-btn" }, [
-          _c(
-            "button",
-            { staticClass: "btn btn-warning", attrs: { type: "button" } },
-            [_vm._v("Go!")]
-          )
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-6" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("p", { staticClass: "ml-5" }, [_c("strong", [_vm._v("Status")])]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check form-check-inline ml-5" }, [
-          _c("label", { staticClass: "form-check-label" }, [
-            _c("input", {
-              staticClass: "form-check-input",
-              attrs: {
-                type: "radio",
-                name: "inlineRadioOptions",
-                id: "inlineRadio1",
-                value: "option1"
-              }
-            }),
-            _vm._v("Active\n            ")
-          ]),
-          _vm._v(" "),
-          _c("label", { staticClass: "form-check-label" }, [
-            _c("input", {
-              staticClass: "form-check-input",
-              attrs: {
-                type: "radio",
-                name: "inlineRadioOptions",
-                id: "inlineRadio2",
-                value: "option2"
-              }
-            }),
-            _vm._v("Deactivate\n            ")
-          ])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("thead", [
-      _c("tr", { staticClass: "bg-info text-light" }, [
+      _c("tr", [
         _c("th", [_vm._v("#")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Name")]),
+        _c("th", [_vm._v("Name:")]),
         _vm._v(" "),
         _c("th", [_vm._v("Index No.")]),
         _vm._v(" "),
@@ -14900,7 +14425,17 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("td", [
-      _c("button", { staticClass: "btn btn-danger btn-xs" }, [
+      _c("button", { staticClass: "button is-success" }, [
+        _c("span", { staticClass: "fa fa-pencil" })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [
+      _c("button", { staticClass: "button is-danger" }, [
         _c("span", { staticClass: "fa fa-trash" })
       ])
     ])
@@ -16419,8 +15954,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__navbar_NavbarItem_vue__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__navbar_NavbarItem_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__navbar_NavbarItem_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bootstrap_js__ = __webpack_require__(9);
-//
-//
 //
 //
 //
@@ -34918,14 +34451,18 @@ var render = function() {
           "div",
           { staticClass: "navbar-end" },
           [
-            _c("navbar-item", { attrs: { uri: "#/" } }, [_vm._v("Home")]),
-            _vm._v(" "),
-            _c("navbar-item", { attrs: { uri: "#/" } }, [_vm._v("About")]),
-            _vm._v(" "),
-            _c("navbar-item", { attrs: { uri: "#/" } }, [_vm._v("Contact")]),
-            _vm._v(" "),
             !_vm.auth.isLoggedIn()
               ? [
+                  _c("navbar-item", { attrs: { uri: "#/" } }, [_vm._v("Home")]),
+                  _vm._v(" "),
+                  _c("navbar-item", { attrs: { uri: "#/" } }, [
+                    _vm._v("About")
+                  ]),
+                  _vm._v(" "),
+                  _c("navbar-item", { attrs: { uri: "#/" } }, [
+                    _vm._v("Contact")
+                  ]),
+                  _vm._v(" "),
                   _c("navbar-item", { attrs: { uri: "#/login" } }, [
                     _vm._v("Login")
                   ])

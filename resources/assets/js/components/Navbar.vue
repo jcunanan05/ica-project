@@ -12,12 +12,10 @@
     <div class="navbar-menu"
       :class="{ 'is-active': showNavbarMenu }" >
       <div class="navbar-end">
-        <navbar-item uri="#/">Home</navbar-item>
-        <navbar-item uri="#/">About</navbar-item>
-        <navbar-item uri="#/">Contact</navbar-item>
-
-
         <template v-if="! auth.isLoggedIn()">
+          <navbar-item uri="#/">Home</navbar-item>
+          <navbar-item uri="#/">About</navbar-item>
+          <navbar-item uri="#/">Contact</navbar-item>
           <navbar-item uri="#/login">Login</navbar-item>
         </template>
         
