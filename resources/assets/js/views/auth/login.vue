@@ -78,13 +78,13 @@ export default {
     login() {
       this.auth.login()
         .then(response => {
-          this.redirectTo('welcome');
+          this.redirectTo(this.auth.user.role.name);
         })
         .catch(errors => {});
     },
 
     redirectTo(routeName) {
-      this.$router.push({ name: routeName });
+      this.$router.push({ path: '/' + routeName });
     }
 
   }
