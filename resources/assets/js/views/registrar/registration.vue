@@ -16,10 +16,10 @@
           <td v-text="user.role.name"></td>
           <td v-text="user['is_active']"></td>
           <td>
-            <edit-button otherClass="is-primary"></edit-button>
+            <edit-button class="is-primary"></edit-button>
           </td>
           <td>
-            <delete-button otherClass="is-danger"></delete-button>
+            <delete-button class="is-danger"></delete-button>
           </td>
         </tr>
       </template>
@@ -31,16 +31,14 @@
 import Form from '../../utilities/Form.js';
 import Table from '../../components/Table.vue';
 import UserTable from '../../utilities/table/UserTable.js';
-import { EditButton, DeleteButton } from '../../components/button/Buttons.js';
+import '../../components/button/Buttons.js';
 
 
 export default {
   name: 'registration',
 
   components: {
-    'app-table': Table,
-    'edit-button': EditButton,
-    'delete-button': DeleteButton
+    'app-table': Table
   },
 
   data: () => ({

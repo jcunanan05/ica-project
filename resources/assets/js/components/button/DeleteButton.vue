@@ -1,21 +1,19 @@
 <template>
-  <app-button 
-    :otherClass="otherClass"
+  <app-button
     @click="$emit('click')" >
-    <span class="fa fa-trash"></span>
-      <slot></slot>
+    <trash />
+    <slot></slot>
   </app-button>
 </template>
 
 <script>
 import { buttonConfig } from './buttonConfig.js';
+import '../icons/Icons.js';
 
 
 export default {
   name: 'edit-button',
 
-  components: buttonConfig.components,
-
-  props: buttonConfig.props
+  components: buttonConfig.components
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <button :class="'button ' + otherClass"
+  <button class="button"
     @click="$emit('click')" >
     <slot></slot>
   </button>
@@ -7,13 +7,6 @@
 
 <script>
 export default {
-  name: 'app-button',
-
-  props: {
-    otherClass: {
-      type: String,
-      default: ''
-    }
-  }
+  name: 'app-button'
 }
 </script>
