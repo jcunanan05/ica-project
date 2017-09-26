@@ -1,7 +1,7 @@
 <template>
   <app-button
     @click="$emit('click')" >
-    <trash />
+    <icon class="fa-trash" />
     <slot></slot>
   </app-button>
 </template>

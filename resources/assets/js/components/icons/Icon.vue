@@ -1,11 +1,11 @@
 <template>
-  <span class="fa fa-pencil">
+  <span class="fa">
     <slot></slot>
   </span>
 </template>
 
 <script>
 export default {
-  name: 'pencil'
+  name: 'icon'
 }
 </script>

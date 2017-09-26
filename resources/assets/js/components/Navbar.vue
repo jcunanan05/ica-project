@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar" role="navigation">
     <div class="navbar-brand">
-      <navbar-item uri="#/">
+      <navbar-item href="#/">
         <img src="images/icalogo.png" width="auto" height="25px">
       </navbar-item>
 
@@ -13,14 +13,14 @@
       :class="{ 'is-active': showNavbarMenu }" >
       <div class="navbar-end">
         <template v-if="! auth.isLoggedIn()">
-          <navbar-item uri="#/">Home</navbar-item>
-          <navbar-item uri="#/">About</navbar-item>
-          <navbar-item uri="#/">Contact</navbar-item>
-          <navbar-item uri="#/login">Login</navbar-item>
+          <navbar-item href="#/">Home</navbar-item>
+          <navbar-item href="#/">About</navbar-item>
+          <navbar-item href="#/">Contact</navbar-item>
+          <navbar-item href="#/login">Login</navbar-item>
         </template>
         
         <template v-else>
-          <navbar-item uri="#/">
+          <navbar-item href="#/">
             {{ auth.user['first_name'] }}
           </navbar-item>
 

@@ -2,10 +2,10 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-2">
-        <a href="#/registrar/dashboard">Dashboard</a>
-        <a href="#/registrar/registration">Registration</a>
-        <a href="#/registrar/courses">Courses</a>
-        <a href="#/registrar/reports">Reports</a>
+        <app-link href="#/registrar/dashboard">Dashboard</app-link>
+        <app-link href="#/registrar/registration">Registration</app-link>
+        <app-link href="#/registrar/courses">Courses</app-link>
+        <app-link href="#/registrar/reports">Reports</app-link>
       </div>
 
 
@@ -19,19 +19,10 @@
 
 
 <script>
-import Vue from 'vue';
+import '../../components/link/Links.js';
 
 
-  export default {
+export default {
 
-  }
-
-Vue.component('nav-link', {
-  template: `
-    <a :href="uri" class="list-group-item list-group-item-action">{{ text }}</a>
-  `,
-  props: ['uri', 'text', 'role']
-})
-
+}
 </script>
-

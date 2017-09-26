@@ -1,7 +1,7 @@
 <template>
   <app-button 
     @click="$emit('click')" >
-      <pencil />
+      <icon class="fa-pencil" />
       <slot></slot>
   </app-button>
 </template>

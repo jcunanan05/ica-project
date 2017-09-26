@@ -53,7 +53,7 @@
               type="submit"
               name="login"
               :disabled="auth.form.submitDisabled" >
-              <circle-spin v-if="auth.form.isLoading">&nbsp</circle-spin>  
+              <icon class="fa-circle-o-notch" v-if="auth.form.isLoading">&nbsp</icon>  
               Submit
             </app-button>
           </div>
