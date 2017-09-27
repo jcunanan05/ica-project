@@ -7,12 +7,14 @@ window._ = require('lodash');
  * code may be modified to fit the specific needs of your application.
  */
 
-try {
-    window.$ = window.jQuery = require('jquery');
-    window.Popper = require('popper.js');
+// try {
+//     window.$ = window.jQuery = require('jquery');
+//     window.Popper = require('popper.js');
 
-    require('bootstrap');
-} catch (e) {}
+//     require('bootstrap');
+// } catch (e) {}
+
+
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -38,6 +40,7 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
+export { token };
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
@@ -52,3 +55,4 @@ if (token) {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
+
