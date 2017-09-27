@@ -1,7 +1,11 @@
 <template>
   <section class="section">
+
     <h1 class="title">Users</h1>
 
+    <app-button>
+      <icon class="fa-plus" />
+    </app-button>
 
     <app-table :headers="userTable.headers">
       <template slot="body" 
@@ -32,6 +36,7 @@ import Form from '../../utilities/Form.js';
 import Table from '../../components/Table.vue';
 import UserTable from '../../utilities/table/UserTable.js';
 import '../../components/button/Buttons.js';
+import '../../components/icons/Icons.js';
 
 
 export default {
