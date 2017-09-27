@@ -48,14 +48,14 @@
 
         <div class="field is-grouped">
           <div class="control">
-            <app-button 
-              class="is-primary"
+            <button 
+              class="button is-primary"
               type="submit"
               name="login"
               :disabled="auth.form.submitDisabled" >
-              <icon class="fa-circle-o-notch" v-if="auth.form.isLoading">&nbsp</icon>  
-              Submit
-            </app-button>
+              <span v-if="auth.form.isLoading"><i class="fa fa-circle-o-notch fa-spin"></i></span>
+               Submit
+            </button>
           </div>
         </div>
       </form>
@@ -65,16 +65,10 @@
 
 <script>
 import auth from '../../utilities/auth/Auth.js';
-import Button from '../../components/Button.vue';
-import '../../components/icons/Icons.js';
 
 
 export default {
   name: 'login',
-
-  components: {
-    'app-button': Button
-  },
 
   data: () => ({
     auth
@@ -84,13 +78,13 @@ export default {
     login() {
       this.auth.login()
         .then(response => {
-          this.redirectTo(this.auth.user.role.name);
+          this.redirectTo('welcome');
         })
         .catch(errors => {});
     },
 
     redirectTo(routeName) {
-      this.$router.push({ path: '/' + routeName });
+      this.$router.push({ name: routeName });
     }
 
   }
