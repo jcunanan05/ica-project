@@ -18,9 +18,9 @@ const registrar = [
       path: 'reports',
       component: require('../views/registrar/reports.vue')
     },
-  {
-      path: 'subjects',
-      component: require('../views/registrar/subjects.vue')
+    {
+      path: 'comprehensive-subject',
+      component: require('../views/registrar/comprehensive-subject.vue')
     }
 ];
 
