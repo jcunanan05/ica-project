@@ -3,12 +3,13 @@
 
     <h1 class="title">Users</h1>
 
-    <app-button @click="showNewUserModal()">
+    <app-button @click="newUserModalIsVisible = true">
       <icon class="fa-plus" />
     </app-button>
 
-    <modal-card :showModal="newUserModalIsVisible"
-      @close="closeNewUserModal()"></modal-card>
+    <modal-card :show-modal="newUserModalIsVisible"
+      @close="newUserModalIsVisible = false">
+    </modal-card>
 
     <app-table :headers="userTable.headers">
       <template slot="body" 
@@ -66,13 +67,6 @@ export default {
   }),
 
   methods: {
-    showNewUserModal() {
-      this.newUserModalIsVisible = true;
-    },
-
-    closeNewUserModal() {
-      this.newUserModalIsVisible = false;
-    }
   },
 
   mounted() {

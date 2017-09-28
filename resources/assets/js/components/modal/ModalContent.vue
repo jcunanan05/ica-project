@@ -1,18 +1,28 @@
 <template>
-  <modal>
-    <div class="modal-content">
-      <slot></slot>
+  <modal :showModal="showModal">
+    <div class="modal-content box">
+      <slot>Modal</slot>
     </div>
     <button class="modal-close is-large" 
-      aria-label="close">
+      aria-label="close"
+      @click="closeModal()" >
     </button>
   </modal>
 </template>
 
 <script>
 import './Modals.js';
+import { modalConfig } from './modalConfig';
 
 export default {
-  name: 'modal-content'
+  name: 'modal-content',
+
+  props: {
+    showModal: modalConfig.props.showModal
+  },
+
+  methods: {
+    closeModal: modalConfig.methods.closeModal
+  }
 }
 </script>

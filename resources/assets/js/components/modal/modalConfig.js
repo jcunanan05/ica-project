@@ -11,7 +11,6 @@ let modalConfig = {
       this.$emit('close');
     }
   }
-  
 };
 
 export { modalConfig };

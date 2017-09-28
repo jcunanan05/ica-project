@@ -32,10 +32,6 @@ import '../../components/button/Buttons.js';
 export default {
   name: 'modal-card',
 
-  data: () => ({
-    someBool: true
-  }),
-
   props: {
     title: {
       type: String,
