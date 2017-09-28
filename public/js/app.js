@@ -10728,7 +10728,7 @@ var Auth = function () {
 
           resolve(response.data);
         }).catch(function (errors) {
-          console.log(errors);
+          // console.log(errors);
           reject(errors.response.data);
         });
       });
@@ -14227,6 +14227,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utilities_table_UserTable_js__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_button_Buttons_js__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_icons_Icons_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_modal_Modals_js__ = __webpack_require__(121);
 //
 //
 //
@@ -14260,6 +14261,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+
 
 
 
@@ -14285,8 +14290,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         userType: ''
       }),
 
-      userTable: new __WEBPACK_IMPORTED_MODULE_2__utilities_table_UserTable_js__["a" /* default */]({})
+      userTable: new __WEBPACK_IMPORTED_MODULE_2__utilities_table_UserTable_js__["a" /* default */]({}),
+
+      newUserModalIsVisible: false
     };
+  },
+
+  methods: {
+    showNewUserModal: function showNewUserModal() {
+      this.newUserModalIsVisible = true;
+    },
+    closeNewUserModal: function closeNewUserModal() {
+      this.newUserModalIsVisible = false;
+    }
   },
 
   mounted: function mounted() {
@@ -14919,7 +14935,27 @@ var render = function() {
     [
       _c("h1", { staticClass: "title" }, [_vm._v("Users")]),
       _vm._v(" "),
-      _c("app-button", [_c("icon", { staticClass: "fa-plus" })], 1),
+      _c(
+        "app-button",
+        {
+          on: {
+            click: function($event) {
+              _vm.showNewUserModal()
+            }
+          }
+        },
+        [_c("icon", { staticClass: "fa-plus" })],
+        1
+      ),
+      _vm._v(" "),
+      _c("modal-card", {
+        attrs: { showModal: _vm.newUserModalIsVisible },
+        on: {
+          close: function($event) {
+            _vm.closeNewUserModal()
+          }
+        }
+      }),
       _vm._v(" "),
       _c(
         "app-table",
@@ -36040,6 +36076,426 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 112 */,
+/* 113 */,
+/* 114 */,
+/* 115 */,
+/* 116 */,
+/* 117 */,
+/* 118 */,
+/* 119 */,
+/* 120 */,
+/* 121 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export Modal */
+/* unused harmony export ModalContent */
+/* unused harmony export ModalCard */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+
+
+var Modal = __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('modal', __webpack_require__(122));
+
+var ModalContent = __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('modal-content', __webpack_require__(125));
+
+var ModalCard = __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('modal-card', __webpack_require__(128));
+
+
+
+/***/ }),
+/* 122 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(123)
+/* template */
+var __vue_template__ = __webpack_require__(124)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\modal\\Modal.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Modal.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5174246c", Component.options)
+  } else {
+    hotAPI.reload("data-v-5174246c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 123 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modalConfig_js__ = __webpack_require__(131);
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'modal',
+
+  props: {
+    showModal: __WEBPACK_IMPORTED_MODULE_0__modalConfig_js__["a" /* modalConfig */].props.showModal
+  }
+});
+
+/***/ }),
+/* 124 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "modal", class: { "is-active": _vm.showModal } },
+    [
+      _c("div", { staticClass: "modal-background" }),
+      _vm._v(" "),
+      _vm._t("default")
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-5174246c", module.exports)
+  }
+}
+
+/***/ }),
+/* 125 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(126)
+/* template */
+var __vue_template__ = __webpack_require__(127)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\modal\\ModalContent.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] ModalContent.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-d91d7bc6", Component.options)
+  } else {
+    hotAPI.reload("data-v-d91d7bc6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 126 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modals_js__ = __webpack_require__(121);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'modal-content'
+});
+
+/***/ }),
+/* 127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("modal", [
+    _c("div", { staticClass: "modal-content" }, [_vm._t("default")], 2),
+    _vm._v(" "),
+    _c("button", {
+      staticClass: "modal-close is-large",
+      attrs: { "aria-label": "close" }
+    })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-d91d7bc6", module.exports)
+  }
+}
+
+/***/ }),
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(129)
+/* template */
+var __vue_template__ = __webpack_require__(130)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\modal\\ModalCard.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] ModalCard.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-bb981cc8", Component.options)
+  } else {
+    hotAPI.reload("data-v-bb981cc8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 129 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modals_js__ = __webpack_require__(121);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modalConfig__ = __webpack_require__(131);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_button_Buttons_js__ = __webpack_require__(31);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'modal-card',
+
+  data: function data() {
+    return {
+      someBool: true
+    };
+  },
+
+  props: {
+    title: {
+      type: String,
+      default: 'Modal Title'
+    },
+
+    showModal: __WEBPACK_IMPORTED_MODULE_1__modalConfig__["a" /* modalConfig */].props.showModal
+  },
+
+  methods: {
+    closeModal: __WEBPACK_IMPORTED_MODULE_1__modalConfig__["a" /* modalConfig */].methods.closeModal
+  }
+});
+
+/***/ }),
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("modal", { attrs: { showModal: _vm.showModal } }, [
+    _c("div", { staticClass: "modal-card" }, [
+      _c("header", { staticClass: "modal-card-head" }, [
+        _c("p", {
+          staticClass: "modal-card-title",
+          domProps: { textContent: _vm._s(_vm.title) }
+        }),
+        _vm._v(" "),
+        _c("button", {
+          staticClass: "delete",
+          attrs: { "aria-label": "close" },
+          on: {
+            click: function($event) {
+              _vm.closeModal()
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c(
+        "section",
+        { staticClass: "modal-card-body" },
+        [_vm._t("body", [_vm._v("\n        Default Body\n      ")])],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "footer",
+        { staticClass: "modal-card-foot" },
+        [
+          _vm._t("footer", [
+            _c("app-button", { staticClass: "is-success" }, [
+              _vm._v("Save changes")
+            ])
+          ])
+        ],
+        2
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-bb981cc8", module.exports)
+  }
+}
+
+/***/ }),
+/* 131 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return modalConfig; });
+var modalConfig = {
+  props: {
+    showModal: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  methods: {
+    closeModal: function closeModal() {
+      this.$emit('close');
+    }
+  }
+
+};
+
+
 
 /***/ })
 /******/ ]);

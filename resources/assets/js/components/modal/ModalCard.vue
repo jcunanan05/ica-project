@@ -1,9 +1,12 @@
 <template>
-  <modal>
+  <modal :showModal="showModal">
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title" v-text="title"></p>
-        <button class="delete" aria-label="close"></button>
+        
+        <button class="delete" 
+          aria-label="close"
+          @click="closeModal()" ></button>
       </header>
       
       <section class="modal-card-body">
@@ -23,16 +26,27 @@
 
 <script>
 import './Modals.js';
+import { modalConfig } from './modalConfig';
 import '../../components/button/Buttons.js';
 
 export default {
   name: 'modal-card',
 
+  data: () => ({
+    someBool: true
+  }),
+
   props: {
     title: {
       type: String,
       default: 'Modal Title'
-    }
+    },
+
+    showModal: modalConfig.props.showModal
+  },
+
+  methods: {
+    closeModal: modalConfig.methods.closeModal
   }
 }
 </script>

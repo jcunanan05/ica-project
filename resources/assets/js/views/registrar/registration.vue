@@ -3,9 +3,12 @@
 
     <h1 class="title">Users</h1>
 
-    <app-button>
+    <app-button @click="showNewUserModal()">
       <icon class="fa-plus" />
     </app-button>
+
+    <modal-card :showModal="newUserModalIsVisible"
+      @close="closeNewUserModal()"></modal-card>
 
     <app-table :headers="userTable.headers">
       <template slot="body" 
@@ -37,6 +40,7 @@ import Table from '../../components/Table.vue';
 import UserTable from '../../utilities/table/UserTable.js';
 import '../../components/button/Buttons.js';
 import '../../components/icons/Icons.js';
+import '../../components/modal/Modals.js';
 
 
 export default {
@@ -57,7 +61,19 @@ export default {
     }),
 
     userTable: new UserTable({}),
+
+    newUserModalIsVisible: false
   }),
+
+  methods: {
+    showNewUserModal() {
+      this.newUserModalIsVisible = true;
+    },
+
+    closeNewUserModal() {
+      this.newUserModalIsVisible = false;
+    }
+  },
 
   mounted() {
     this.userTable.fetchData('/api/users')
