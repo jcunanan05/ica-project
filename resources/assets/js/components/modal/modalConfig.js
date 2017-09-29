@@ -4,12 +4,6 @@ let modalConfig = {
       type: Boolean,
       default: false
     }
-  },
-
-  methods: {
-    closeModal() {
-      this.$emit('close');
-    }
   }
 };
 

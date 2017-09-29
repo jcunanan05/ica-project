@@ -7,9 +7,9 @@
       <icon class="fa-plus" />
     </app-button>
 
-    <modal-card :show-modal="newUserModalIsVisible"
-      @close="newUserModalIsVisible = false">
-    </modal-card>
+    <new-user-modal :show-modal="newUserModalIsVisible"
+      @close="newUserModalIsVisible = false" />
+
 
     <app-table :headers="userTable.headers">
       <template slot="body" 
@@ -36,35 +36,27 @@
 </template>
 
 <script>
+import '../../components/Components.js';
 import Form from '../../utilities/Form.js';
-import Table from '../../components/Table.vue';
 import UserTable from '../../utilities/table/UserTable.js';
-import '../../components/button/Buttons.js';
-import '../../components/icons/Icons.js';
-import '../../components/modal/Modals.js';
+import newUserModal from './registration/newUserModal.vue';
+
 
 
 export default {
   name: 'registration',
 
   components: {
-    'app-table': Table
+    'new-user-modal': newUserModal
   },
 
-  data: () => ({
-    newUser: new Form({
-      firstName: 'Jonathan',
-      middleName: 'Albert',
-      lastName: 'Cunanan',
-      schoolIndexNo: '1234-1234-1234',
-      email: 'asdf@example.com',
-      userType: ''
-    }),
+  data() {
+    return {
+      newUserModalIsVisible: false,
 
-    userTable: new UserTable({}),
-
-    newUserModalIsVisible: false
-  }),
+      userTable: new UserTable({})
+    };
+  },
 
   methods: {
   },

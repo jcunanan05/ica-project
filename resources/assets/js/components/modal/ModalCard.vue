@@ -6,7 +6,7 @@
         
         <button class="delete" 
           aria-label="close"
-          @click="closeModal()" ></button>
+          @click="$emit('close')" ></button>
       </header>
       
       <section class="modal-card-body">
@@ -39,10 +39,6 @@ export default {
     },
 
     showModal: modalConfig.props.showModal
-  },
-
-  methods: {
-    closeModal: modalConfig.methods.closeModal
   }
 }
 </script>

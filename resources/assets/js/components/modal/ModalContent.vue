@@ -5,7 +5,7 @@
     </div>
     <button class="modal-close is-large" 
       aria-label="close"
-      @click="closeModal()" >
+      @click="$emit('close')" >
     </button>
   </modal>
 </template>
@@ -19,10 +19,6 @@ export default {
 
   props: {
     showModal: modalConfig.props.showModal
-  },
-
-  methods: {
-    closeModal: modalConfig.methods.closeModal
   }
 }
 </script>
