@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use \App\Http\Requests\CustomRules\UserRules;
 use Illuminate\Http\Request;
 use App\Transformers\UserTransformer;
 
@@ -14,7 +15,7 @@ class UsersController extends Controller
     public function __construct(UserTransformer $userTransformer)
     {
         $this->userTransformer = $userTransformer;
-        $this->middleware('auth')->only(['index']);
+        $this->middleware('auth')->only(['index', 'store']);
     }
 
 
@@ -26,6 +27,16 @@ class UsersController extends Controller
                     User::with('role')->where("id",">",0)->get()->toArray()
                 )
         ], 200);
+    }
+
+
+    public function store(Request $request)
+    {
+        $userRules = new UserRules();
+
+        $this->validate($request, [
+            'firstName' => $userRules->for('first_name')
+        ]);
     }
 
 }

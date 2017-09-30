@@ -17,7 +17,6 @@
 
       <footer class="modal-card-foot">
         <slot name="footer">
-          <app-button class="is-success">Save changes</app-button>
         </slot>
       </footer>
     </div>
