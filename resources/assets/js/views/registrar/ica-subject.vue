@@ -6,14 +6,14 @@
       <p class="control">
         <span class="select">
           <select>
-            <option><a href="#Subject-Assigning"></a>Assigning of Subjects</option>
+            <option><a href="#Subject-Assigning"></a>Assign Subject</option>
             <option>Learning Resources</option>
           </select>
         </span>
       </p>
     </div>
 
-    <section id="Subject-Assigning">
+    <section id="Assign-Subject">
       <h1 class="subtitle is-3">Subject Assigning</h1>
       <div class="column is-9">
         <div class="block">
@@ -45,8 +45,8 @@
       </div>
     </section>
     
-    <section id="Learning-Resources">
-      <h1 class="subtitle is-3">Learning Resources</h1>
+    <section id="Activity-feed">
+      <h1 class="subtitle is-3">Activity Feed</h1>
 
       <!-- nav level -->
       <nav class="level">

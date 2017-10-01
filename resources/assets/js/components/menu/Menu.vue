@@ -1,5 +1,5 @@
 <template>
-  <div class="menu">
+  <div class="menu" id="menu">
     <slot></slot>
   </div>
 </template>
@@ -17,3 +17,13 @@ export default {
   }
 }
 </script>
+
+
+<style>
+#menu{
+  padding: 15px;
+  height: 100%;  
+  border: solid 1px 1px 1px 1px #888;
+  
+}
+</style>

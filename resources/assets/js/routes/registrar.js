@@ -20,8 +20,12 @@ const registrar = [
     component: require('../views/registrar/reports.vue')
   },
   {
-    path: 'comprehensive-subject',
-    component: require('../views/registrar/comprehensive-subject.vue')
+    path: 'ica-subject',
+    component: require('../views/registrar/ica-subject.vue')
+  },
+  {
+    path: 'account-setting',
+    component: require('../views/registrar/account-setting.vue')
   }
 ];
 

@@ -1,6 +1,7 @@
 import VueRouter from 'vue-router';
 import { requireGuest, requireRegistrar } from '../utilities/auth/guards.js';
 import { registrar } from './registrar.js';
+import { lecturer } from './lecturer.js';
 
 
 const routes = [
@@ -28,6 +29,7 @@ const routes = [
       name: 'lecturer',
       component: require('../views/lecturer/lecturer.vue'),
       // beforeEnter: ,
+      children: lecturer
       
       
     }

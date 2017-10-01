@@ -1,46 +1,36 @@
 <template>
-  <div class="container is-fluid">
-    <div class="columns">
-      <div class="column is-2">
-        <aside class="menu ">
-          <p class="menu-label">
-            Management
-          </p>
-          <ul class="menu-list">
-           
-            <nav-link uri="#/registrar/dashboard" text="Learning Resources"/>
-              <ul class="menu-list">
-                <li>
-                  <ul>
-                    <nav-link uri="#/registrar/comprehensive-subject" text="Quiz"/>
-                    <nav-link uri="#/registrar/comprehensive-subject" text="Exam"/>
-                  </ul>
-                </li>
-              </ul>
-            <nav-link uri="#/registrar/registration" text="Reports"/>
-            <nav-link uri="#/registrar/courses" text="Courses"/>
-            <nav-link uri="#/registrar/comprehensive-subject" text="Account Setting"/>
-            
-          </ul>
-        </aside>
-      </div>
-      
-      
-
+  <div class="columns">
+    <div id="lecturer-sidebar" class="column is-2">
+      <app-menu>
+        <menu-label text="Learning" />
+        <menu-list>
+          <menu-dropdown uri="learning-resources" text="Learning Resources">
+            <menu-item uri="quiz" text="Quiz" />
+            <menu-item uri="exam" text="Exam" />
+          </menu-dropdown>
+          <menu-item uri="Reports" text="Courses" />
+        </menu-list>
+        <menu-label text="Management" />
+        <menu-list>
+          <menu-item uri="Reports" text="Reports" />
+          <menu-item uri="Reports" text="Account Setting" />
+        </menu-list>
+      </app-menu>
+    </div>
+    <div class="column is-10">
       <router-view></router-view>
     </div>
   </div>
 </template>
 
-
-</template>
-
-
 <script>
-  export default {
+export default {
 
-  }
-
-
-
+}
 </script>
+
+<style lang="scss">
+#lecturer-side {
+  border-right: 1px;
+}
+</style>

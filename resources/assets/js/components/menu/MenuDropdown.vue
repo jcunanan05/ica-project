@@ -1,6 +1,8 @@
 <template>
   <li>
-    <a disabled>{{ text }}</a>
+    <router-link :to="uri">
+      {{ text }}
+    </router-link>
     <ul><slot></slot></ul>
   </li>
 </template>
@@ -10,6 +12,10 @@ import MenuItem from './MenuItem.vue'
 export default {
   name: 'menu-dropdown',
   props: {
+    uri: {
+      type: String,
+      required: false
+    },
     text: {
       type: String,
       required: true
