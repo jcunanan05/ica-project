@@ -35,7 +35,8 @@ class UsersController extends Controller
         $userRules = new UserRules();
 
         $this->validate($request, [
-            'firstName' => $userRules->for('first_name')
+            'firstName' => $userRules->for('first_name'),
+            'middleName' => $userRules->for('middle_name')
         ]);
     }
 

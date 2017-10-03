@@ -8,6 +8,7 @@
     </app-button>
 
     <new-user-modal :show-modal="newUserModalIsVisible"
+      @success="newUserModalIsVisible = false"
       @close="newUserModalIsVisible = false" />
 
 

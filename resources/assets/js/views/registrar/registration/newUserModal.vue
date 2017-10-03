@@ -4,9 +4,14 @@
     @close="$emit('close')" >
 
     
+    <!-- form body -->
     <template slot="body">
       <form method="POST"
-        @submit.prevent="submit()">
+        @keyup="
+          form.errors.clear($event.target.name), 
+          form.setSubmitDisabled(form.errors.any())
+        " >
+
         <field>
           <p slot="label">First Name</p>
           <input slot="control" 
@@ -23,12 +28,35 @@
           </help>
         </field>
 
-        <app-button class="is-primary"
-          type="submit"
-          name="newUser" >
-          Submit
-        </app-button>
+        <field>
+          <p slot="label">Middle Name</p>
+          <input slot="control" 
+            class="input"
+            :class="{ 'is-danger': form.errors.has('middleName') }"
+            type="text" 
+            name="middleName"
+            v-model="form.middleName" 
+            placeholder="Enter Middle Name" >
+
+          <help class="is-danger"
+            v-if="form.errors.has('middleName')"
+            v-text="form.errors.get('middleName')" >
+          </help>
+        </field>    
       </form>
+    </template>
+
+
+    <!-- submit button -->
+    <template slot="footer">
+      <app-button class="is-primary"
+        type="submit"
+        name="newUser"
+        @click="submit()"
+        :disabled="form.submitDisabled" >
+        <icon class="fa-circle-o-notch" v-if="form.isLoading">&nbsp</icon>
+        Submit
+      </app-button>
     </template>
   </modal-card>
 </template>
@@ -44,7 +72,8 @@ export default {
   data() {
     return {
       form: new Form({
-        firstName: ''
+        firstName: '',
+        middleName: '',
       })
     };
   },
@@ -58,7 +87,9 @@ export default {
     submit() {
       this.form.submit('post', '/api/users/store')
         .then(response => {
+          this.$emit('success');
 
+          
         })
         .catch(errors => {
 

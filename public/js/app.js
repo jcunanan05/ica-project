@@ -10906,6 +10906,8 @@ var Form = function () {
     key: 'onSuccess',
     value: function onSuccess(data) {
       this.reset();
+
+      this.setSubmitDisabled(false);
     }
   }]);
 
@@ -14357,6 +14359,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -15930,6 +15933,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -15941,7 +15972,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       form: new __WEBPACK_IMPORTED_MODULE_2__utilities_Form_js__["a" /* default */]({
-        firstName: ''
+        firstName: '',
+        middleName: ''
       })
     };
   },
@@ -15953,7 +15985,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     submit: function submit() {
-      this.form.submit('post', '/api/users/store').then(function (response) {}).catch(function (errors) {});
+      var _this = this;
+
+      this.form.submit('post', '/api/users/store').then(function (response) {
+        _this.$emit('success');
+      }).catch(function (errors) {});
     }
   }
 });
@@ -15983,9 +16019,9 @@ var render = function() {
           {
             attrs: { method: "POST" },
             on: {
-              submit: function($event) {
-                $event.preventDefault()
-                _vm.submit()
+              keyup: function($event) {
+                _vm.form.errors.clear($event.target.name),
+                  _vm.form.setSubmitDisabled(_vm.form.errors.any())
               }
             }
           },
@@ -16039,17 +16075,89 @@ var render = function() {
             ),
             _vm._v(" "),
             _c(
-              "app-button",
-              {
-                staticClass: "is-primary",
-                attrs: { type: "submit", name: "newUser" }
-              },
-              [_vm._v("\n        Submit\n      ")]
+              "field",
+              [
+                _c("p", { attrs: { slot: "label" }, slot: "label" }, [
+                  _vm._v("Middle Name")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.form.middleName,
+                      expression: "form.middleName"
+                    }
+                  ],
+                  staticClass: "input",
+                  class: { "is-danger": _vm.form.errors.has("middleName") },
+                  attrs: {
+                    slot: "control",
+                    type: "text",
+                    name: "middleName",
+                    placeholder: "Enter Middle Name"
+                  },
+                  domProps: { value: _vm.form.middleName },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.form.middleName = $event.target.value
+                    }
+                  },
+                  slot: "control"
+                }),
+                _vm._v(" "),
+                _vm.form.errors.has("middleName")
+                  ? _c("help", {
+                      staticClass: "is-danger",
+                      domProps: {
+                        textContent: _vm._s(_vm.form.errors.get("middleName"))
+                      }
+                    })
+                  : _vm._e()
+              ],
+              1
             )
           ],
           1
         )
-      ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "template",
+        { attrs: { slot: "footer" }, slot: "footer" },
+        [
+          _c(
+            "app-button",
+            {
+              staticClass: "is-primary",
+              attrs: {
+                type: "submit",
+                name: "newUser",
+                disabled: _vm.form.submitDisabled
+              },
+              on: {
+                click: function($event) {
+                  _vm.submit()
+                }
+              }
+            },
+            [
+              _vm.form.isLoading
+                ? _c("icon", { staticClass: "fa-circle-o-notch" }, [
+                    _vm._v(" ")
+                  ])
+                : _vm._e(),
+              _vm._v("\n      Submit\n    ")
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     2
   )
@@ -16094,6 +16202,9 @@ var render = function() {
       _c("new-user-modal", {
         attrs: { "show-modal": _vm.newUserModalIsVisible },
         on: {
+          success: function($event) {
+            _vm.newUserModalIsVisible = false
+          },
           close: function($event) {
             _vm.newUserModalIsVisible = false
           }
