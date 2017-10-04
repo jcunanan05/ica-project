@@ -1,7 +1,9 @@
 <template lang="html">
-  <header id="home-section">
-
+  <header class="is-mobile" id="home-section">
+    <h1>helllllooooo</h1>
   </header>
+  
+
 </template>
 
 <script>

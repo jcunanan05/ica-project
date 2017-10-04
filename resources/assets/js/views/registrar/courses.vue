@@ -1,6 +1,6 @@
 <template>
 
-  <main class="column is-10 box" style="margin-top:20px"role="main">
+  <main class="column is-11 box" style="margin-top:20px"role="main">
     <h1 class="title is-2">COURSES</h1>
     <div class="container is-fluid">
       <div class="column is-12 bg-light" style="margin-top:20px">
