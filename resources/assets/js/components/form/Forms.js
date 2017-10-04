@@ -10,6 +10,9 @@ let Input = Vue.component('app-input',
 let Help = Vue.component('help', 
   require('./Help.vue'));
 
+let Option = Vue.component('form-select',
+  require('./FormSelect.vue'));
+
 
 export {
   Field,

@@ -1,17 +1,18 @@
 <template>
-  <modal-card title="Add New User"
-    :show-modal="showModal"
-    @close="$emit('close')" >
+  <form method="POST"
+    @keyup="
+      form.errors.clear($event.target.name), 
+      form.setSubmitDisabled(form.errors.any())
+    " 
+    @submit.prevent="submit()" >
 
-    
-    <!-- form body -->
-    <template slot="body">
-      <form method="POST"
-        @keyup="
-          form.errors.clear($event.target.name), 
-          form.setSubmitDisabled(form.errors.any())
-        " >
+    <modal-card title="Add New User"
+      :show-modal="showModal"
+      @close="$emit('close')" >
 
+      
+      <!-- card body -->
+      <template slot="body">
         <field>
           <p slot="label">First Name</p>
           <input slot="control" 
@@ -28,6 +29,7 @@
           </help>
         </field>
 
+
         <field>
           <p slot="label">Middle Name</p>
           <input slot="control" 
@@ -42,23 +44,63 @@
             v-if="form.errors.has('middleName')"
             v-text="form.errors.get('middleName')" >
           </help>
-        </field>    
-      </form>
-    </template>
+        </field>
 
 
-    <!-- submit button -->
-    <template slot="footer">
-      <app-button class="is-primary"
-        type="submit"
-        name="newUser"
-        @click="submit()"
-        :disabled="form.submitDisabled" >
-        <icon class="fa-circle-o-notch" v-if="form.isLoading">&nbsp</icon>
-        Submit
-      </app-button>
-    </template>
-  </modal-card>
+        <field>
+          <p slot="label">Last Name</p>
+          <input slot="control" 
+            class="input"
+            :class="{ 'is-danger': form.errors.has('lastName') }"
+            type="text" 
+            name="lastName"
+            v-model="form.lastName" 
+            placeholder="Enter Last Name" >
+
+          <help class="is-danger"
+            v-if="form.errors.has('lastName')"
+            v-text="form.errors.get('lastName')" >
+          </help>
+        </field>
+
+
+        <field>
+          <p slot="label">Email</p>
+          <input slot="control" 
+            class="input"
+            :class="{ 'is-danger': form.errors.has('email') }"
+            type="email" 
+            name="email"
+            v-model="form.email" 
+            placeholder="Enter Email" >
+
+          <help class="is-danger"
+            v-if="form.errors.has('email')"
+            v-text="form.errors.get('email')" >
+          </help>
+        </field>
+
+
+        <field>
+          <p slot="label">User Type</p>
+          <form-select slot="control"
+            :choices="choices"></form-select>
+        </field>            
+      </template>
+
+
+      <!-- submit button/footer -->
+      <template slot="footer">
+        <app-button class="is-primary"
+          type="submit"
+          name="newUser"
+          :disabled="form.submitDisabled" >
+          <icon class="fa-circle-o-notch" v-if="form.isLoading">&nbsp</icon>
+          Submit
+        </app-button>
+      </template>
+    </modal-card>
+  </form>
 </template>
 
 <script>
@@ -74,7 +116,13 @@ export default {
       form: new Form({
         firstName: '',
         middleName: '',
-      })
+        lastName: '',
+        email: ''
+      }),
+
+      choices: {
+        0: { id: 1, text: 'registrar' }
+      }
     };
   },
 

@@ -15201,6 +15201,8 @@ var Input = __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('app-input', _
 
 var Help = __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('help', __webpack_require__(61));
 
+var Option = __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('form-select', __webpack_require__(149));
+
 
 
 /***/ }),
@@ -15961,6 +15963,48 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -15973,8 +16017,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       form: new __WEBPACK_IMPORTED_MODULE_2__utilities_Form_js__["a" /* default */]({
         firstName: '',
-        middleName: ''
-      })
+        middleName: '',
+        lastName: '',
+        email: ''
+      }),
+
+      choices: {
+        0: { id: 1, text: 'registrar' }
+      }
     };
   },
 
@@ -16003,163 +16053,278 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "modal-card",
+    "form",
     {
-      attrs: { title: "Add New User", "show-modal": _vm.showModal },
+      attrs: { method: "POST" },
       on: {
-        close: function($event) {
-          _vm.$emit("close")
+        keyup: function($event) {
+          _vm.form.errors.clear($event.target.name),
+            _vm.form.setSubmitDisabled(_vm.form.errors.any())
+        },
+        submit: function($event) {
+          $event.preventDefault()
+          _vm.submit()
         }
       }
     },
     [
-      _c("template", { attrs: { slot: "body" }, slot: "body" }, [
-        _c(
-          "form",
-          {
-            attrs: { method: "POST" },
-            on: {
-              keyup: function($event) {
-                _vm.form.errors.clear($event.target.name),
-                  _vm.form.setSubmitDisabled(_vm.form.errors.any())
-              }
-            }
-          },
-          [
-            _c(
-              "field",
-              [
-                _c("p", { attrs: { slot: "label" }, slot: "label" }, [
-                  _vm._v("First Name")
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.form.firstName,
-                      expression: "form.firstName"
-                    }
-                  ],
-                  staticClass: "input",
-                  class: { "is-danger": _vm.form.errors.has("firstName") },
-                  attrs: {
-                    slot: "control",
-                    type: "text",
-                    name: "firstName",
-                    placeholder: "Enter First Name"
-                  },
-                  domProps: { value: _vm.form.firstName },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.form.firstName = $event.target.value
-                    }
-                  },
-                  slot: "control"
-                }),
-                _vm._v(" "),
-                _vm.form.errors.has("firstName")
-                  ? _c("help", {
-                      staticClass: "is-danger",
-                      domProps: {
-                        textContent: _vm._s(_vm.form.errors.get("firstName"))
-                      }
-                    })
-                  : _vm._e()
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "field",
-              [
-                _c("p", { attrs: { slot: "label" }, slot: "label" }, [
-                  _vm._v("Middle Name")
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.form.middleName,
-                      expression: "form.middleName"
-                    }
-                  ],
-                  staticClass: "input",
-                  class: { "is-danger": _vm.form.errors.has("middleName") },
-                  attrs: {
-                    slot: "control",
-                    type: "text",
-                    name: "middleName",
-                    placeholder: "Enter Middle Name"
-                  },
-                  domProps: { value: _vm.form.middleName },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.form.middleName = $event.target.value
-                    }
-                  },
-                  slot: "control"
-                }),
-                _vm._v(" "),
-                _vm.form.errors.has("middleName")
-                  ? _c("help", {
-                      staticClass: "is-danger",
-                      domProps: {
-                        textContent: _vm._s(_vm.form.errors.get("middleName"))
-                      }
-                    })
-                  : _vm._e()
-              ],
-              1
-            )
-          ],
-          1
-        )
-      ]),
-      _vm._v(" "),
       _c(
-        "template",
-        { attrs: { slot: "footer" }, slot: "footer" },
+        "modal-card",
+        {
+          attrs: { title: "Add New User", "show-modal": _vm.showModal },
+          on: {
+            close: function($event) {
+              _vm.$emit("close")
+            }
+          }
+        },
         [
           _c(
-            "app-button",
-            {
-              staticClass: "is-primary",
-              attrs: {
-                type: "submit",
-                name: "newUser",
-                disabled: _vm.form.submitDisabled
-              },
-              on: {
-                click: function($event) {
-                  _vm.submit()
-                }
-              }
-            },
+            "template",
+            { attrs: { slot: "body" }, slot: "body" },
             [
-              _vm.form.isLoading
-                ? _c("icon", { staticClass: "fa-circle-o-notch" }, [
-                    _vm._v(" ")
-                  ])
-                : _vm._e(),
-              _vm._v("\n      Submit\n    ")
+              _c(
+                "field",
+                [
+                  _c("p", { attrs: { slot: "label" }, slot: "label" }, [
+                    _vm._v("First Name")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.firstName,
+                        expression: "form.firstName"
+                      }
+                    ],
+                    staticClass: "input",
+                    class: { "is-danger": _vm.form.errors.has("firstName") },
+                    attrs: {
+                      slot: "control",
+                      type: "text",
+                      name: "firstName",
+                      placeholder: "Enter First Name"
+                    },
+                    domProps: { value: _vm.form.firstName },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.form.firstName = $event.target.value
+                      }
+                    },
+                    slot: "control"
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("firstName")
+                    ? _c("help", {
+                        staticClass: "is-danger",
+                        domProps: {
+                          textContent: _vm._s(_vm.form.errors.get("firstName"))
+                        }
+                      })
+                    : _vm._e()
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "field",
+                [
+                  _c("p", { attrs: { slot: "label" }, slot: "label" }, [
+                    _vm._v("Middle Name")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.middleName,
+                        expression: "form.middleName"
+                      }
+                    ],
+                    staticClass: "input",
+                    class: { "is-danger": _vm.form.errors.has("middleName") },
+                    attrs: {
+                      slot: "control",
+                      type: "text",
+                      name: "middleName",
+                      placeholder: "Enter Middle Name"
+                    },
+                    domProps: { value: _vm.form.middleName },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.form.middleName = $event.target.value
+                      }
+                    },
+                    slot: "control"
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("middleName")
+                    ? _c("help", {
+                        staticClass: "is-danger",
+                        domProps: {
+                          textContent: _vm._s(_vm.form.errors.get("middleName"))
+                        }
+                      })
+                    : _vm._e()
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "field",
+                [
+                  _c("p", { attrs: { slot: "label" }, slot: "label" }, [
+                    _vm._v("Last Name")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.lastName,
+                        expression: "form.lastName"
+                      }
+                    ],
+                    staticClass: "input",
+                    class: { "is-danger": _vm.form.errors.has("lastName") },
+                    attrs: {
+                      slot: "control",
+                      type: "text",
+                      name: "lastName",
+                      placeholder: "Enter Last Name"
+                    },
+                    domProps: { value: _vm.form.lastName },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.form.lastName = $event.target.value
+                      }
+                    },
+                    slot: "control"
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("lastName")
+                    ? _c("help", {
+                        staticClass: "is-danger",
+                        domProps: {
+                          textContent: _vm._s(_vm.form.errors.get("lastName"))
+                        }
+                      })
+                    : _vm._e()
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "field",
+                [
+                  _c("p", { attrs: { slot: "label" }, slot: "label" }, [
+                    _vm._v("Email")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.email,
+                        expression: "form.email"
+                      }
+                    ],
+                    staticClass: "input",
+                    class: { "is-danger": _vm.form.errors.has("email") },
+                    attrs: {
+                      slot: "control",
+                      type: "email",
+                      name: "email",
+                      placeholder: "Enter Email"
+                    },
+                    domProps: { value: _vm.form.email },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.form.email = $event.target.value
+                      }
+                    },
+                    slot: "control"
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("email")
+                    ? _c("help", {
+                        staticClass: "is-danger",
+                        domProps: {
+                          textContent: _vm._s(_vm.form.errors.get("email"))
+                        }
+                      })
+                    : _vm._e()
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "field",
+                [
+                  _c("p", { attrs: { slot: "label" }, slot: "label" }, [
+                    _vm._v("User Type")
+                  ]),
+                  _vm._v(" "),
+                  _c("form-select", {
+                    attrs: { slot: "control", choices: _vm.choices },
+                    slot: "control"
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "template",
+            { attrs: { slot: "footer" }, slot: "footer" },
+            [
+              _c(
+                "app-button",
+                {
+                  staticClass: "is-primary",
+                  attrs: {
+                    type: "submit",
+                    name: "newUser",
+                    disabled: _vm.form.submitDisabled
+                  }
+                },
+                [
+                  _vm.form.isLoading
+                    ? _c("icon", { staticClass: "fa-circle-o-notch" }, [
+                        _vm._v(" ")
+                      ])
+                    : _vm._e(),
+                  _vm._v("\n        Submit\n      ")
+                ],
+                1
+              )
             ],
             1
           )
         ],
-        1
+        2
       )
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
@@ -37222,6 +37387,169 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 140 */,
+/* 141 */,
+/* 142 */,
+/* 143 */,
+/* 144 */,
+/* 145 */,
+/* 146 */,
+/* 147 */,
+/* 148 */,
+/* 149 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(150)
+/* template */
+var __vue_template__ = __webpack_require__(151)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\form\\FormSelect.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] FormSelect.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-56354728", Component.options)
+  } else {
+    hotAPI.reload("data-v-56354728", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 150 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'select',
+
+  data: function data() {
+    return {
+      selected: 0
+    };
+  },
+
+
+  computed: {
+    hasChoices: function hasChoices() {
+      return Object.keys(this.choices).length;
+    }
+  },
+
+  props: {
+    choices: {
+      type: Object,
+      required: true
+    }
+  }
+});
+
+/***/ }),
+/* 151 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "select" }, [
+    _c(
+      "select",
+      {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.selected,
+            expression: "selected"
+          }
+        ],
+        on: {
+          change: function($event) {
+            var $$selectedVal = Array.prototype.filter
+              .call($event.target.options, function(o) {
+                return o.selected
+              })
+              .map(function(o) {
+                var val = "_value" in o ? o._value : o.value
+                return val
+              })
+            _vm.selected = $event.target.multiple
+              ? $$selectedVal
+              : $$selectedVal[0]
+          }
+        }
+      },
+      [
+        _c("option", { attrs: { disabled: "" }, domProps: { value: 0 } }, [
+          _vm._v("Select User type")
+        ]),
+        _vm._v(" "),
+        _vm._l(_vm.choices, function(choice) {
+          return _vm.hasChoices
+            ? _c("option", {
+                key: choice.id,
+                domProps: { value: choice.id, textContent: _vm._s(choice.text) }
+              })
+            : _vm._e()
+        })
+      ],
+      2
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-56354728", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
