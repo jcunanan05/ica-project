@@ -19,14 +19,12 @@ const routes = [
     },
     {
       path: '/registrar',
-      name: 'registrar',
       component: require('../views/registrar/registrar.vue'),
       // beforeEnter: requireRegistrar,
       children: registrar
     },
      {
       path: '/lecturer',
-      name: 'lecturer',
       component: require('../views/lecturer/lecturer.vue'),
       // beforeEnter: ,
       children: lecturer

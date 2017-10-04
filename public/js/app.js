@@ -14435,13 +14435,11 @@ var routes = [{
   component: __webpack_require__(78)
 }, {
   path: '/registrar',
-  name: 'registrar',
   component: __webpack_require__(81),
   // beforeEnter: requireRegistrar,
   children: __WEBPACK_IMPORTED_MODULE_2__registrar_js__["a" /* registrar */]
 }, {
   path: '/lecturer',
-  name: 'lecturer',
   component: __webpack_require__(98),
   // beforeEnter: ,
   children: __WEBPACK_IMPORTED_MODULE_3__lecturer_js__["a" /* lecturer */]
@@ -16264,6 +16262,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
@@ -16282,7 +16303,34 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "role": "main"
     }
-  }, [_c('h1', [_vm._v("ssdfsdfs")])])
+  }, [_c('h1', {
+    staticClass: "title is-3"
+  }, [_vm._v("Learning Resources")]), _vm._v(" "), _c('div', {
+    staticClass: "container is-fluid"
+  }, [_c('div', {
+    staticClass: "column is-12 bg-light",
+    staticStyle: {
+      "margin-top": "20px"
+    }
+  }, [_c('div', {
+    staticClass: "columns"
+  }, [_c('div', {
+    staticClass: "field",
+    staticStyle: {
+      "margin-left": "2px"
+    }
+  }), _vm._v(" "), _c('label', {
+    staticClass: "title is-6",
+    staticStyle: {
+      "margin-bottom": "10px"
+    }
+  }, [_vm._v("ICA Subject")]), _vm._v(" "), _c('p', {
+    staticClass: "control"
+  }, [_c('span', {
+    staticClass: "select"
+  }, [_c('select', [_c('option', [_vm._v("BSIT")]), _vm._v(" "), _c('option', [_vm._v("BSCS")]), _vm._v(" "), _c('option', [_vm._v("BSIS")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "columns"
+  })])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
