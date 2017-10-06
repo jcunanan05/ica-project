@@ -79,6 +79,8 @@ class Form {
 
   onSuccess(data) {
     this.reset();
+
+    this.setSubmitDisabled(false);
   }
 
 }

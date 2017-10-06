@@ -1,6 +1,15 @@
 <template>
   <section class="section">
+
     <h1 class="title">Users</h1>
+
+    <app-button @click="newUserModalIsVisible = true">
+      <icon class="fa-plus" />
+    </app-button>
+
+    <new-user-modal :show-modal="newUserModalIsVisible"
+      @success="newUserModalIsVisible = false"
+      @close="newUserModalIsVisible = false" />
 
 
     <app-table :headers="userTable.headers">
@@ -28,31 +37,30 @@
 </template>
 
 <script>
+import '../../components/Components.js';
 import Form from '../../utilities/Form.js';
-import Table from '../../components/Table.vue';
 import UserTable from '../../utilities/table/UserTable.js';
-import '../../components/button/Buttons.js';
+import newUserModal from './registration/newUserModal.vue';
+
 
 
 export default {
   name: 'registration',
 
   components: {
-    'app-table': Table
+    'new-user-modal': newUserModal
   },
 
-  data: () => ({
-    newUser: new Form({
-      firstName: 'Jonathan',
-      middleName: 'Albert',
-      lastName: 'Cunanan',
-      schoolIndexNo: '1234-1234-1234',
-      email: 'asdf@example.com',
-      userType: ''
-    }),
+  data() {
+    return {
+      newUserModalIsVisible: false,
 
-    userTable: new UserTable({}),
-  }),
+      userTable: new UserTable({})
+    };
+  },
+
+  methods: {
+  },
 
   mounted() {
     this.userTable.fetchData('/api/users')

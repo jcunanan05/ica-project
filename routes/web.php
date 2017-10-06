@@ -18,6 +18,7 @@ Route::get('/', function () {
 Route::post('/api/login', 'Auth\LoginController@login');
 Route::get('/api/auth/user', 'Auth\LoginController@authenticatedUser');
 Route::get('/api/users', 'UsersController@index');
+Route::post('/api/users/store', 'UsersController@store');
 
 Route::post('/api/logout', 'Auth\LoginController@logout');
 Route::get('/logout', 'Auth\LoginController@logout');
